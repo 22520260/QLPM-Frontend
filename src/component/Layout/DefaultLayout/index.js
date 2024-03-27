@@ -1,18 +1,15 @@
 import Header from "./Header";
 import Navbar from "./Navbar";
 
-function DefaultLayout({children}) {
-    return ( 
+function DefaultLayout({ children }) {
+    return (
         <div>
-            <Header />
-            <div>
-                <Navbar />
-                <div className="content">
-                    {children}
-                </div>
+            <Navbar />
+            <div className="content">
+                {children}
             </div>
         </div>
-     );
+    );
 }
 
 export default DefaultLayout;

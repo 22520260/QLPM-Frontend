@@ -1,9 +1,17 @@
+import NavbarIcon from "../../../NavIcon";
+
 function Header() {
-    return ( 
+    return (
         <>
-            <div>Header</div>
+            <nav className="navbar bg-primary navbar-expand-md">
+                <div className="container-fluid px-4">
+                    <a className="navbar-brand" href="./">BCarefull</a>
+                    <NavbarIcon />
+                </div>
+            </nav>
+
         </>
-     );
+    );
 }
 
 export default Header;

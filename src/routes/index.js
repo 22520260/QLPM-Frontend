@@ -4,7 +4,7 @@ import KhachHang from "../pages/KhachHang";
 import Start from "../pages/Start";
 
 const publicRoutes = [
-    { path: '/', component: TiepDon},
+    { path: '/tiepdon', component: TiepDon},
     { path: '/khambenh', component: KhamBenh},
     { path: '/khachhang', component: KhachHang},
     { path: '/start', component: Start, layout: null},
