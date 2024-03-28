@@ -1,4 +1,5 @@
 import { FaBeer } from 'react-icons/fa'
+
 function KhamBenh() {
     return ( 
         <>
