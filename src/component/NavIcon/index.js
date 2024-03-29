@@ -9,7 +9,7 @@ function NavIcon() {
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav ms-auto mb-20 mb-lg-0">
                     <li className="nav-item px-2">
-                        <a className="nav-link active text-white" aria-current="page" href="#">
+                        <a className="nav-link active text-white" aria-current="page" href="~/">
                             <FaRegBell />
                         </a>
                     </li>

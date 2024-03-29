@@ -1,15 +1,16 @@
 import Navtab from '../../component/Navtab';
-import { tabsData } from './data';
+import { tabsDataTD } from './data';
 
 function TiepDon() {
         // Dữ liệu cho các tab và nội dung tương ứng
 
     return (
-        <>
+        <div>
+        
             <h1>TiepDon</h1>
-            <Navtab tabsData={tabsData}/>
+            <Navtab tabsData={tabsDataTD}/>
             
-        </>
+        </div>
     );
 }
 
