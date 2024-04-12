@@ -5,7 +5,7 @@ function Header() {
         <>
             <nav className="navbar bg-primary navbar-expand-md">
                 <div className="container-fluid px-4">
-                    <a className="navbar-brand" href="./">BCarefull</a>
+                    <a className="navbar-brand" href="">BCarefull</a>
                     <NavbarIcon />
                 </div>
             </nav>
