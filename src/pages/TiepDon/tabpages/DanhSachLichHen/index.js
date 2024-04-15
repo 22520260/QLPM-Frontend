@@ -5,15 +5,16 @@ import { getData, getLength } from "./data";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 
-function DanhSachDangKy() {
+function DanhSachLichHen() {
 
     const columns = [
         { title: 'ID', key: 'id' },
-        { title: 'Name', key: 'name' },
+        { title: 'Ngày hẹn', key: 'date' },
         { title: 'Info', render: (row) => (
-            <div>{row.info.age} - {row.info.gender}<br />{row.info.phone}</div>
+            <div>{row.info.name}<br />{row.info.age} - {row.info.gender}<br />{row.info.phone}</div>
         ) },
-        { title: 'Bill', key: 'bill' },
+        { title: 'Nội dung', key: 'content' },
+        { title: 'Bác sĩ', key: 'doctor' },
         { title: 'Status', key: 'status' },
         { title: 'Other', key: 'other' }
     ];
@@ -38,4 +39,4 @@ function DanhSachDangKy() {
     );
 }
 
-export default DanhSachDangKy;
+export default DanhSachLichHen;
