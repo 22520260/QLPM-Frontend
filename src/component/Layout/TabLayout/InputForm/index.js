@@ -10,7 +10,7 @@ export function IFSelect({ title, size, option }) {
     ));
     return (
         <div className={style}>
-            <label for="basic-url" className="form-label">{title}</label>
+            <label htmlFor="basic-url" className="form-label">{title}</label>
             <select class="form-select" aria-label="Default select example">
                 <option selected>Chọn</option>
                 {optionElements}
@@ -24,7 +24,7 @@ export function IFInputText({ title, size }) {
 
     return (
         <div className={style}>
-            <label for="basic-url" className="form-label">{title}</label>
+            <label htmlFor="basic-url" className="form-label">{title}</label>
             <div className="input-group">
                 <input type="text" className="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4" />
             </div>
@@ -48,7 +48,7 @@ export function IFSearch({ title, size }) {
 
     return (
         <div className={style}>
-            <label for="basic-url" className="form-label">{title}</label>
+            <label htmlFor="basic-url" className="form-label">{title}</label>
             <div className="input-group ">
                 <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
                 <button className="input-group-text bg-primary"><FaSearch /></button>
