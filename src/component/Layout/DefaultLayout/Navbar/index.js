@@ -7,7 +7,7 @@ function Navbar() {
     <>
       <nav className="navbar bg-primary navbar-expand-md">
         <div className="container-fluid px-4">
-          <Link className="navbar-brand"to="./"><FaAccessibleIcon /></Link> 
+          <Link className="navbar-brand"to="../"><FaAccessibleIcon /></Link> 
 
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           <li className="nav-item">
