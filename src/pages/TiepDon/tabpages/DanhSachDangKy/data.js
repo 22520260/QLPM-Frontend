@@ -1,4 +1,4 @@
-const customers = [
+const data = [
     { id: 1, name: 'Mark', info: { age: 30, gender: 'Male', phone: '123456789' }, bill: 100, status: 'Chờ khám', other: 'Detail 1' },
     { id: 2, name: 'Jacob', info: { age: 35, gender: 'Male', phone: '987654321' }, bill: 200, status: 'Hoàn thành', other: 'Detail 2' },
     { id: 3, name: 'Larry the Bird', info: { age: 25, gender: 'Female', phone: '555555555' },  bill: 0, status: 'Hủy', other: 'Detail 3' },
@@ -49,17 +49,29 @@ const customers = [
     { id: 48, name: 'Jacob', info: { age: 35, gender: 'Male', phone: '987654321' }, bill: 200, status: 'Hoàn thành', other: 'Detail 2' },
     { id: 49, name: 'Larry the Bird', info: { age: 25, gender: 'Female', phone: '555555555' },  bill: 0, status: 'Hủy', other: 'Detail 3' },
     { id: 50, name: 'Mark', info: { age: 30, gender: 'Male', phone: '123456789' }, bill: 100, status: 'Chờ khám', other: 'Detail 1' },
+    { id: 51, name: 'Jacob', info: { age: 35, gender: 'Male', phone: '987654321' }, bill: 200, status: 'Hoàn thành', other: 'Detail 2' },
+    { id: 52, name: 'Larry the Bird', info: { age: 25, gender: 'Female', phone: '555555555' },  bill: 0, status: 'Hủy', other: 'Detail 3' },
+    { id: 53, name: 'Mark', info: { age: 30, gender: 'Male', phone: '123456789' }, bill: 100, status: 'Chờ khám', other: 'Detail 1' },
+    { id: 54, name: 'Jacob', info: { age: 35, gender: 'Male', phone: '987654321' }, bill: 200, status: 'Hoàn thành', other: 'Detail 2' },
+    { id: 55, name: 'Larry the Bird', info: { age: 25, gender: 'Female', phone: '555555555' },  bill: 0, status: 'Hủy', other: 'Detail 3' },
+    { id: 56, name: 'Mark', info: { age: 30, gender: 'Male', phone: '123456789' }, bill: 100, status: 'Chờ khám', other: 'Detail 1' },
+    { id: 57, name: 'Jacob', info: { age: 35, gender: 'Male', phone: '987654321' }, bill: 200, status: 'Hoàn thành', other: 'Detail 2' },
+    { id: 58, name: 'Jacob', info: { age: 35, gender: 'Male', phone: '987654321' }, bill: 200, status: 'Hoàn thành', other: 'Detail 2' },
+    { id: 59, name: 'Larry the Bird', info: { age: 25, gender: 'Female', phone: '555555555' },  bill: 0, status: 'Hủy', other: 'Detail 3' },
 ];
 
-export function getCustomer(page, limit) {
+export function getData(page, limit) {
     let array = [];
-    for (let i = (page-1) * limit; i < (page * limit); i++) {
-        array.push(customers[i]);
+    const startIndex = (page - 1) * limit;
+    const endIndex = Math.min(startIndex + limit, data.length);
+    for (let i = startIndex; i < endIndex; i++) {
+        array.push(data[i]);
     }
     return array;
 }
 
+
 export function getLength() {
-    return customers.length;
+    return data.length;
 }
 
