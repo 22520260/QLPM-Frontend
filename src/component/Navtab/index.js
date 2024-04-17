@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 
 
 function Navtab({ tabsData }) {
-    const [activeTab, setActiveTab] = useState(0); // State để lưu trạng thái của tab đang được chọn
+    const [activeTab, setActiveTab] = useState(0); 
 
-    // Chọn tab
     const handleTabClick = (index) => {
-        setActiveTab(index); // Cập nhật trạng thái của tab đang được chọn
+        setActiveTab(index); 
     };
 
     return (
@@ -27,7 +26,6 @@ function Navtab({ tabsData }) {
                     </ul>
                 </div>
 
-                {/* Nội dung của tab */}
                 <div className="tab-content">
                     {tabsData.map((tab, index) => (
                         <div
