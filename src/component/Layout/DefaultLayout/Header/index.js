@@ -1,4 +1,4 @@
-import NavbarIcon from "../../../NavIcon";
+import NavIcon from "../../../NavIcon";
 
 function Header() {
     return (
@@ -6,7 +6,7 @@ function Header() {
             <nav className="navbar bg-primary navbar-expand-md">
                 <div className="container-fluid px-4">
                     <a className="navbar-brand" href="">BCarefull</a>
-                    <NavbarIcon />
+                    <NavIcon />
                 </div>
             </nav>
 

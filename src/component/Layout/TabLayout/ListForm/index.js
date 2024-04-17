@@ -1,32 +1,37 @@
-function ListForm({ customers }) {
+import CTPhieuKham from "../../../../popups/CTPhieuKham";
+import React, {useState} from "react";
+
+function ListForm({ columns, data }) {
+    const [selectedId, setSelectedId] = useState(null);
+
+    function handleRowClick(id) {
+        console.log(id);
+    }
+
     return (
+        <>
             <table className="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Info</th>
-                        <th scope="col">Bill</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Khác</th>
+                        {columns.map((column, index) => (
+                            <th key={index} scope="col">{column.title}</th>
+                        ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {customers.map((customer, index) => (
-                        <tr key={index}>
-                            <th scope="row">{customer.id}</th>
-                            <td>{customer.name}</td>
-                            <td>
-                                <div>{customer.info.age} - {customer.info.gender}</div>
-                                <div>{customer.info.phone}</div>
-                            </td>
-                            <td>{customer.bill}</td>
-                            <td>{customer.status}</td>
-                            <td>{customer.other}</td>
+                    {data.map((row, rowIndex) => (
+                        <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                            {columns.map((column, colIndex) => (
+                                <td key={colIndex}>
+                                    {column.render ? column.render(row) : row[column.key]}
+                                </td>
+                            ))}
                         </tr>
                     ))}
                 </tbody>
             </table>
+        </>
     );
 }
+
 export default ListForm;
