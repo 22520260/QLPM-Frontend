@@ -8,6 +8,7 @@ import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchData } from "../../../../redux/action/getDataAction";
 import { useDispatch, useSelector } from "react-redux";
+import { compareDates } from "../../../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
@@ -39,23 +40,22 @@ function DanhSachDangKy() {
       // Lọc theo ngày bắt đầu và ngày kết thúc
       if (startDate && endDate) {
         filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
-
-          return customerDate >= startDate && customerDate <= endDate;
+          const customerDate = new Date(customer[4]);
+          return ((compareDates(startDate, customerDate) >= 0) && compareDates(customerDate, endDate) >= 0);
         });
       } else if (startDate) {
         // Chỉ có ngày bắt đầu
         filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
+          const customerDate = new Date(customer[4]);
 
-          return customerDate >= startDate;
+          return (compareDates(startDate, customerDate) >= 0);
         });
       } else if (endDate) {
         // Chỉ có ngày kết thúc
         filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
+          const customerDate = new Date(customer[4]);
 
-          return customerDate <= endDate;
+          return compareDates(customerDate, endDate) >= 0;
         });
       }
 

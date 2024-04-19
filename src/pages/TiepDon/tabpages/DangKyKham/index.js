@@ -71,8 +71,6 @@ function DangKyKham() {
     );
   };
 
-  console.log(formData)
-
   return (
     <div>
       {/* Thông tin */}
