@@ -87,13 +87,13 @@ function DangKyKham() {
             />
             <IFSelect
               title={"Giới tính"}
-              size={1}
+              size={2}
               option={["Nam", "Nữ", "Khác"]}
               onChange={(value) => handleChange("gioiTinh", value)}
             />
             <IFInputText
               title={"Địa chỉ"}
-              size={7}
+              size={6}
               onChange={(value) => handleChange("diaChi", value)}
             />
           </div>

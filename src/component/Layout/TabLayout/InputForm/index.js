@@ -19,11 +19,12 @@ export function IFSelect({ title, size, option, onChange }) {
 
   return (
     <div className={style}>
-      <label htmlFor="basic-url" className="form-label">
+      <label htmlFor={title} className="form-label">
         {title}
       </label>
       <select
         className="form-select"
+        id={title}
         aria-label="Default select example"
         onChange={handleSelectChange}
       >
@@ -44,14 +45,14 @@ export function IFInputText({ title, size, value, readOnly, onChange }) {
 
   return (
     <div className={style}>
-      <label htmlFor="basic-url" className="form-label">
+      <label htmlFor={title} className="form-label">
         {title}
       </label>
       <div className="input-group">
         <input
           type="text"
           className="form-control"
-          id="basic-url"
+          id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
           value={value}
@@ -78,11 +79,12 @@ export function IFNgay({ title, onChange }) {
 
   return (
     <div className="col-md-2">
-      <label htmlFor="date" className="form-label">
+      <label htmlFor={title} className="form-label">
         {title}
       </label>
       <div className="input-group">
         <DatePicker
+          id={title}
           format="dd/MM/yyyy"
           placeholder="dd/mm/yyyy"
           onChange={handleDateChange}
@@ -131,7 +133,6 @@ export function IFSearchDV({ title, size, options, onChange }) {
     </div>
   );
 }
-
 
 export function IFSearch({ title, size, onChange }) {
   const style = "col-md-" + size;
