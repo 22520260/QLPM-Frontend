@@ -92,7 +92,7 @@ export function IFNgay({ title, onChange }) {
   );
 }
 
-export function IFSearch({ title, size, options, onChange }) {
+export function IFSearchDV({ title, size, options, onChange }) {
   const style = "col-md-" + size;
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -121,6 +121,37 @@ export function IFSearch({ title, size, options, onChange }) {
             <option value="No options available" />
           )}
         </datalist>
+        <button className="input-group-text bg-primary">
+          <FaSearch />
+        </button>
+        <button className="input-group-text">
+          <FaRedoAlt />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+export function IFSearch({ title, size, onChange }) {
+  const style = "col-md-" + size;
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  return (
+    <div className={style}>
+      <label htmlFor="exampleDataList" className="form-label">
+        {title}
+      </label>
+      <div className="input-group">
+        <input
+          className="form-control"
+          id="exampleDataList"
+          type="text"
+          onChange={handleInputChange}
+        />
         <button className="input-group-text bg-primary">
           <FaSearch />
         </button>

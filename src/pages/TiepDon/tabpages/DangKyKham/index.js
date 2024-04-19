@@ -4,6 +4,7 @@ import {
   IFSelect,
   IFNgay,
   IFSearch,
+  IFSearchDV,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { submitData } from "../../../../redux/action/postDataAction";
@@ -154,7 +155,7 @@ function DangKyKham() {
       <div className="py-3 border border-primary">
         <div className="container-fluid mb-3">
           <div className="row py-2">
-            <IFSearch
+            <IFSearchDV
               title={"Nhập dịch vụ"}
               size={6}
               options={namesDoctor}
