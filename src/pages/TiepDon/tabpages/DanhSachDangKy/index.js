@@ -16,8 +16,8 @@ function DanhSachDangKy() {
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
@@ -40,23 +40,22 @@ function DanhSachDangKy() {
       if (startDate && endDate) {
         filteredCustomers = filteredCustomers.filter((customer) => {
           const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
-          const filterStartDate = new Date(startDate);
-          const filterEndDate = new Date(endDate);
-          return customerDate >= filterStartDate && customerDate <= filterEndDate;
+
+          return customerDate >= startDate && customerDate <= endDate;
         });
       } else if (startDate) {
         // Chỉ có ngày bắt đầu
         filteredCustomers = filteredCustomers.filter((customer) => {
           const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
-          const filterStartDate = new Date(startDate);
-          return customerDate >= filterStartDate;
+
+          return customerDate >= startDate;
         });
       } else if (endDate) {
         // Chỉ có ngày kết thúc
         filteredCustomers = filteredCustomers.filter((customer) => {
           const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
-          const filterEndDate = new Date(endDate);
-          return customerDate <= filterEndDate;
+
+          return customerDate <= endDate;
         });
       }
 
@@ -94,8 +93,8 @@ function DanhSachDangKy() {
   return (
     <>
       <div className="row py-2">
-        <IFNgay title={"Từ ngày"} onChange={handleChange_NBD} />
-        <IFNgay title={"Đến ngày"} onChange={handleChange_NKT} />
+        <IFNgay title={"Từ ngày"} onChange={(value) => handleChange_NBD(value)} />
+        <IFNgay title={"Đến ngày"} onChange={(value) => handleChange_NKT(value)} />
         <IFSearch
           title={"Tìm kiếm từ khóa"}
           size={4}
