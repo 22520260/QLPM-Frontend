@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchData } from '../../action/actions';
+import { fetchData } from '../../action/getDataAction';
 
 const initialState = {
   data: null,

@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import fetchDataReducer from './slice/fetchData/DSDK_fetchUser'
+import fetchDataReducer from './slice/getDataSlice/getDataSlice'
+import postDataReducer from './slice/postDataSlice/postDataSlice'
 
 
 export default configureStore({
   reducer: {
-    data: fetchDataReducer,
+    getData: fetchDataReducer,
+    postData: postDataReducer,
   },
   devTools: true,
 })

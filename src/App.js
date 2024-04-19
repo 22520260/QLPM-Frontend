@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { publicRoutes } from "./routes";
 import DefaultLayout from "./component/Layout/DefaultLayout";
 import { Fragment } from "react";
-
+import { FaSearch, FaRedoAlt } from "react-icons/fa";
+import { IFSearch } from "./component/Layout/TabLayout/InputForm";
 function App() {
   return (
     <Router>
@@ -34,5 +35,26 @@ function App() {
     </Router>
   );
 }
+
+// function App() {
+//   return (
+//     <div>
+//       <div className="px-3 py-2 bg-primary">Dịch vụ</div>
+//       <div className="py-3 border border-primary">
+//         <div className="container-fluid mb-3">
+//           <div className="row py-2">
+//             <IFSearch
+//               title={"Nhập dịch vụ"}
+//               size={6}
+//               onChange={(value) => {
+//                 console.log("dichVu", value);
+//               }}
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 export default App;

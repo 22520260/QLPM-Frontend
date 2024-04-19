@@ -8,11 +8,11 @@ import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchData } from "../../../../redux/action/actions";
+import { fetchData } from "../../../../redux/action/getDataAction";
 
 function DanhSachLichHen() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.data.data);
+  const data = useSelector((state) => state.getData.data);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);

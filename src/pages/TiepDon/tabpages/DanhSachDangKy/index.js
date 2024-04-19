@@ -3,12 +3,12 @@ import { IFNgay, IFSearch } from "../../../../component/Layout/TabLayout/InputFo
 import ListForm from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchData } from "../../../../redux/action/actions";
+import { fetchData } from "../../../../redux/action/getDataAction";
 import { useDispatch, useSelector } from "react-redux";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const data = useSelector(state => state.data.data);
+  const data = useSelector(state => state.getData.data);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5); 
   const [displayedCustomers, setDisplayedCustomers] = useState([]);

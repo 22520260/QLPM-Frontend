@@ -1,60 +1,133 @@
-import DatePicker from 'rsuite/DatePicker';
+import DatePicker from "rsuite/DatePicker";
 import { FaSearch, FaRedoAlt } from "react-icons/fa";
-import 'rsuite/DatePicker/styles/index.css';
-import './style.css'
+import "rsuite/DatePicker/styles/index.css";
+import "./style.css";
 
-export function IFSelect({ title, size, option }) {
-    const style = 'col-md-' + size
-    const optionElements = option.map((value, index) => (
-        <option key={index} value={index}>{value}</option>
-    ));
-    return (
-        <div className={style}>
-            <label htmlFor="basic-url" className="form-label">{title}</label>
-            <select class="form-select" aria-label="Default select example">
-                <option selected>Chọn</option>
-                {optionElements}
-            </select>
-        </div>
-    );
+export function IFSelect({ title, size, option, onChange }) {
+  const style = "col-md-" + size;
+
+  const handleSelectChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  const optionElements = option.map((value, index) => (
+    <option key={index} value={value}>
+      {value}
+    </option>
+  ));
+
+  return (
+    <div className={style}>
+      <label htmlFor="basic-url" className="form-label">
+        {title}
+      </label>
+      <select
+        className="form-select"
+        aria-label="Default select example"
+        onChange={handleSelectChange}
+      >
+        <option value="">Chọn</option>
+        {optionElements}
+      </select>
+    </div>
+  );
 }
 
-export function IFInputText({ title, size }) {
-    const style = 'col-md-' + size
+export function IFInputText({ title, size, value, readOnly, onChange }) {
+  const style = "col-md-" + size;
 
-    return (
-        <div className={style}>
-            <label htmlFor="basic-url" className="form-label">{title}</label>
-            <div className="input-group">
-                <input type="text" className="form-control" id="basic-url" aria-describedby="basic-addon3 basic-addon4" />
-            </div>
-        </div>
-    );
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  return (
+    <div className={style}>
+      <label htmlFor="basic-url" className="form-label">
+        {title}
+      </label>
+      <div className="input-group">
+        <input
+          type="text"
+          className="form-control"
+          id="basic-url"
+          aria-describedby="basic-addon3 basic-addon4"
+          onChange={handleInputChange}
+          value={value}
+          readOnly={readOnly}
+        />
+      </div>
+    </div>
+  );
 }
 
-export function IFNgay({ title }) {
-    return (
-        <div className="col-md-2">
-            <label htmlFor="date" className="form-label">{title}</label>
-            <div className="input-group">
-                <DatePicker format="dd/MM/yyyy" placeholder="dd/mm/yyyy" />
-            </div>
-        </div>
-    );
+export function IFNgay({ title, onChange }) {
+  const handleDateChange = (date) => {
+    if (date) {
+      const formattedDate = new Date(date); // Chuyển đổi thành đối tượng Date
+      const day = formattedDate.getDate().toString().padStart(2, "0"); // Lấy ngày (có thêm số 0 nếu cần)
+      const month = (formattedDate.getMonth() + 1).toString().padStart(2, "0"); // Lấy tháng (có thêm số 0 nếu cần)
+      const year = formattedDate.getFullYear(); // Lấy năm
+      const formattedDateString = `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
+      onChange(formattedDateString); // Gọi hàm onChange với ngày đã định dạng
+    } else {
+      onChange(""); // Nếu date là null hoặc undefined, trả về chuỗi rỗng
+    }
+  };
+
+  return (
+    <div className="col-md-2">
+      <label htmlFor="date" className="form-label">
+        {title}
+      </label>
+      <div className="input-group">
+        <DatePicker
+          format="dd/MM/yyyy"
+          placeholder="dd/mm/yyyy"
+          onChange={handleDateChange}
+        />
+      </div>
+    </div>
+  );
 }
 
-export function IFSearch({ title, size }) {
-    const style = 'col-md-' + size
+export function IFSearch({ title, size, options, onChange }) {
+  const style = "col-md-" + size;
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
 
-    return (
-        <div className={style}>
-            <label htmlFor="basic-url" className="form-label">{title}</label>
-            <div className="input-group ">
-                <input type="text" className="form-control" aria-label="Dollar amount (with dot and two decimal places)" />
-                <button className="input-group-text bg-primary"><FaSearch /></button>
-                <button className="input-group-text"><FaRedoAlt /></button>
-            </div>
-        </div>
-    );
+  return (
+    <div className={style}>
+      <label htmlFor="exampleDataList" className="form-label">
+        {title}
+      </label>
+      <div className="input-group">
+        <input
+          className="form-control"
+          list="datalistOptions"
+          id="exampleDataList"
+          type="text"
+          onChange={handleInputChange}
+        />
+        <datalist id="datalistOptions">
+          {Array.isArray(options) ? (
+            options.map((option, index) => (
+              <option key={index} value={option} />
+            ))
+          ) : (
+            <option value="No options available" />
+          )}
+        </datalist>
+        <button className="input-group-text bg-primary">
+          <FaSearch />
+        </button>
+        <button className="input-group-text">
+          <FaRedoAlt />
+        </button>
+      </div>
+    </div>
+  );
 }
-
