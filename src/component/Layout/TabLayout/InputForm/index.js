@@ -73,7 +73,7 @@ export function IFNgay({ title, onChange }) {
       const formattedDateString = `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
       onChange(formattedDateString); // Gọi hàm onChange với ngày đã định dạng
     } else {
-      onChange(""); // Nếu date là null hoặc undefined, trả về chuỗi rỗng
+      onChange(null); // Nếu date là null hoặc undefined, trả về chuỗi rỗng
     }
   };
 

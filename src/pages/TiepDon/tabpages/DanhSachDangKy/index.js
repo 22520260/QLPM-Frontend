@@ -16,6 +16,8 @@ function DanhSachDangKy() {
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
@@ -32,27 +34,48 @@ function DanhSachDangKy() {
 
   useEffect(() => {
     if (data) {
+      let filteredCustomers = [...data]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
+
+      // Lọc theo ngày bắt đầu và ngày kết thúc
+      if (startDate && endDate) {
+        filteredCustomers = filteredCustomers.filter((customer) => {
+          const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
+          const filterStartDate = new Date(startDate);
+          const filterEndDate = new Date(endDate);
+          return customerDate >= filterStartDate && customerDate <= filterEndDate;
+        });
+      } else if (startDate) {
+        // Chỉ có ngày bắt đầu
+        filteredCustomers = filteredCustomers.filter((customer) => {
+          const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
+          const filterStartDate = new Date(startDate);
+          return customerDate >= filterStartDate;
+        });
+      } else if (endDate) {
+        // Chỉ có ngày kết thúc
+        filteredCustomers = filteredCustomers.filter((customer) => {
+          const customerDate = new Date(customer[4]); // Thay "date" bằng thuộc tính chứa ngày trong đối tượng customer
+          const filterEndDate = new Date(endDate);
+          return customerDate <= filterEndDate;
+        });
+      }
+
+      // Lọc theo từ khóa tìm kiếm
       if (searchKeyword) {
-        const filteredCustomers = data.filter((customer) =>
+        filteredCustomers = filteredCustomers.filter((customer) =>
           customer[3].toLowerCase().includes(searchKeyword.toLowerCase())
-        );      
-        
-        setTotalPages(Math.ceil(filteredCustomers.length / limit));
-        console.log(totalPages)
-        const startIdx = (page - 1) * limit;
-        const endIdx = Math.min(startIdx + limit, filteredCustomers.length);
-        const pageCustomers = filteredCustomers.slice(startIdx, endIdx);
-        setDisplayedCustomers(pageCustomers);
+        );
       }
-      else{
-        setTotalPages(Math.ceil(data.length / limit));
-        const startIdx = (page - 1) * limit;
-        const endIdx = Math.min(startIdx + limit, data.length);
-        const pageCustomers = data.slice(startIdx, endIdx);
-        setDisplayedCustomers(pageCustomers);
-      }
+
+      const calculatedTotalPages = Math.ceil(filteredCustomers.length / limit);
+      setTotalPages(calculatedTotalPages);
+
+      const startIdx = (page - 1) * limit;
+      const endIdx = Math.min(startIdx + limit, filteredCustomers.length);
+      const pageCustomers = filteredCustomers.slice(startIdx, endIdx);
+      setDisplayedCustomers(pageCustomers);
     }
-  }, [data, page, limit, searchKeyword]);
+  }, [data, page, limit, searchKeyword, startDate, endDate]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
@@ -60,16 +83,23 @@ function DanhSachDangKy() {
 
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
+  const handleChange_NBD = (value) => {
+    setStartDate(value);
+  };
+
+  const handleChange_NKT = (value) => {
+    setEndDate(value);
+  };
 
   return (
     <>
       <div className="row py-2">
-        <IFNgay title={"Từ ngày"} />
-        <IFNgay title={"Đến ngày"} />
+        <IFNgay title={"Từ ngày"} onChange={handleChange_NBD} />
+        <IFNgay title={"Đến ngày"} onChange={handleChange_NKT} />
         <IFSearch
           title={"Tìm kiếm từ khóa"}
           size={4}
-          onChange={(value) => handleIFSearchChange(value)}
+          onChange={handleIFSearchChange}
         />
       </div>
 
