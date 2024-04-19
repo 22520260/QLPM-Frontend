@@ -5,12 +5,13 @@ import Pagination from "rsuite/esm/Pagination/Pagination";
 import { usePaginationHandler } from "../../utils/appUtils";
 import { fetchData } from "../../redux/action/getDataAction";
 import { useDispatch, useSelector } from "react-redux";
+import CTPhieuKham from "../../popups/CTPhieuKham";
 
 function KhachHang() {
   const dispatch = useDispatch();
   const data = useSelector(state => state.getData.data);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5); 
+  const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
 
   const columns = [
@@ -40,20 +41,24 @@ function KhachHang() {
 
   return (
     <>
-      <div className="row py-2">
-        <IFNgay title={"Từ ngày"} />
-        <IFNgay title={"Đến ngày"} />
-        <IFSearch title={"Tìm kiếm từ khóa"} size={4} />
+      <div className="mx-4">
+
+        <div className="row py-2">
+          <IFNgay title={"Từ ngày"} />
+          <IFNgay title={"Đến ngày"} />
+          <IFSearch title={"Tìm kiếm từ khóa"} size={4} />
+        </div>
+        <ListForm columns={columns} data={displayedCustomers} />
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          limit={limit}
+          siblings={1}
+          onPageChange={handlePageChange}
+        />
       </div>
 
-      <ListForm columns={columns} data={displayedCustomers} />
-      <Pagination
-        totalPages={totalPages}
-        page={page}
-        limit={limit}
-        siblings={1}
-        onPageChange={handlePageChange}
-      />
+      <CTPhieuKham />
     </>
   );
 }
