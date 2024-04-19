@@ -2,6 +2,7 @@ import DatePicker from "rsuite/DatePicker";
 import { FaSearch, FaRedoAlt } from "react-icons/fa";
 import "rsuite/DatePicker/styles/index.css";
 import "./style.css";
+import { formatDate } from "../../../../utils/appUtils";
 
 export function IFSelect({ title, size, option, onChange }) {
   const style = "col-md-" + size;
@@ -66,14 +67,14 @@ export function IFInputText({ title, size, value, readOnly, onChange }) {
 export function IFNgay({ title, onChange }) {
   const handleDateChange = (date) => {
     if (date) {
-      const formattedDate = new Date(date); // Chuyển đổi thành đối tượng Date
-      const day = formattedDate.getDate().toString().padStart(2, "0"); // Lấy ngày (có thêm số 0 nếu cần)
-      const month = (formattedDate.getMonth() + 1).toString().padStart(2, "0"); // Lấy tháng (có thêm số 0 nếu cần)
-      const year = formattedDate.getFullYear(); // Lấy năm
-      const formattedDateString = `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
-      onChange(formattedDateString); // Gọi hàm onChange với ngày đã định dạng
+      const formattedDate = new Date(date);
+      // const day = formattedDate.getDate().toString().padStart(2, "0"); // Lấy ngày (có thêm số 0 nếu cần)
+      // const month = (formattedDate.getMonth() + 1).toString().padStart(2, "0"); // Lấy tháng (có thêm số 0 nếu cần)
+      // const year = formattedDate.getFullYear(); // Lấy năm
+      // const formattedDateString = `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
+      onChange(formattedDate); // Gọi hàm onChange với ngày đã định dạng
     } else {
-      onChange(null); // Nếu date là null hoặc undefined, trả về chuỗi rỗng
+      onChange(""); // Nếu date là null hoặc undefined, trả về chuỗi rỗng
     }
   };
 

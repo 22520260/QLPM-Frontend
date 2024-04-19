@@ -54,4 +54,13 @@ export const extractNames = (data, index) => {
     const namesArray = data.map(item => item[3]);
     return namesArray;
 };
+
+
+const { format } = require('date-fns');
+
+export const formatDate = (isoDate) => {
+  const date = new Date(isoDate);
+  return format(date, 'dd-MM-yyyy');
+};
+
   

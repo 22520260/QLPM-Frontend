@@ -41,8 +41,6 @@ function DangKyKham() {
   };
 
   const namesDoctor = extractNames(doctors);
-  console.log(formData)
-
   const calculateAge = (birthDate) => {
     const today = new Date();
     const birthDateObj = new Date(birthDate);
@@ -72,6 +70,8 @@ function DangKyKham() {
       })
     );
   };
+
+  console.log(formData)
 
   return (
     <div>
