@@ -4,6 +4,7 @@ import {
   IFSelect,
   IFNgay,
   IFSearch,
+  IFSearchDV,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { submitData } from "../../../../redux/action/postDataAction";
@@ -40,8 +41,6 @@ function DangKyKham() {
   };
 
   const namesDoctor = extractNames(doctors);
-  console.log(formData);
-
   const calculateAge = (birthDate) => {
     const today = new Date();
     const birthDateObj = new Date(birthDate);
@@ -85,13 +84,13 @@ function DangKyKham() {
             />
             <IFSelect
               title={"Giới tính"}
-              size={1}
+              size={2}
               option={["Nam", "Nữ", "Khác"]}
               onChange={(value) => handleChange("gioiTinh", value)}
             />
             <IFInputText
               title={"Địa chỉ"}
-              size={7}
+              size={6}
               onChange={(value) => handleChange("diaChi", value)}
             />
           </div>
@@ -153,7 +152,7 @@ function DangKyKham() {
       <div className="py-3 border border-primary">
         <div className="container-fluid mb-3">
           <div className="row py-2">
-            <IFSearch
+            <IFSearchDV
               title={"Nhập dịch vụ"}
               size={6}
               options={namesDoctor}
