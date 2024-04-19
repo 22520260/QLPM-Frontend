@@ -5,7 +5,7 @@ function TiepDon() {
     return (
         <div>
         
-            <h1>TiepDon</h1>
+            <h1 className='container-fluid'>Tiếp Đón</h1>
             <Navtab tabsData={tabsDataTD}/>
             
         </div>

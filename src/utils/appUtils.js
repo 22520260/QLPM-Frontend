@@ -45,3 +45,13 @@ export function usePaginationHandler(setPage, curentPage, totalPages) {
         }
     };
 }
+
+
+export const extractNames = (data, index) => {
+    if (!data) {
+      return [];
+    }
+    const namesArray = data.map(item => item[3]);
+    return namesArray;
+};
+  
