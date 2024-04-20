@@ -8,13 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CTPhieuKham from "../../popups/CTPhieuKham";
 
 function KhachHang() {
-<<<<<<< HEAD
-    return ( 
-        <>
-            <h1 className="container-fluid">Khách hàng</h1>
-        </>
-     );
-=======
   const dispatch = useDispatch();
   const data = useSelector(state => state.getData.data);
   const [page, setPage] = useState(1);
@@ -68,7 +61,6 @@ function KhachHang() {
       <CTPhieuKham />
     </>
   );
->>>>>>> 20d3e35a994297fb42f82ada9406871351fb6bfd
 }
 
 export default KhachHang;
