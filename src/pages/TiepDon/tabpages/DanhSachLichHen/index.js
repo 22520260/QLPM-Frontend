@@ -7,12 +7,12 @@ import { useState, useEffect } from "react";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchData } from "../../../../redux/action/getDataAction";
+import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachLichHen() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.getData.data);
+  const data = useSelector((state) => state.fetchAllBenhNhan.data);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
@@ -44,9 +44,12 @@ function DanhSachLichHen() {
   const handleChange_NKT = (value) => {
     setEndDate(value);
   };
-  useEffect(() => {
-    dispatch(fetchData("http://localhost:3001/tiepdon"));
-  }, []);
+
+  // useEffect(() => {
+  //   dispatch(fetchAllBenhNhanAction());
+  //   console.log('call api DanhSachLichHen')
+
+  // }, []);
 
   useEffect(() => {
     if (data) {

@@ -1,31 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchData } from '../../action/getDataAction';
+import { fetchAllBenhNhanAction } from '../../action/fetchDataAction/fetchAllBenhNhanAction';
 
 const initialState = {
-  data: null,
+  patients: [],
   loading: false,
   error: null,
 };
 
-const dataSlice = createSlice({
-  name: 'data',
+const fetchAllBenhNhanSlice = createSlice({
+  name: 'patients',
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchData.pending, (state, action) => {
+      .addCase(fetchAllBenhNhanAction.pending, (state, action) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchData.fulfilled, (state, action) => {
+      .addCase(fetchAllBenhNhanAction.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(fetchData.rejected, (state, action) => {
+      .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
   },
 });
 
-export default dataSlice.reducer;
+export default fetchAllBenhNhanSlice.reducer;

@@ -51,7 +51,7 @@ export const extractNames = (data, index) => {
     if (!data) {
       return [];
     }
-    const namesArray = data.map(item => item[3]);
+    const namesArray = data.map(item => item[index]);
     return namesArray;
 };
 

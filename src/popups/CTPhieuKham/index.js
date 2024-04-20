@@ -8,7 +8,7 @@ import {
 } from "../../component/Layout/TabLayout/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { submitData } from "../../redux/action/postDataAction";
-import { fetchData } from "../../redux/action/getDataAction";
+import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { extractNames } from "../../utils/appUtils";
 
 function CTPhieuKham() {
@@ -29,7 +29,7 @@ function CTPhieuKham() {
         dichVu: "",
     });
     const [age, setAge] = useState("");
-    const doctors = useSelector((state) => state.getData.data);
+    const doctors = useSelector((state) => state.fetchAllBenhNhan.data);
 
     const handleChange = (fieldName, value) => {
         setFormData({ ...formData, [fieldName]: value });
@@ -58,7 +58,7 @@ function CTPhieuKham() {
     };
 
     useEffect(() => {
-        dispatch(fetchData("http://localhost:3001/tiepdon"));
+        dispatch(fetchAllBenhNhanAction("http://localhost:3001/tiepdon"));
     }, []);
 
     const handleFormSubmit = () => {
