@@ -119,10 +119,12 @@ function DanhSachDangKy() {
       <div className="row py-2">
         <IFNgay
           title={"Từ ngày"}
+          size={2}
           onChange={(value) => handleChange_NBD(value)}
         />
         <IFNgay
           title={"Đến ngày"}
+          size={2}
           onChange={(value) => handleChange_NKT(value)}
         />
         <IFSearch

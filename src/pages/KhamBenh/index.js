@@ -29,8 +29,8 @@ function KhamBenh() {
             <div className="mx-4">
                 
                 <div className="row py-2">
-                    <IFNgay title={"Từ ngày"} />
-                    <IFNgay title={"Đến ngày"} />
+                    <IFNgay size={2} title={"Từ ngày"} />
+                    <IFNgay size={2} title={"Đến ngày"} />
                     <IFSearch title={"Tìm kiếm từ khóa"} size={4} />
                 </div>
                 <ListForm columns={columns} data={getData(page, limit)} />
