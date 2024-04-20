@@ -25,7 +25,7 @@ function KhamBenh() {
     const handlePageChange = usePaginationHandler(setPage, page, totalPages);
     return (
         <>
-            <h1>Khám bệnh</h1>
+            <h1 className="container-fluid">Khám bệnh</h1>
             <div className="mx-4">
                 
                 <div className="row py-2">

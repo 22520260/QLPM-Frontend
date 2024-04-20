@@ -123,7 +123,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
               <option key={index} value={option} />
             ))
           ) : (
-            <option value="No options available" />
+            <option value="Loading..." />
           )}
         </datalist>
         <button className="input-group-text bg-primary">

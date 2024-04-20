@@ -1,43 +1,38 @@
 import React, { useState } from 'react';
 
-
 function Navtab({ tabsData }) {
-    const [activeTab, setActiveTab] = useState(0); 
+    const [activeTab, setActiveTab] = useState(0);
 
     const handleTabClick = (index) => {
-        setActiveTab(index); 
+        setActiveTab(index);
+    };
+
+    const renderActiveTabContent = () => {
+        const ActiveComponent = tabsData[activeTab].component;
+        return <ActiveComponent />;
     };
 
     return (
-        <>
-            <div className='px-4'>
-                <div>
-                    <ul className="nav nav-tabs">
-                        {tabsData.map((tab, index) => (
-                            <li className="nav-item" key={index}>
-                                <a
-                                    className={`nav-link ${activeTab === index ? 'active' : ''}`}
-                                    onClick={() => handleTabClick(index)}
-                                >
-                                    {tab.title}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <div className="tab-content">
+        <div className='px-4'>
+            <div>
+                <ul className="nav nav-tabs">
                     {tabsData.map((tab, index) => (
-                        <div
-                            key={index}
-                            className={`tab-pane fade ${activeTab === index ? 'show active' : ''}`}
-                        >
-                            {tab.component && <tab.component />}
-                        </div>
+                        <li className="nav-item" key={index}>
+                            <a
+                                className={`nav-link ${activeTab === index ? 'active' : ''}`}
+                                onClick={() => handleTabClick(index)}
+                            >
+                                {tab.title}
+                            </a>
+                        </li>
                     ))}
-                </div>
+                </ul>
             </div>
-        </>
+
+            <div className="tab-content">
+                {renderActiveTabContent()}
+            </div>
+        </div>
     );
 }
 

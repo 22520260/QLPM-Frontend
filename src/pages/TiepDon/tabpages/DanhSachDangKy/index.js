@@ -6,13 +6,14 @@ import {
 import ListForm from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchData } from "../../../../redux/action/getDataAction";
+import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { useDispatch, useSelector } from "react-redux";
 import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.getData.data);
+  const patients = useSelector((state) => state.fetchAllBenhNhan.data);
+  console.log(patients)
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
@@ -30,12 +31,14 @@ function DanhSachDangKy() {
   ];
 
   useEffect(() => {
-    dispatch(fetchData("http://localhost:3001/tiepdon"));
+    dispatch(fetchAllBenhNhanAction());
+    console.log('call api DanhSachDangKy')
+
   }, []);
 
   useEffect(() => {
-    if (data) {
-      let filteredCustomers = [...data]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
+    if (patients) {
+      let filteredCustomers = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
 
       // Lọc theo ngày bắt đầu và ngày kết thúc
       if (startDate && endDate) {
@@ -98,7 +101,7 @@ function DanhSachDangKy() {
 
       setDisplayedCustomers(pageCustomers);
     }
-  }, [data, page, limit, searchKeyword, startDate, endDate]);
+  }, [patients, page, limit, searchKeyword, startDate, endDate]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
