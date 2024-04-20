@@ -29,7 +29,7 @@ function DangKyKham() {
     dichVu: "",
   });
   const [age, setAge] = useState("");
-  const doctors = useSelector(state => state.getData.data);
+  const doctors = useSelector((state) => state.getData.data);
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -54,13 +54,12 @@ function DangKyKham() {
       age--;
     }
 
-    return age;
+    return (age > 0 ? age : 0);
   };
 
   useEffect(() => {
     dispatch(fetchData("http://localhost:3001/tiepdon"));
   }, []);
-
 
   const handleFormSubmit = () => {
     dispatch(
@@ -164,7 +163,6 @@ function DangKyKham() {
           </div>
         </div>
       </div>
-
 
       <div className="px-3 py-2 bg-primary">
         <button onClick={handleFormSubmit}>Create</button>
