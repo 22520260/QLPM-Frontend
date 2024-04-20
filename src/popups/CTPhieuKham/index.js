@@ -5,63 +5,68 @@ import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetch
 import { extractNames } from "../../utils/appUtils";
 
 function CTPhieuKham() {
-    const dispatch = useDispatch();
-    const responseMessage = useSelector((state) => state.postData.status);
-    const [formData, setFormData] = useState({
-        hoTen: "",
-        gioiTinh: "",
-        diaChi: "",
-        ngaySinh: "",
-        cccd: "",
-        soDienThoai: "",
-        diUng: "",
-        ngayKham: "",
-        bacSi: "",
-        lyDoKham: "",
-        chuThich: "",
-        dichVu: "",
-    });
-    const [age, setAge] = useState("");
-    const doctors = useSelector((state) => state.fetchAllBenhNhan.data);
+    // const dispatch = useDispatch();
+    // const responseMessage = useSelector((state) => state.postData.status);
+    // const [formData, setFormData] = useState({
+    //     hoTen: "",
+    //     gioiTinh: "",
+    //     diaChi: "",
+    //     ngaySinh: "",
+    //     cccd: "",
+    //     soDienThoai: "",
+    //     diUng: "",
+    //     ngayKham: "",
+    //     bacSi: "",
+    //     lyDoKham: "",
+    //     chuThich: "",
+    //     dichVu: "",
+    // });
+    // const [age, setAge] = useState("");
+    // const doctors = useSelector((state) => state.fetchAllBenhNhan.data);
 
-    const handleChange = (fieldName, value) => {
-        setFormData({ ...formData, [fieldName]: value });
+    // const handleChange = (fieldName, value) => {
+    //     setFormData({ ...formData, [fieldName]: value });
 
-        if (fieldName === "ngaySinh") {
-            const age = calculateAge(value);
-            setAge(age);
-        }
-    };
+    //     if (fieldName === "ngaySinh") {
+    //         const age = calculateAge(value);
+    //         setAge(age);
+    //     }
+    // };
 
-    const namesDoctor = extractNames(doctors);
-    const calculateAge = (birthDate) => {
-        const today = new Date();
-        const birthDateObj = new Date(birthDate);
-        let age = today.getFullYear() - birthDateObj.getFullYear();
-        const monthDiff = today.getMonth() - birthDateObj.getMonth();
+    // const namesDoctor = extractNames(doctors);
+    // const calculateAge = (birthDate) => {
+    //     const today = new Date();
+    //     const birthDateObj = new Date(birthDate);
+    //     let age = today.getFullYear() - birthDateObj.getFullYear();
+    //     const monthDiff = today.getMonth() - birthDateObj.getMonth();
 
-        if (
-            monthDiff < 0 ||
-            (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
-        ) {
-            age--;
-        }
+    //     if (
+    //         monthDiff < 0 ||
+    //         (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    //     ) {
+    //         age--;
+    //     }
 
-        return (age > 0 ? age : 0);
-    };
+    //     return (age > 0 ? age : 0);
+    // };
 
-    useEffect(() => {
-        dispatch(fetchAllBenhNhanAction("http://localhost:3001/tiepdon"));
-    }, []);
+    // useEffect(() => {
+    //     dispatch(fetchAllBenhNhanAction("http://localhost:3001/tiepdon"));
+    // }, []);
 
-    const handleFormSubmit = () => {
-        dispatch(
-            submitData({
-                url: "http://localhost:3001/customer/store",
-                formData: formData,
-            })
-        );
-    };
+    // const handleFormSubmit = () => {
+    //     dispatch(
+    //         submitData({
+    //             url: "http://localhost:3001/customer/store",
+    //             formData: formData,
+    //         })
+    //     );
+    // };
+
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const handleSelectList = () => 
+
     return (
         <>
             <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
