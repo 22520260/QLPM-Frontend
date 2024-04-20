@@ -97,6 +97,7 @@ function DangKyKham() {
           <div className="row py-2">
             <IFNgay
               title={"Ngày sinh"}
+              size={2}
               onChange={(value) => handleChange("ngaySinh", value)}
             />
             <IFInputText
@@ -125,6 +126,7 @@ function DangKyKham() {
           <div className="row py-2">
             <IFNgay
               title={"Ngày khám"}
+              size={2}
               onChange={(value) => handleChange("ngayKham", value)}
             />
             <IFSelect

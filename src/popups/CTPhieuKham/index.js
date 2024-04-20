@@ -90,34 +90,35 @@ function CTPhieuKham() {
                                     <div className="col col-md-3">
                                         alW
                                     </div>
-                                    
-                                    <div className="col col-md-9 border">
+
+                                    <div className="col col-md-9 border py-3">
                                         <div className="row py-2">
                                             <IFInputText
                                                 title={"Họ và Tên"}
-                                                size={4}
+                                                size={5}
                                                 onChange={(value) => handleChange("hoTen", value)}
-                                            />
-                                            <IFSelect
-                                                title={"Giới tính"}
-                                                size={2}
-                                                option={["Nam", "Nữ", "Khác"]}
-                                                onChange={(value) => handleChange("gioiTinh", value)}
                                             />
                                             <IFInputText
                                                 title={"Địa chỉ"}
-                                                size={6}
+                                                size={7}
                                                 onChange={(value) => handleChange("diaChi", value)}
                                             />
                                         </div>
                                         <div className="row py-2">
+                                            <IFSelect
+                                                title={"Giới tính"}
+                                                size={3}
+                                                option={["Nam", "Nữ", "Khác"]}
+                                                onChange={(value) => handleChange("gioiTinh", value)}
+                                            />
                                             <IFNgay
                                                 title={"Ngày sinh"}
+                                                size={4}
                                                 onChange={(value) => handleChange("ngaySinh", value)}
                                             />
                                             <IFInputText
                                                 title={"Tuổi"}
-                                                size={1}
+                                                size={2}
                                                 value={age}
                                                 readOnly={true}
                                                 onChange={(value) => handleChange("tuoi", value)}
@@ -127,6 +128,8 @@ function CTPhieuKham() {
                                                 size={3}
                                                 onChange={(value) => handleChange("cccd", value)}
                                             />
+                                        </div>
+                                        <div className="row py-2">
                                             <IFInputText
                                                 title={"Số điện thoại"}
                                                 size={3}
@@ -134,24 +137,26 @@ function CTPhieuKham() {
                                             />
                                             <IFInputText
                                                 title={"Dị ứng"}
-                                                size={3}
+                                                size={5}
                                                 onChange={(value) => handleChange("diUng", value)}
+                                            />
+                                            <IFNgay
+                                                title={"Ngày khám"}
+                                                size={4}
+                                                onChange={(value) => handleChange("ngayKham", value)}
                                             />
                                         </div>
                                         <div className="row py-2">
-                                            <IFNgay
-                                                title={"Ngày khám"}
-                                                onChange={(value) => handleChange("ngayKham", value)}
-                                            />
+
                                             <IFSelect
                                                 title={"Bác sĩ"}
-                                                size={3}
+                                                size={4}
                                                 option={namesDoctor}
                                                 onChange={(value) => handleChange("bacSi", value)}
                                             />
                                             <IFInputText
                                                 title={"Lý do khám"}
-                                                size={4}
+                                                size={5}
                                                 onChange={(value) => handleChange("lyDoKham", value)}
                                             />
                                             <IFInputText
