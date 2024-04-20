@@ -1,7 +1,7 @@
 function KhachHang() {
     return ( 
         <>
-            <h1>KhachHang</h1>
+            <h1 className="container-fluid">Khách hàng</h1>
         </>
      );
 }
