@@ -6,7 +6,7 @@ export const fetchAllBenhNhanAction = createAsyncThunk(
   async () => {
     try {
       console.log('fetchAllBenhNhan')
-      const response = await axios.get('http://localhost:3001/customer');
+      const response = await axios.get('http://localhost:3001/patient');
       return response.data;
     } catch (error) {
       return error.message;
