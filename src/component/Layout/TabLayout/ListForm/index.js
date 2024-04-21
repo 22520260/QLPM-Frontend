@@ -1,11 +1,10 @@
-import CTPhieuKham from "../../../../popups/CTPhieuKham";
-import React, {useState} from "react";
+import React, { useState } from "react";
 
-function ListForm({ columns, data }) {
+function ListForm({ columns, data, loading }) {
     const [selectedId, setSelectedId] = useState(null);
 
-    function handleRowClick(id) {
-        console.log(id);
+    function handleRowClick(row) {
+        console.log(row); // Log row object when clicked
     }
 
     return (
@@ -19,15 +18,21 @@ function ListForm({ columns, data }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((row, rowIndex) => (
-                        <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                            {columns.map((column, colIndex) => (
-                                <td key={colIndex}>
-                                    {column.render ? column.render(row) : row[column.key]}
-                                </td>
-                            ))}
+                    {loading ? (
+                        <tr>
+                            <td colSpan={columns.length}>Loading...</td>
                         </tr>
-                    ))}
+                    ) : (
+                        data.map((row, rowIndex) => (
+                            <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                                {columns.map((column, colIndex) => (
+                                    <td key={colIndex}>
+                                        {column.render ? column.render(row) : row[column.key]}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
         </>

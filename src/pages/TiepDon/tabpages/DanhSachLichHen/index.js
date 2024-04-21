@@ -13,6 +13,8 @@ import { compareDates, formatDate } from "../../../../utils/appUtils";
 function DanhSachLichHen() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.fetchAllBenhNhan.data);
+  const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
@@ -130,7 +132,7 @@ function DanhSachLichHen() {
         <IFSearch title={"Tìm kiếm từ khóa"} size={4} onChange={(value) => handleIFSearchChange(value)}/>
       </div>
 
-      <ListForm columns={columns} data={displayedCustomers} />
+      <ListForm columns={columns} data={displayedCustomers} loading={isLoading}/>
       <Pagination
         totalPages={totalPages}
         page={page}

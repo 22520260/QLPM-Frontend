@@ -13,6 +13,8 @@ import { compareDates, formatDate } from "../../../../utils/appUtils";
 function DanhSachDangKy() {
   const dispatch = useDispatch();
   const patients = useSelector((state) => state.fetchAllBenhNhan.data);
+  const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
+  console.log(isLoading)
   console.log(patients)
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -135,7 +137,7 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListForm columns={columns} data={displayedCustomers} />
+      <ListForm columns={columns} data={displayedCustomers} loading={isLoading}/>
       <Pagination
         totalPages={totalPages}
         page={page}

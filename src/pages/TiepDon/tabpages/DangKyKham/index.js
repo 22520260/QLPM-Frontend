@@ -29,6 +29,7 @@ function DangKyKham() {
   });
   const [age, setAge] = useState("");
   const doctors = useSelector((state) => state.fetchAllBacSi.data);
+
   const services = useSelector((state) => state.fetchAllDichVu.data);
   console.log(services)
 
