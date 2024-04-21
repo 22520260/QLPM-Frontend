@@ -65,7 +65,11 @@ function CTPhieuKham() {
 
     const [currentPage, setCurrentPage] = useState(1);
 
-    const handleSelectList = () => 
+const handleSelectList = () => {}
+
+const renderElement = () => {}
+const handleSave = () => {}
+
 
     return (
         <>
