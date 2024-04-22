@@ -71,6 +71,7 @@ function DangKyKham() {
     console.log("call api DangKyKham");
   }, []);
 
+  // hàm này phải dùng để insert hồ sơ bệnh nhân lẫn phiếu khám, chưa làm
   const handleFormSubmit = () => {
     dispatch(
       submitData({
@@ -80,6 +81,8 @@ function DangKyKham() {
     );
   };
 
+  // Cái này dùng để insert phiếu khám cho các bệnh nhân đã từng khám
+  // tức là chỉ insert phiếu khám thôi, maBN, maBS, maDV lấy từ lựa chọn trên UI
   const handleJustPKSubmit = () => {
     const pkFormData = {
       maBN: patients[0][0],
