@@ -71,7 +71,7 @@ function DangKyKham() {
   const handleFormSubmit = () => {
     dispatch(
       submitData({
-        url: "http://localhost:3001/patient/store",
+        url: "http://localhost:3001/customer/store",
         formData: formData,
       })
     );
