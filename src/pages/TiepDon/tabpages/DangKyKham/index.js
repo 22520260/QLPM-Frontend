@@ -28,7 +28,7 @@ function DangKyKham() {
     dichVu: "",
   });
   const [age, setAge] = useState("");
-  const doctors = useSelector((state) => state.fetchAllBacSi.data);
+  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
 
   const services = useSelector((state) => state.fetchAllDichVu.data);
   console.log(services);

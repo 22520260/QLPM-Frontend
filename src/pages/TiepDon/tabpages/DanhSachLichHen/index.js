@@ -12,7 +12,7 @@ import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachLichHen() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchAllBenhNhan.data);
+  const data = useSelector((state) => state.fetchAllBenhNhan.patients);
   const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
 
   const [page, setPage] = useState(1);
