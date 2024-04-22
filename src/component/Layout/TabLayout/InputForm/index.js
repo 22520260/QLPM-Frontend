@@ -64,7 +64,8 @@ export function IFInputText({ title, size, value, readOnly, onChange }) {
   );
 }
 
-export function IFNgay({ title, onChange }) {
+export function IFNgay({ title, size, onChange }) {
+  const style = "col-md-" + size;
   const handleDateChange = (date) => {
     if (date) {
       const formattedDate = new Date(date);
@@ -79,12 +80,13 @@ export function IFNgay({ title, onChange }) {
   };
 
   return (
-    <div className="col-md-2">
+    <div className={style}>
       <label htmlFor={title} className="form-label">
         {title}
       </label>
       <div className="input-group">
         <DatePicker
+        containerProps={{ style: { zIndex: 1056 } }}
           id={title}
           format="dd/MM/yyyy"
           placeholder="dd/mm/yyyy"
@@ -121,7 +123,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
               <option key={index} value={option} />
             ))
           ) : (
-            <option value="No options available" />
+            <option value="Loading..." />
           )}
         </datalist>
         <button className="input-group-text bg-primary">

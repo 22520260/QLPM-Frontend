@@ -1,7 +1,7 @@
 function Thuoc() {
     return ( 
         <>
-            <h1>Thuoc</h1>
+            <h1 className="container-fluid">Thuốc</h1>
         </>
      );
 }

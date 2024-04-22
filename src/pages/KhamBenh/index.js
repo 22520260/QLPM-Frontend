@@ -25,12 +25,12 @@ function KhamBenh() {
     const handlePageChange = usePaginationHandler(setPage, page, totalPages);
     return (
         <>
-            <h1>Khám bệnh</h1>
+            <h1 className="container-fluid">Khám bệnh</h1>
             <div className="mx-4">
                 
                 <div className="row py-2">
-                    <IFNgay title={"Từ ngày"} />
-                    <IFNgay title={"Đến ngày"} />
+                    <IFNgay size={2} title={"Từ ngày"} />
+                    <IFNgay size={2} title={"Đến ngày"} />
                     <IFSearch title={"Tìm kiếm từ khóa"} size={4} />
                 </div>
                 <ListForm columns={columns} data={getData(page, limit)} />

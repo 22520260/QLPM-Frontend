@@ -3,17 +3,16 @@ import {
   IFInputText,
   IFSelect,
   IFNgay,
-  IFSearch,
   IFSearchDV,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { submitData } from "../../../../redux/action/postDataAction";
-import { fetchData } from "../../../../redux/action/getDataAction";
+import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fetchAllBacSiAction";
+import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { extractNames } from "../../../../utils/appUtils";
 
 function DangKyKham() {
   const dispatch = useDispatch();
-  const responseMessage = useSelector((state) => state.postData.status);
   const [formData, setFormData] = useState({
     hoTen: "",
     gioiTinh: "",
@@ -29,7 +28,10 @@ function DangKyKham() {
     dichVu: "",
   });
   const [age, setAge] = useState("");
-  const doctors = useSelector(state => state.getData.data);
+  const doctors = useSelector((state) => state.fetchAllBacSi.data);
+
+  const services = useSelector((state) => state.fetchAllDichVu.data);
+  console.log(services)
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -40,7 +42,9 @@ function DangKyKham() {
     }
   };
 
-  const namesDoctor = extractNames(doctors);
+  const namesDoctor = extractNames(doctors, 3);
+  const namesService = extractNames(services, 2);
+
   const calculateAge = (birthDate) => {
     const today = new Date();
     const birthDateObj = new Date(birthDate);
@@ -54,13 +58,15 @@ function DangKyKham() {
       age--;
     }
 
-    return age;
+    return (age > 0 ? age : 0);
   };
 
   useEffect(() => {
-    dispatch(fetchData("http://localhost:3001/tiepdon"));
-  }, []);
+    dispatch(fetchAllBacSiAction());
+    dispatch(fetchAllDichVuAction());
 
+    console.log('call api DangKyKham')
+  }, []);
 
   const handleFormSubmit = () => {
     dispatch(
@@ -70,8 +76,6 @@ function DangKyKham() {
       })
     );
   };
-
-  console.log(formData)
 
   return (
     <div>
@@ -100,6 +104,7 @@ function DangKyKham() {
           <div className="row py-2">
             <IFNgay
               title={"Ngày sinh"}
+              size={2}
               onChange={(value) => handleChange("ngaySinh", value)}
             />
             <IFInputText
@@ -128,6 +133,7 @@ function DangKyKham() {
           <div className="row py-2">
             <IFNgay
               title={"Ngày khám"}
+              size={2}
               onChange={(value) => handleChange("ngayKham", value)}
             />
             <IFSelect
@@ -158,7 +164,7 @@ function DangKyKham() {
             <IFSearchDV
               title={"Nhập dịch vụ"}
               size={6}
-              options={namesDoctor}
+              options={namesService}
               onChange={(value) => {
                 handleChange("dichVu", value);
               }}
@@ -166,7 +172,6 @@ function DangKyKham() {
           </div>
         </div>
       </div>
-
 
       <div className="px-3 py-2 bg-primary">
         <button onClick={handleFormSubmit}>Create</button>
