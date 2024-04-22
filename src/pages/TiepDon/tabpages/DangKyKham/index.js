@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { submitData } from "../../../../redux/action/postDataAction";
 import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fetchAllBacSiAction";
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
+import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { extractNames } from "../../../../utils/appUtils";
 
 function DangKyKham() {
@@ -30,8 +31,9 @@ function DangKyKham() {
   const [age, setAge] = useState("");
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
 
-  const services = useSelector((state) => state.fetchAllDichVu.data);
+  const services = useSelector((state) => state.fetchAllDichVu.services);
   console.log(services);
+  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -64,6 +66,7 @@ function DangKyKham() {
   useEffect(() => {
     dispatch(fetchAllBacSiAction());
     dispatch(fetchAllDichVuAction());
+    dispatch(fetchAllBenhNhanAction());
 
     console.log("call api DangKyKham");
   }, []);
@@ -73,6 +76,25 @@ function DangKyKham() {
       submitData({
         url: "http://localhost:3001/patient/store",
         formData: formData,
+      })
+    );
+  };
+
+  const handleJustPKSubmit = () => {
+    const pkFormData = {
+      maBN: patients[0][0],
+      maBS: doctors[0][0],
+      maDV: services[0][0],
+      maPhong: 999,
+      ngayKham: formData.ngayKham,
+      lyDoKham: formData.lyDoKham,
+      STT: 999,
+      trangThai: "Chưa thực hiện",
+    };
+    dispatch(
+      submitData({
+        url: "http://localhost:3001/phieukham/insert-pk",
+        formData: pkFormData,
       })
     );
   };
@@ -174,7 +196,8 @@ function DangKyKham() {
       </div>
 
       <div className="px-3 py-2 bg-primary">
-        <button onClick={handleFormSubmit}>Create</button>
+        <button onClick={handleFormSubmit}>Tạo hồ sơ và đăng kí</button>
+        <button onClick={handleJustPKSubmit}>Đăng kí khám</button>
       </div>
     </div>
   );
