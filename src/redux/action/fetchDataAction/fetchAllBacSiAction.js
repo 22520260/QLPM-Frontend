@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchAllBacSiAction = createAsyncThunk(
-  'fetchAllBacSiAction',
+  'fetchAllBacSi',
   async () => {
     try {
       console.log('fetchAllBacSi')

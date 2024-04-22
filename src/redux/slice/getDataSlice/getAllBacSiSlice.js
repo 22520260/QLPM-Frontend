@@ -8,7 +8,7 @@ const initialState = {
 };
 
 const fetchAllBacSiSlice = createSlice({
-  name: 'doctors',
+  name: 'fetchAllBacSi',
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {
@@ -19,7 +19,7 @@ const fetchAllBacSiSlice = createSlice({
       })
       .addCase(fetchAllBacSiAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.doctors = action.payload;
       })
       .addCase(fetchAllBacSiAction.rejected, (state, action) => {
         state.loading = false;
