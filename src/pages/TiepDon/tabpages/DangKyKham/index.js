@@ -31,7 +31,7 @@ function DangKyKham() {
   const doctors = useSelector((state) => state.fetchAllBacSi.data);
 
   const services = useSelector((state) => state.fetchAllDichVu.data);
-  console.log(services)
+  console.log(services);
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -58,20 +58,20 @@ function DangKyKham() {
       age--;
     }
 
-    return (age > 0 ? age : 0);
+    return age > 0 ? age : 0;
   };
 
   useEffect(() => {
     dispatch(fetchAllBacSiAction());
     dispatch(fetchAllDichVuAction());
 
-    console.log('call api DangKyKham')
+    console.log("call api DangKyKham");
   }, []);
 
   const handleFormSubmit = () => {
     dispatch(
       submitData({
-        url: "http://localhost:3001/customer/store",
+        url: "http://localhost:3001/patient/store",
         formData: formData,
       })
     );
