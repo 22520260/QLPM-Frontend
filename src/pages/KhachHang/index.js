@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
-import ListForm from "../../component/Layout/TabLayout/ListForm";
+import {ListForm} from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "rsuite/esm/Pagination/Pagination";
 import { usePaginationHandler } from "../../utils/appUtils";
 import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -153,7 +153,7 @@ function KhachHang() {
         />
       </div>
 
-      <CTPhieuKham />
+  {/* <CTPhieuKham /> */}
     </>
   );
 }

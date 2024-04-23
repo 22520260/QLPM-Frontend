@@ -11,9 +11,16 @@ import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fe
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { extractNames } from "../../../../utils/appUtils";
+import {ListForm} from "../../../../component/Layout/TabLayout/ListForm";
 
 function DangKyKham() {
   const dispatch = useDispatch();
+  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
+  const services = useSelector((state) => state.fetchAllDichVu.services);
+
+  const [age, setAge] = useState("");
+  const [selectedServices, setSelectedServices] = useState([]);
+
   const [formData, setFormData] = useState({
     hoTen: "",
     gioiTinh: "",
@@ -26,8 +33,19 @@ function DangKyKham() {
     bacSi: "",
     lyDoKham: "",
     chuThich: "",
-    dichVu: "",
+    dichVu: [],
   });
+
+  const columns = [
+    { title: "Mã dịch vụ", key: "0" },
+    { title: "Tên dịch vụ", key: "2" },
+    { title: "Giá dịch vụ", key: "3" },
+  ];
+
+  useEffect(() => {
+    dispatch(fetchAllBacSiAction());
+    dispatch(fetchAllDichVuAction());
+  }, []);
   const [age, setAge] = useState("");
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
 
@@ -44,9 +62,6 @@ function DangKyKham() {
     }
   };
 
-  const namesDoctor = extractNames(doctors, 3);
-  const namesService = extractNames(services, 2);
-
   const calculateAge = (birthDate) => {
     const today = new Date();
     const birthDateObj = new Date(birthDate);
@@ -59,17 +74,8 @@ function DangKyKham() {
     ) {
       age--;
     }
-
     return age > 0 ? age : 0;
   };
-
-  useEffect(() => {
-    dispatch(fetchAllBacSiAction());
-    dispatch(fetchAllDichVuAction());
-    dispatch(fetchAllBenhNhanAction());
-
-    console.log("call api DangKyKham");
-  }, []);
 
   // hàm này phải dùng để insert hồ sơ bệnh nhân lẫn phiếu khám, chưa làm
   const handleFormSubmit = () => {
@@ -79,6 +85,21 @@ function DangKyKham() {
         formData: formData,
       })
     );
+  };
+
+  const handleAddService = (selectedService) => {
+    if (selectedService) {
+      const updatedServices = [...selectedServices, selectedService];
+      setSelectedServices(updatedServices);
+      setFormData({ ...formData, dichVu: updatedServices });
+    }
+  };
+
+  const handleDeleteService = (index) => {
+    const updatedServices = [...selectedServices];
+    updatedServices.splice(index, 1);
+    setSelectedServices(updatedServices);
+    setFormData({ ...formData, dichVu: updatedServices });
   };
 
   // Cái này dùng để insert phiếu khám cho các bệnh nhân đã từng khám
@@ -164,7 +185,8 @@ function DangKyKham() {
             <IFSelect
               title={"Bác sĩ"}
               size={3}
-              option={namesDoctor}
+              option={doctors}
+              indexName={3}
               onChange={(value) => handleChange("bacSi", value)}
             />
             <IFInputText
@@ -173,7 +195,7 @@ function DangKyKham() {
               onChange={(value) => handleChange("lyDoKham", value)}
             />
             <IFInputText
-              title={"Chú thích (nếu có)"}
+              title={"Tiền sử bệnh"}
               size={3}
               onChange={(value) => handleChange("chuThich", value)}
             />
@@ -189,18 +211,31 @@ function DangKyKham() {
             <IFSearchDV
               title={"Nhập dịch vụ"}
               size={6}
-              options={namesService}
+              options={services}
               onChange={(value) => {
-                handleChange("dichVu", value);
+                const selected = services.find((service) => service[2] === value);
+                handleAddService(selected);
               }}
             />
           </div>
+          {selectedServices.length > 0 ? (
+            <ListForm
+              columns={columns}
+              data={selectedServices}
+              onDeleteService={handleDeleteService}
+            />
+          ) : (
+            <div className="d-flex justify-content-center">
+              Chưa thêm dịch vụ nào.
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="px-3 py-2 bg-primary">
-        <button onClick={handleFormSubmit}>Tạo hồ sơ và đăng kí</button>
-        <button onClick={handleJustPKSubmit}>Đăng kí khám</button>
+      <div className="d-flex justify-content-center px-3 py-2">
+        <button className="btn btn-primary" onClick={handleFormSubmit}>
+          Đăng kí
+        </button>
       </div>
     </div>
   );

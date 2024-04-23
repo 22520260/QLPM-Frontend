@@ -2,7 +2,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import ListForm from "../../../../component/Layout/TabLayout/ListForm";
+import {ListForm} from "../../../../component/Layout/TabLayout/ListForm";
 import { useState, useEffect } from "react";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
