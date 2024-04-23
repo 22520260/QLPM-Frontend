@@ -1,10 +1,10 @@
 import DatePicker from "rsuite/DatePicker";
 import { FaSearch, FaRedoAlt } from "react-icons/fa";
+import { useState } from "react";
 import "rsuite/DatePicker/styles/index.css";
 import "./style.css";
-import { formatDate } from "../../../../utils/appUtils";
 
-export function IFSelect({ title, size, option, onChange }) {
+export function IFSelect({ title, size, option, indexName, onChange }) {
   const style = "col-md-" + size;
 
   const handleSelectChange = (e) => {
@@ -13,10 +13,11 @@ export function IFSelect({ title, size, option, onChange }) {
   };
 
   const optionElements = option.map((value, index) => (
-    <option key={index} value={value}>
-      {value}
+    <option key={index} value={Array.isArray(value) ? value[indexName] : value}>
+      {Array.isArray(value) ? value[indexName] : value}
     </option>
   ));
+  
 
   return (
     <div className={style}>
@@ -98,14 +99,20 @@ export function IFNgay({ title, size, onChange }) {
 }
 
 export function IFSearchDV({ title, size, options, onChange }) {
-  const style = "col-md-" + size;
+  const [searchValue, setSearchValue] = useState("");
+
   const handleInputChange = (e) => {
     const value = e.target.value;
-    onChange(value);
+    setSearchValue(value); // Lưu trữ giá trị của ô tìm kiếm vào trạng thái local
+  };
+
+  const handleSelectOption = (selectedValue) => {
+    onChange(selectedValue); // Gọi hàm onChange với giá trị được chọn từ ô tìm kiếm
+    setSearchValue(""); // Đặt lại giá trị của ô tìm kiếm thành chuỗi rỗng
   };
 
   return (
-    <div className={style}>
+    <div className={`col-md-${size}`}>
       <label htmlFor="exampleDataList" className="form-label">
         {title}
       </label>
@@ -115,22 +122,23 @@ export function IFSearchDV({ title, size, options, onChange }) {
           list="datalistOptions"
           id="exampleDataList"
           type="text"
+          value={searchValue}
           onChange={handleInputChange}
         />
         <datalist id="datalistOptions">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option} />
+              <option key={index} value={option[2]} />
             ))
           ) : (
             <option value="Loading..." />
           )}
         </datalist>
-        <button className="input-group-text bg-primary">
-          <FaSearch />
-        </button>
-        <button className="input-group-text">
-          <FaRedoAlt />
+        <button
+          className="input-group-text bg-primary"
+          onClick={() => handleSelectOption(searchValue)}
+        >
+          Add
         </button>
       </div>
     </div>

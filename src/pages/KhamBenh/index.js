@@ -1,43 +1,166 @@
 import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
-import ListForm from "../../component/Layout/TabLayout/ListForm";
-import { useState } from "react";
-import { getData, getLength } from "./data";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { ListFormAddBtnThanhToanAndChiTiet } from "../../component/Layout/TabLayout/ListForm";
+import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../utils/appUtils";
+import { compareDates, formatDate } from "../../utils/appUtils";
 
 function KhamBenh() {
-    const columns = [
-        { title: 'ID', key: 'id' },
-        { title: 'Name', key: 'name' },
-        { title: 'Info', render: (row) => (
-            <div>{row.info.age} - {row.info.gender}<br />{row.info.phone}</div>
-        ) },
-        { title: 'Bill', key: 'bill' },
-        { title: 'Status', key: 'status' },
-        { title: 'Other', key: 'other' }
-    ];
+  const dispatch = useDispatch();
+  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
+  const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
 
-    const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [displayedCustomers, setDisplayedCustomers] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
 
-    let totalPages = Math.ceil(getLength() / limit);
+  const columns = [
+    { title: "Mã phiếu", key: "0" },
+    { title: "STT", key: "1" },
+    { title: "Họ Tên", key: "2" },
+    { title: "Tên Bác sĩ", key: "3" },
+    { title: "Tổng tiền", key: "4" },
+    { title: "Trạng thái", key: "5" },
+  ];
 
-    const handlePageChange = usePaginationHandler(setPage, page, totalPages);
-    return (
-        <>
-            <h1 className="container-fluid">Khám bệnh</h1>
-            <div className="mx-4">
-                
-                <div className="row py-2">
-                    <IFNgay size={2} title={"Từ ngày"} />
-                    <IFNgay size={2} title={"Đến ngày"} />
-                    <IFSearch title={"Tìm kiếm từ khóa"} size={4} />
-                </div>
-                <ListForm columns={columns} data={getData(page, limit)} />
-                <Pagination totalPages={totalPages} page={page} limit={limit} siblings={1} onPageChange={handlePageChange} />
-            </div>
-        </>
-    );
+  useEffect(() => {
+    dispatch(fetchAllBenhNhanAction());
+    console.log("call api DanhSachDangKy");
+  }, []);
+
+  useEffect(() => {
+    if (patients) {
+      let filteredCustomers = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
+
+      // Lọc theo ngày bắt đầu và ngày kết thúc
+      if (startDate && endDate) {
+        filteredCustomers = filteredCustomers.filter((customer) => {
+          const customerDate = new Date(customer[4]);
+          return (
+            compareDates(startDate, customerDate) >= 0 &&
+            compareDates(customerDate, endDate) >= 0
+          );
+        });
+      } else if (startDate) {
+        // Chỉ có ngày bắt đầu
+        filteredCustomers = filteredCustomers.filter((customer) => {
+          const customerDate = new Date(customer[4]);
+
+          return compareDates(startDate, customerDate) >= 0;
+        });
+      } else if (endDate) {
+        // Chỉ có ngày kết thúc
+        filteredCustomers = filteredCustomers.filter((customer) => {
+          const customerDate = new Date(customer[4]);
+
+          return compareDates(customerDate, endDate) >= 0;
+        });
+      }
+
+      // Lọc theo từ khóa tìm kiếm
+      if (searchKeyword) {
+        filteredCustomers = filteredCustomers.filter((customer) =>
+          customer[3].toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+      }
+
+      const formattedCustomers = filteredCustomers.map((customer) => {
+        const [
+          mabn,
+          matk,
+          cccd,
+          hoTen,
+          ngaySinh,
+          gioiTinh,
+          sdt,
+          diaChi,
+          tienSuBenh,
+          diUng,
+        ] = customer;
+
+        const formattedNgaySinh = formatDate(ngaySinh);
+
+        return [
+          mabn,
+          matk,
+          cccd,
+          hoTen,
+          formattedNgaySinh,
+          gioiTinh,
+          sdt,
+          diaChi,
+          tienSuBenh,
+          diUng,
+        ];
+      });
+
+      const calculatedTotalPages = Math.ceil(filteredCustomers.length / limit);
+      setTotalPages(calculatedTotalPages);
+
+      const startIdx = (page - 1) * limit;
+      const endIdx = Math.min(startIdx + limit, filteredCustomers.length);
+      const pageCustomers = formattedCustomers.slice(startIdx, endIdx);
+
+      setDisplayedCustomers(pageCustomers);
+    }
+  }, [patients, page, limit, searchKeyword, startDate, endDate]);
+
+  const handleIFSearchChange = (value) => {
+    setSearchKeyword(value);
+  };
+
+  const handlePageChange = usePaginationHandler(setPage, page, totalPages);
+
+  const handleChange_NBD = (value) => {
+    setStartDate(value);
+  };
+
+  const handleChange_NKT = (value) => {
+    setEndDate(value);
+  };
+
+  return (
+    <>
+      <div className="container-fluid">
+        <div className="row py-2">
+          <IFNgay
+            title={"Từ ngày"}
+            size={2}
+            onChange={(value) => handleChange_NBD(value)}
+          />
+          <IFNgay
+            title={"Đến ngày"}
+            size={2}
+            onChange={(value) => handleChange_NKT(value)}
+          />
+          <IFSearch
+            title={"Tìm kiếm từ khóa"}
+            size={4}
+            onChange={(value) => handleIFSearchChange(value)}
+          />
+        </div>
+
+        <ListFormAddBtnThanhToanAndChiTiet
+          columns={columns}
+          data={displayedCustomers}
+          loading={isLoading}
+        />
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          limit={limit}
+          siblings={1}
+          onPageChange={handlePageChange}
+        />
+      </div>
+    </>
+  );
 }
 
 export default KhamBenh;

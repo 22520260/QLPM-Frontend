@@ -4,5 +4,6 @@
 }
 .rs-picker-popup {
     z-index: 1056 !important;
+    max-height: 100rem;
   }
   

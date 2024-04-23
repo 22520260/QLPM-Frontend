@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import ListForm from "../../../../component/Layout/TabLayout/ListForm";
+import {ListForm, ListFormAddBtnThanhToanAndChiTiet} from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -24,11 +24,14 @@ function DanhSachDangKy() {
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "ID", key: "0" },
-    { title: "Name", key: "1" },
-    { title: "Bill", key: "2" },
-    { title: "Status", key: "3" },
-    { title: "Other", key: "4" },
+    { title: "Mã phiếu", key: "0" },
+    { title: "STT", key: "1" },
+    { title: "Họ Tên", key: "2" },
+    { title: "Tên Bác sĩ", key: "3" },
+    { title: "Tổng tiền", key: "4" },
+    { title: "Trạng thái", key: "5" },
+
+
   ];
 
   useEffect(() => {
@@ -138,7 +141,7 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListForm columns={columns} data={displayedCustomers} loading={isLoading}/>
+      <ListFormAddBtnThanhToanAndChiTiet columns={columns} data={displayedCustomers} loading={isLoading}/>
       <Pagination
         totalPages={totalPages}
         page={page}
