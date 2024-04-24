@@ -13,10 +13,9 @@ function ThongTinKham() {
   };
 
   return (
-    <div>
+    <div className="shadow rounded">
       {/* Thông tin */}
-      <div className="px-3 py-2 bg-primary">Thông tin khám</div>
-      <div className="py-3 border border-primary">
+      <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
         <div className="container-fluid mb-">
           <div className="row py-2">
             <IFInputText
@@ -131,7 +130,6 @@ function ThongTinKham() {
             />
           </div>
         </div>
-      </div>
     </div>
   );
 }
