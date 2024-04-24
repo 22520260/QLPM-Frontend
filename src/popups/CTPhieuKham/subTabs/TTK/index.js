@@ -5,7 +5,7 @@ import {
   IFNgay,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { useSelector } from "react-redux";
-function ThongTinKhachHang() {
+function ThongTinKham() {
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
 
   const handleChange = (page) => {
@@ -15,7 +15,7 @@ function ThongTinKhachHang() {
   return (
     <div className="shadow rounded">
       {/* Thông tin */}
-      <div className="px-3 py-2 bg-primary rounded-top">Thông tin khách hàng</div>
+      <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
         <div className="container-fluid mb-">
           <div className="row py-2">
             <IFInputText
@@ -64,15 +64,68 @@ function ThongTinKhachHang() {
               onChange={(value) => handleChange(1)}
             />
           </div>
+
           <div className="row py-2">
             <IFInputText
-              title={"Tiền sử bệnh"}
+              title={"Lý do khám"}
               size={5}
               onChange={(value) => handleChange(1)}
             />
             <IFInputText
+              title={"Phòng khám"}
+              size={3}
+              onChange={(value) => handleChange(1)}
+            />
+            <IFInputText
+              title={"Bác sĩ khám"}
+              size={4}
+              onChange={(value) => handleChange(1)}
+            />
+          </div>
+          <div className="row py-2">
+            <IFInputText
+              title={"Tiền sử bệnh"}
+              size={6}
+              onChange={(value) => handleChange(1)}
+            />
+            <IFInputText
               title={"Dị ứng"}
-              size={7}
+              size={6}
+              onChange={(value) => handleChange(1)}
+            />
+          </div>
+          <div className="row py-2">
+            <IFInputText
+              title={"Bệnh sử"}
+              size={4}
+              onChange={(value) => handleChange(1)}
+            />
+            <IFInputText
+              title={"Khám lâm sàn"}
+              size={4}
+              onChange={(value) => handleChange(1)}
+            />
+            <IFInputText
+              title={"Lời dặn"}
+              size={4}
+              onChange={(value) => handleChange(1)}
+            />
+          </div>
+          <div className="px-3 py-2 bg-primary">Chỉ số sinh tồn</div>
+          <div className="row py-2">
+            <IFInputText
+              title={"Huyết áp"}
+              size={4}
+              onChange={(value) => handleChange(1)}
+            />
+            <IFInputText
+              title={"Chiều cao"}
+              size={4}
+              onChange={(value) => handleChange(1)}
+            />
+            <IFInputText
+              title={"Cân nặng"}
+              size={4}
               onChange={(value) => handleChange(1)}
             />
           </div>
@@ -81,4 +134,4 @@ function ThongTinKhachHang() {
   );
 }
 
-export default ThongTinKhachHang;
+export default ThongTinKham;

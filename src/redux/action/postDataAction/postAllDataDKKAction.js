@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Action creator để gửi dữ liệu lên backend
-export const submitData = createAsyncThunk(
+export const postAllDataDKKAction = createAsyncThunk(
   "registration/submit",
-  async ({ url, formData }) => {
+  async ({formData }) => {
     try {
-      console.log(formData)
-      const response = await axios.post(url, formData);
+      const response = await axios.post('http://localhost:3001/patient/store', formData);
+      console.log(response.data)
+
       return response.data;
     } catch (error) {
       throw Error("Failed to submit data");

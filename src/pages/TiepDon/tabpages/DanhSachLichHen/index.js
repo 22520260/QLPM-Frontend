@@ -2,7 +2,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import ListForm from "../../../../component/Layout/TabLayout/ListForm";
+import {ListForm} from "../../../../component/Layout/TabLayout/ListForm";
 import { useState, useEffect } from "react";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
@@ -12,7 +12,7 @@ import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachLichHen() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchAllBenhNhan.data);
+  const data = useSelector((state) => state.fetchAllBenhNhan.patients);
   const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
 
   const [page, setPage] = useState(1);

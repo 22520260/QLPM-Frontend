@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
-import ListForm from "../../component/Layout/TabLayout/ListForm";
+import {ListForm} from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "rsuite/esm/Pagination/Pagination";
 import { usePaginationHandler } from "../../utils/appUtils";
 import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -10,7 +10,9 @@ import CTPhieuKham from "../../popups/CTPhieuKham";
 
 function KhachHang() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchAllBenhNhan.data);
+  const data = useSelector((state) => state.fetchAllBenhNhan.patients);
+  const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayedCustomers, setDisplayedCustomers] = useState([]);
@@ -141,7 +143,7 @@ function KhachHang() {
             onChange={(value) => handleIFSearchChange(value)}
           />
         </div>
-        <ListForm columns={columns} data={displayedCustomers} />
+        <ListForm columns={columns} data={displayedCustomers} loading={isLoading}/>
         <Pagination
           totalPages={totalPages}
           page={page}
@@ -151,7 +153,7 @@ function KhachHang() {
         />
       </div>
 
-      <CTPhieuKham />
+  {/* <CTPhieuKham /> */}
     </>
   );
 }

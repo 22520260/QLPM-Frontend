@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import fetchAllBenhNhanReducer from './slice/getDataSlice/getAllBenhNhanSlice'
 import fetchAllBacSiReducer from './slice/getDataSlice/getAllBacSiSlice'
 import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
-import postDataReducer from './slice/postDataSlice/postDataSlice'
+import postAllDataDKKSlice from './slice/postDataSlice/postAllDataDKKSlice'
 
 
 export default configureStore({
@@ -10,7 +10,7 @@ export default configureStore({
     fetchAllBenhNhan: fetchAllBenhNhanReducer,
     fetchAllBacSi: fetchAllBacSiReducer,
     fetchAllDichVu: fetchAllDichVuReducer,
-    postData: postDataReducer,
+    postAllDataDDK: postAllDataDKKSlice,
   },
   devTools: true,
 })

@@ -19,7 +19,7 @@ const fetchAllBenhNhanSlice = createSlice({
       })
       .addCase(fetchAllBenhNhanAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.patients = action.payload;
       })
       .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
         state.loading = false;
