@@ -11,12 +11,13 @@ import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fe
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { extractNames } from "../../../../utils/appUtils";
-import {ListForm} from "../../../../component/Layout/TabLayout/ListForm";
+import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 
 function DangKyKham() {
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
   const services = useSelector((state) => state.fetchAllDichVu.services);
+  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
 
   const [age, setAge] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
@@ -45,13 +46,8 @@ function DangKyKham() {
   useEffect(() => {
     dispatch(fetchAllBacSiAction());
     dispatch(fetchAllDichVuAction());
+    dispatch(fetchAllBenhNhanAction());
   }, []);
-  const [age, setAge] = useState("");
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
-
-  const services = useSelector((state) => state.fetchAllDichVu.services);
-  console.log(services);
-  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -213,7 +209,9 @@ function DangKyKham() {
               size={6}
               options={services}
               onChange={(value) => {
-                const selected = services.find((service) => service[2] === value);
+                const selected = services.find(
+                  (service) => service[2] === value
+                );
                 handleAddService(selected);
               }}
             />
