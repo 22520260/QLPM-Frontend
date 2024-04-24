@@ -39,7 +39,7 @@ function DangKyKham() {
     chuThich: "",
     dichVu: [],
   });
-
+  console.log(formData);
   const columns = [
     { title: "Mã dịch vụ", key: "0" },
     { title: "Mã loại dịch vụ", key: "1" },
@@ -107,11 +107,16 @@ function DangKyKham() {
   //   window.location.reload();
   // };
 
-  const handleAddService = (selectedService) => {
-    if (selectedService) {
-      const updatedServices = [...selectedServices, selectedService];
+
+  const handleAddService = (selected) => {
+    if (selected) {
+      const updatedServices = [...selectedServices, selected];
+      const selectedNoServices = updatedServices.map(
+        (selectedNoService) => selectedNoService[0]
+      );
+      console.log(selectedNoServices);
       setSelectedServices(updatedServices);
-      setFormData({ ...formData, dichVu: updatedServices });
+      setFormData({ ...formData, dichVu: selectedNoServices });
     }
   };
 
@@ -119,7 +124,10 @@ function DangKyKham() {
     const updatedServices = [...selectedServices];
     updatedServices.splice(index, 1);
     setSelectedServices(updatedServices);
-    setFormData({ ...formData, dichVu: updatedServices });
+    const selectedNoServices = updatedServices.map(
+      (selectedNoService) => selectedNoService[0]
+    );
+    setFormData({ ...formData, dichVu: selectedNoServices });
   };
 
   return (
@@ -153,6 +161,7 @@ function DangKyKham() {
                 title={"Ngày sinh"}
                 size={2}
                 onChange={(value) => handleChange("ngaySinh", value)}
+                
               />
               <IFInputText
                 title={"Tuổi"}
@@ -183,13 +192,22 @@ function DangKyKham() {
                 title={"Ngày khám"}
                 size={2}
                 onChange={(value) => handleChange("ngayKham", value)}
+                defaultValue={new Date()}
               />
               <IFSelect
                 title={"Bác sĩ"}
                 size={3}
                 option={doctors}
                 indexName={3}
-                onChange={(value) => handleChange("bacSi", value)}
+                onChange={(value) => {
+                  const selected = doctors.find(
+                    (doctor) => doctor[3] === value
+                  );
+                  console.log(selected)
+                  if(selected) {
+                    handleChange("bacSi", selected[0])
+                  }
+                }}
               />
               <IFInputText
                 title={"Lý do khám"}

@@ -80,18 +80,14 @@ export function IFInputText({
   );
 }
 
-export function IFNgay({ title, size, onChange }) {
+export function IFNgay({ title, size, defaultValue, onChange }) {
   const style = "col-md-" + size;
   const handleDateChange = (date) => {
     if (date) {
       const formattedDate = new Date(date);
-      // const day = formattedDate.getDate().toString().padStart(2, "0"); // Lấy ngày (có thêm số 0 nếu cần)
-      // const month = (formattedDate.getMonth() + 1).toString().padStart(2, "0"); // Lấy tháng (có thêm số 0 nếu cần)
-      // const year = formattedDate.getFullYear(); // Lấy năm
-      // const formattedDateString = `${day}-${month}-${year}`; // Định dạng dd-mm-yyyy
-      onChange(formattedDate); // Gọi hàm onChange với ngày đã định dạng
+      onChange(formattedDate); 
     } else {
-      onChange(""); // Nếu date là null hoặc undefined, trả về chuỗi rỗng
+      onChange(""); 
     }
   };
 
@@ -107,6 +103,7 @@ export function IFNgay({ title, size, onChange }) {
           format="dd/MM/yyyy"
           placeholder="dd/mm/yyyy"
           onChange={handleDateChange}
+          defaultValue={defaultValue}
         />
       </div>
     </div>
@@ -118,12 +115,12 @@ export function IFSearchDV({ title, size, options, onChange }) {
 
   const handleInputChange = (e) => {
     const value = e.target.value;
-    setSearchValue(value); // Lưu trữ giá trị của ô tìm kiếm vào trạng thái local
+    setSearchValue(value); 
   };
 
   const handleSelectOption = (selectedValue) => {
-    onChange(selectedValue); // Gọi hàm onChange với giá trị được chọn từ ô tìm kiếm
-    setSearchValue(""); // Đặt lại giá trị của ô tìm kiếm thành chuỗi rỗng
+    onChange(selectedValue); 
+    setSearchValue(""); 
   };
 
   return (
