@@ -50,7 +50,6 @@ function DangKyKham() {
   useEffect(() => {
     dispatch(fetchAllBacSiAction());
     dispatch(fetchAllDichVuAction());
-    dispatch(fetchAllBenhNhanAction());
   }, []);
 
   const handleChange = (fieldName, value) => {
@@ -79,7 +78,7 @@ function DangKyKham() {
 
   const handleFormSubmit = async () => {
     if (selectedServices.length > 0) {
-      if (formData.cccd !== "" && formData.hoTen !=="") {
+      if (formData.cccd !== "" && formData.hoTen !== "") {
         try {
           const response = await axios.post(
             "http://localhost:3001/patient/store",
@@ -121,27 +120,6 @@ function DangKyKham() {
     updatedServices.splice(index, 1);
     setSelectedServices(updatedServices);
     setFormData({ ...formData, dichVu: updatedServices });
-  };
-
-  // Cái này dùng để insert phiếu khám cho các bệnh nhân đã từng khám
-  // tức là chỉ insert phiếu khám thôi, maBN, maBS, maDV lấy từ lựa chọn trên UI
-  const handleJustPKSubmit = () => {
-    const pkFormData = {
-      maBN: patients[0][0],
-      maBS: doctors[0][0],
-      maDV: services[0][0],
-      maPhong: 999,
-      ngayKham: formData.ngayKham,
-      lyDoKham: formData.lyDoKham,
-      STT: 999,
-      trangThai: "Chưa thực hiện",
-    };
-    dispatch(
-      submitData({
-        url: "http://localhost:3001/phieukham/insert-pk",
-        formData: pkFormData,
-      })
-    );
   };
 
   return (
