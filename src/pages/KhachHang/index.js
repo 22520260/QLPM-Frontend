@@ -153,7 +153,7 @@ function KhachHang() {
         />
       </div>
 
-      <CTPhieuKham />
+      {/* <CTPhieuKham /> */}
     </>
   );
 }

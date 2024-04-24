@@ -4,7 +4,14 @@ import { useState } from "react";
 import "rsuite/DatePicker/styles/index.css";
 import "./style.css";
 
-export function IFSelect({ title, size, option, indexName, onChange }) {
+export function IFSelect({
+  title,
+  size,
+  option,
+  indexName,
+  onChange,
+  required,
+}) {
   const style = "col-md-" + size;
 
   const handleSelectChange = (e) => {
@@ -17,7 +24,6 @@ export function IFSelect({ title, size, option, indexName, onChange }) {
       {Array.isArray(value) ? value[indexName] : value}
     </option>
   ));
-  
 
   return (
     <div className={style}>
@@ -29,6 +35,7 @@ export function IFSelect({ title, size, option, indexName, onChange }) {
         id={title}
         aria-label="Default select example"
         onChange={handleSelectChange}
+        required={required}
       >
         <option value="">Chọn</option>
         {optionElements}
@@ -37,7 +44,14 @@ export function IFSelect({ title, size, option, indexName, onChange }) {
   );
 }
 
-export function IFInputText({ title, size, value, readOnly, onChange }) {
+export function IFInputText({
+  title,
+  size,
+  value,
+  readOnly,
+  onChange,
+  required,
+}) {
   const style = "col-md-" + size;
 
   const handleInputChange = (e) => {
@@ -59,6 +73,7 @@ export function IFInputText({ title, size, value, readOnly, onChange }) {
           onChange={handleInputChange}
           value={value}
           readOnly={readOnly}
+          required={required}
         />
       </div>
     </div>
@@ -87,7 +102,7 @@ export function IFNgay({ title, size, onChange }) {
       </label>
       <div className="input-group">
         <DatePicker
-        containerProps={{ style: { zIndex: 1056 } }}
+          containerProps={{ style: { zIndex: 1056 } }}
           id={title}
           format="dd/MM/yyyy"
           placeholder="dd/mm/yyyy"
@@ -163,6 +178,7 @@ export function IFSearch({ title, size, onChange }) {
           id="exampleDataList"
           type="text"
           onChange={handleInputChange}
+          required
         />
         <button className="input-group-text bg-primary">
           <FaSearch />
