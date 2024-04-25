@@ -8,6 +8,7 @@ export function IFSelect({
   title,
   size,
   option,
+  selected,
   indexName,
   onChange,
   required,
@@ -18,12 +19,6 @@ export function IFSelect({
     const value = e.target.value;
     onChange(value);
   };
-
-  const optionElements = option.map((value, index) => (
-    <option key={index} value={Array.isArray(value) ? value[indexName] : value}>
-      {Array.isArray(value) ? value[indexName] : value}
-    </option>
-  ));
 
   return (
     <div className={style}>
@@ -36,9 +31,17 @@ export function IFSelect({
         aria-label="Default select example"
         onChange={handleSelectChange}
         required={required}
+        value={selected}
       >
-        <option value="">Chọn</option>
-        {optionElements}
+        <option selected>Chọn</option>
+        {option.map((value, index) => (
+          <option
+            key={index}
+            value={Array.isArray(value) ? value[indexName] : value}
+          >
+            {Array.isArray(value) ? value[indexName] : value}
+          </option>
+        ))}
       </select>
     </div>
   );
@@ -61,9 +64,11 @@ export function IFInputText({
 
   return (
     <div className={style}>
-      <label htmlFor={title} className="form-label">
-        {title}
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
       </label>
+
       <div className="input-group">
         <input
           type="text"
@@ -80,14 +85,14 @@ export function IFInputText({
   );
 }
 
-export function IFNgay({ title, size, defaultValue, onChange }) {
+export function IFNgay({ title, size, defaultValue, value, onChange }) {
   const style = "col-md-" + size;
   const handleDateChange = (date) => {
     if (date) {
       const formattedDate = new Date(date);
-      onChange(formattedDate); 
+      onChange(formattedDate);
     } else {
-      onChange(""); 
+      onChange("");
     }
   };
 
@@ -104,6 +109,7 @@ export function IFNgay({ title, size, defaultValue, onChange }) {
           placeholder="dd/mm/yyyy"
           onChange={handleDateChange}
           defaultValue={defaultValue}
+          value={value}
         />
       </div>
     </div>
@@ -111,33 +117,26 @@ export function IFNgay({ title, size, defaultValue, onChange }) {
 }
 
 export function IFSearchDV({ title, size, options, onChange }) {
-  const [searchValue, setSearchValue] = useState("");
-
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const value = e.target.value;
-    setSearchValue(value); 
-  };
-
-  const handleSelectOption = (selectedValue) => {
-    onChange(selectedValue); 
-    setSearchValue(""); 
+    onChange(value);
+    e.target.value = "";
   };
 
   return (
     <div className={`col-md-${size}`}>
-      <label htmlFor="exampleDataList" className="form-label">
+      <label htmlFor="servicesDataList" className="form-label">
         {title}
       </label>
       <div className="input-group">
         <input
-          className="form-control"
-          list="datalistOptions"
-          id="exampleDataList"
+          className="form-control rounded"
+          list="servicesDatalist"
+          id="servicesDataList"
           type="text"
-          value={searchValue}
-          onChange={handleInputChange}
+          onChange={handleChange}
         />
-        <datalist id="datalistOptions">
+        <datalist id="servicesDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
               <option key={index} value={option[2]} />
@@ -146,12 +145,44 @@ export function IFSearchDV({ title, size, options, onChange }) {
             <option value="Loading..." />
           )}
         </datalist>
-        <button
-          className="input-group-text bg-primary"
-          onClick={() => handleSelectOption(searchValue)}
-        >
-          Add
-        </button>
+      </div>
+    </div>
+  );
+}
+
+export function IFSearchHT({ title, size, options, required, onChange }) {
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  return (
+    <div className={`col-md-${size}`}>
+      <label
+        htmlFor="hoTenInput"
+        className="form-label d-flex align-items-center"
+      >
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
+      </label>
+
+      <div className="input-group">
+        <input
+          className="form-control rounded"
+          list="hoTenDatalist"
+          id="hoTenInput"
+          onChange={handleInputChange}
+          required
+        />
+        <datalist id="hoTenDatalist">
+          {Array.isArray(options) ? (
+            options.map((option, index) => (
+              <option key={index} value={option[3]} />
+            ))
+          ) : (
+            <option value="Loading..." />
+          )}
+        </datalist>
       </div>
     </div>
   );
