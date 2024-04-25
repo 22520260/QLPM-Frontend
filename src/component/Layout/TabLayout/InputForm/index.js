@@ -85,6 +85,41 @@ export function IFInputText({
   );
 }
 
+export function TextArea({
+  title,
+  size,
+  row,
+  value,
+  readOnly,
+  onChange,
+  required,
+}) {
+  const style = "col-md-" + size;
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  return (
+    <div className={style}>
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
+      </label>
+      <textarea
+        class="form-control"
+        id={title}
+        rows={row}
+        onChange={handleInputChange}
+        value={value}
+        readOnly={readOnly}
+        required={required}
+      />
+    </div>
+  );
+}
+
 export function IFNgay({ title, size, defaultValue, value, onChange }) {
   const style = "col-md-" + size;
   const handleDateChange = (date) => {
@@ -112,6 +147,35 @@ export function IFNgay({ title, size, defaultValue, value, onChange }) {
           value={value}
         />
       </div>
+    </div>
+  );
+}
+
+export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
+  const style = "col-md-" + size;
+  const handleDateChange = (date) => {
+    if (date) {
+      const formattedDate = new Date(date);
+      onChange(formattedDate);
+    } else {
+      onChange("");
+    }
+  };
+
+  return (
+    <div className={style}>
+      <label htmlFor={title} className="form-label">
+        {title}
+      </label>
+        <DatePicker
+          containerProps={{ style: { zIndex: 1056 } }}
+          id={title}
+          format="dd/MM/yyyy"
+          placeholder="dd/mm/yyyy"
+          onChange={handleDateChange}
+          defaultValue={defaultValue}
+          value={value}
+        />
     </div>
   );
 }
@@ -215,6 +279,22 @@ export function IFSearch({ title, size, onChange }) {
           <FaRedoAlt />
         </button>
       </div>
+    </div>
+  );
+}
+
+export function ListGroupItem({ title, value, disable }) {
+  return (
+    <div className="input-group">
+      <span className="input-group-text border-0 bg-transparent p-0" id="inputGroup-sizing-default">
+        {title}
+      </span>
+      <input
+        type="text"
+        className="form-control border-0 text-end p-1 bg-transparent"
+        value={value}
+        disabled={disable}
+      />
     </div>
   );
 }
