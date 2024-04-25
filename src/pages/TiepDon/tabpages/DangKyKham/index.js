@@ -42,7 +42,7 @@ function DangKyKham() {
     ngayKham: new Date(),
     bacSi: "",
     lyDoKham: "",
-    chuThich: "",
+    tienSuBenh: "",
     dichVu: [],
   });
   console.log(formData);
@@ -69,7 +69,7 @@ function DangKyKham() {
   // };
 
   const checkPatientExistence = (fullName) => {
-    const patient = patients.find((patient) => patient[3] === fullName);
+    const patient = patients.find((patient) => patient.hoTen === fullName);
     return patient ? patient : null;
   };
 
@@ -267,7 +267,7 @@ function DangKyKham() {
               <IFInputText
                 title={"Tiền sử bệnh"}
                 size={3}
-                onChange={(value) => handleChange("chuThich", value)}
+                onChange={(value) => handleChange("tienSuBenh", value)}
               />
             </div>
           </div>
