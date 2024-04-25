@@ -7,10 +7,10 @@ import "./style.css";
 export function IFSelect({
   title,
   size,
-  option,
+  options,
   selected,
-  indexName,
   onChange,
+  keyObj,
   required,
 }) {
   const style = "col-md-" + size;
@@ -34,12 +34,9 @@ export function IFSelect({
         value={selected}
       >
         <option selected>Chọn</option>
-        {option.map((value, index) => (
-          <option
-            key={index}
-            value={Array.isArray(value) ? value[indexName] : value}
-          >
-            {Array.isArray(value) ? value[indexName] : value}
+        {options.map((value, index) => (
+          <option key={index} value={value[keyObj]}>
+            {value[keyObj]}
           </option>
         ))}
       </select>
@@ -167,15 +164,15 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
       <label htmlFor={title} className="form-label">
         {title}
       </label>
-        <DatePicker
-          containerProps={{ style: { zIndex: 1056 } }}
-          id={title}
-          format="dd/MM/yyyy"
-          placeholder="dd/mm/yyyy"
-          onChange={handleDateChange}
-          defaultValue={defaultValue}
-          value={value}
-        />
+      <DatePicker
+        containerProps={{ style: { zIndex: 1056 } }}
+        id={title}
+        format="dd/MM/yyyy"
+        placeholder="dd/mm/yyyy"
+        onChange={handleDateChange}
+        defaultValue={defaultValue}
+        value={value}
+      />
     </div>
   );
 }
@@ -203,7 +200,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
         <datalist id="servicesDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option[2]} />
+              <option key={index} value={option.tendv} />
             ))
           ) : (
             <option value="Loading..." />
@@ -241,7 +238,7 @@ export function IFSearchHT({ title, size, options, required, onChange }) {
         <datalist id="hoTenDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option[3]} />
+              <option key={index} value={option.hoTen} />
             ))
           ) : (
             <option value="Loading..." />
@@ -286,7 +283,10 @@ export function IFSearch({ title, size, onChange }) {
 export function ListGroupItem({ title, value, disable }) {
   return (
     <div className="input-group">
-      <span className="input-group-text border-0 bg-transparent p-0" id="inputGroup-sizing-default">
+      <span
+        className="input-group-text border-0 bg-transparent p-0"
+        id="inputGroup-sizing-default"
+      >
         {title}
       </span>
       <input

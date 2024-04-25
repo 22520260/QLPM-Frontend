@@ -27,6 +27,8 @@ function DangKyKham() {
   console.log("services", services);
 
   const [showError, setShowError] = useState(false);
+  const [oldPatientID, setOldPatientID] = useState(0);
+  console.log(oldPatientID);
 
   const [age, setAge] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
@@ -40,17 +42,17 @@ function DangKyKham() {
     soDienThoai: "",
     diUng: "",
     ngayKham: new Date(),
-    bacSi: "",
+    maBS: "",
     lyDoKham: "",
     tienSuBenh: "",
     dichVu: [],
   });
   console.log(formData);
   const columns = [
-    { title: "Mã dịch vụ", key: "0" },
-    { title: "Mã loại dịch vụ", key: "1" },
-    { title: "Tên dịch vụ", key: "2" },
-    { title: "Giá dịch vụ", key: "3" },
+    { title: "Mã dịch vụ", key: "madv" },
+    { title: "Mã loại dịch vụ", key: "maldv" },
+    { title: "Tên dịch vụ", key: "tendv" },
+    { title: "Giá dịch vụ", key: "giadv" },
   ];
 
   useEffect(() => {
@@ -80,18 +82,20 @@ function DangKyKham() {
       if (patient) {
         setFormData({
           ...formData,
-          hoTen: patient[3],
-          gioiTinh: patient[5],
-          diaChi: patient[7],
-          ngaySinh: new Date(patient[4]),
-          cccd: patient[2],
-          soDienThoai: patient[6],
-          diUng: patient[9],
+          hoTen: patient.hoTen,
+          gioiTinh: patient.gioiTinh,
+          diaChi: patient.diaChi,
+          ngaySinh: new Date(patient.formattedNgaySinh),
+          cccd: patient.cccd,
+          soDienThoai: patient.sdt,
+          diUng: patient.diUng,
+          tienSuBenh: patient.tienSuBenh,
         });
-        console.log("patient[4]", patient[4]);
+        setOldPatientID(patient.mabn);
+        //console.log("patient[4]", patient[4]);
         console.log("formData.ngaySinh", formData.ngaySinh);
 
-        const age = calculateAge(patient[4]);
+        const age = calculateAge(patient.formattedNgaySinh);
         setAge(age);
       } else {
         setFormData({ ...formData, [fieldName]: value });
@@ -124,23 +128,40 @@ function DangKyKham() {
   const handleFormSubmit = async () => {
     if (selectedServices.length > 0) {
       if (formData.cccd !== "" && formData.hoTen !== "") {
-        try {
-          const response = await axios.post(
-            "http://localhost:3001/patient/store",
-            formData
-          );
-          console.log(response);
-          if (response.status === 200) {
-            alert("Thêm thành công!!!");
-            console.log("Thêm thành công!!!");
+        let apiPath = "",
+          bodyReq = {};
+        formData.dichVu.forEach(async (maDV) => {
+          if (oldPatientID !== 0) {
+            apiPath = "http://localhost:3001/phieukham/insert-pk";
+            bodyReq = {
+              maBN: oldPatientID,
+              maBS: formData.maBS,
+              ngayKham: formData.ngayKham,
+              lyDoKham: formData.lyDoKham,
+            };
           } else {
-            console.log("Thêm không thành công, vui lòng thử lại.");
-            alert("Thêm không thành công, vui lòng thử lại.");
+            apiPath = "http://localhost:3001/phieukham/insert-bn-pk";
+            bodyReq = formData;
           }
-        } catch (error) {
-          console.log("Failed to submit data", error);
-          alert("Failed to submit data", error);
-        }
+          bodyReq.dichVu = maDV;
+          try {
+            const response = await axios.post(apiPath, bodyReq);
+
+            if (response.status === 200) {
+              if (response.data.maBNOld) {
+                setOldPatientID(response.data.maBNOld);
+              }
+              alert("Thêm thành công!!!");
+              console.log("Thêm thành công!!!");
+            } else {
+              console.log("Thêm không thành công, vui lòng thử lại.");
+              alert("Thêm không thành công, vui lòng thử lại.");
+            }
+          } catch (error) {
+            console.log("Failed to submit data", error);
+            alert("Failed to submit data", error);
+          }
+        });
       }
     } else {
       alert("Chưa thêm dịch vụ nào.");
@@ -156,7 +177,7 @@ function DangKyKham() {
     if (selected) {
       const updatedServices = [...selectedServices, selected];
       const selectedNoServices = updatedServices.map(
-        (selectedNoService) => selectedNoService[0]
+        (selectedService) => selectedService.madv
       );
       console.log(selectedNoServices);
       setSelectedServices(updatedServices);
@@ -169,7 +190,7 @@ function DangKyKham() {
     updatedServices.splice(index, 1);
     setSelectedServices(updatedServices);
     const selectedNoServices = updatedServices.map(
-      (selectedNoService) => selectedNoService[0]
+      (selectedService) => selectedService.madv
     );
     setFormData({ ...formData, dichVu: selectedNoServices });
   };
@@ -192,9 +213,14 @@ function DangKyKham() {
               <IFSelect
                 title={"Giới tính"}
                 size={2}
-                option={["Nam", "Nữ", "Khác"]}
+                options={[
+                  { gioiTinh: "Nam" },
+                  { gioiTinh: "Nữ" },
+                  { gioiTinh: "Khác" },
+                ]}
                 onChange={(value) => handleChange("gioiTinh", value)}
                 selected={formData.gioiTinh}
+                keyObj={"gioiTinh"}
               />
               <IFInputText
                 title={"Địa chỉ"}
@@ -247,17 +273,17 @@ function DangKyKham() {
               <IFSelect
                 title={"Bác sĩ"}
                 size={3}
-                option={doctors}
-                indexName={3}
+                options={doctors}
                 onChange={(value) => {
                   const selected = doctors.find(
-                    (doctor) => doctor[3] === value
+                    (doctor) => doctor.hoTen === value
                   );
                   console.log(selected);
                   if (selected) {
-                    handleChange("bacSi", selected[0]);
+                    handleChange("maBS", selected.mabs);
                   }
                 }}
+                keyObj={"hoTen"}
               />
               <IFInputText
                 title={"Lý do khám"}
@@ -267,6 +293,7 @@ function DangKyKham() {
               <IFInputText
                 title={"Tiền sử bệnh"}
                 size={3}
+                value={formData.tienSuBenh}
                 onChange={(value) => handleChange("tienSuBenh", value)}
               />
             </div>
@@ -284,11 +311,11 @@ function DangKyKham() {
                 options={services}
                 onChange={(value) => {
                   const selected = services.find(
-                    (service) => service[2] === value
+                    (service) => service.tendv === value
                   );
                   if (selected) {
                     const alreadySelected = selectedServices.find(
-                      (item) => item[0] === selected[0]
+                      (item) => item.madv === selected.madv
                     );
 
                     if (alreadySelected) {

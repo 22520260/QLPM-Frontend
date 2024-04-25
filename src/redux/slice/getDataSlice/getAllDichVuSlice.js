@@ -19,7 +19,7 @@ const fetchAllDichVuSlice = createSlice({
       })
       .addCase(fetchAllDichVuAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.services = action.payload;
+        state.services = action.payload.data;
       })
       .addCase(fetchAllDichVuAction.rejected, (state, action) => {
         state.loading = false;
