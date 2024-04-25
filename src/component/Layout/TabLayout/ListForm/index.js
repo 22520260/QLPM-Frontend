@@ -6,7 +6,7 @@ import NavTabVertical from "../../../NavTabVertical";
 import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
-import { ListGroupItem, TextArea } from "../InputForm";
+import { IFNgayNgang, ListGroupItem, TextArea } from "../InputForm";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -221,7 +221,7 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
                       title={"Người bán"}
                       value={"Le Thi Thanh Thao"}
                     />
-                    <ListGroupItem title={"Ngày bán"} value={"25/4/2004"} />
+                    <IFNgayNgang title={"Ngày bán"} onChange={()=>{}}/>
                     <ListGroupItem title={"Mã phiếu"} value={selectedRow[0]} disable={true}/>
                     <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true}/>
                     <ListGroupItem title={"Giảm giá"} value={"0"} />

@@ -163,10 +163,13 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
   };
 
   return (
-    <div className={style}>
-      <label htmlFor={title} className="form-label">
-        {title}
-      </label>
+    <div className="row">
+      <div className="col-md-5">
+        <label htmlFor={title} >
+          {title}
+        </label>
+        </div>
+        <div className="col-md-7">
         <DatePicker
           containerProps={{ style: { zIndex: 1056 } }}
           id={title}
@@ -176,15 +179,14 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
           defaultValue={defaultValue}
           value={value}
         />
+      </div>
     </div>
   );
 }
 
 export function IFSearchDV({ title, size, options, onChange }) {
   const handleChange = (e) => {
-    const value = e.target.value;
-    onChange(value);
-    e.target.value = "";
+    onChange(e);
   };
 
   return (
@@ -286,7 +288,10 @@ export function IFSearch({ title, size, onChange }) {
 export function ListGroupItem({ title, value, disable }) {
   return (
     <div className="input-group">
-      <span className="input-group-text border-0 bg-transparent p-0" id="inputGroup-sizing-default">
+      <span
+        className="input-group-text border-0 bg-transparent p-0"
+        id="inputGroup-sizing-default"
+      >
         {title}
       </span>
       <input
