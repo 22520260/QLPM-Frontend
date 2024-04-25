@@ -57,7 +57,7 @@ function DoanhThuLuotKhach() {
                 ]}
                 dataset={dataset}
                 height={400}
-                margin={{ left: 80, right: 50 }}
+                margin={{ left: 90, right: 50 }}
                 
             >
                 <ChartsGrid horizontal />
@@ -66,7 +66,7 @@ function DoanhThuLuotKhach() {
                 <LinePlot />
                 <MarkPlot />
                 <ChartsXAxis />
-                <ChartsYAxis axisId="leftAxis" label="Doanh thu (VND)" labelStyle={{ translate: '-35px 0px' }} />
+                <ChartsYAxis axisId="leftAxis" label="Doanh thu (VND)" labelStyle={{ translate: '-45px 0px' }} />
 
                 <ChartsYAxis
                     axisId="rightAxis"
