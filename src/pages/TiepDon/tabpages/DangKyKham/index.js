@@ -49,10 +49,10 @@ function DangKyKham() {
   });
   console.log(formData);
   const columns = [
-    { title: "Mã dịch vụ", key: "madv" },
-    { title: "Mã loại dịch vụ", key: "maldv" },
-    { title: "Tên dịch vụ", key: "tendv" },
-    { title: "Giá dịch vụ", key: "giadv" },
+    { title: "Mã dịch vụ", key: "MADV" },
+    { title: "Mã loại dịch vụ", key: "MALDV" },
+    { title: "Tên dịch vụ", key: "TENDV" },
+    { title: "Giá dịch vụ", key: "GIADV" },
   ];
 
   useEffect(() => {
@@ -71,7 +71,7 @@ function DangKyKham() {
   // };
 
   const checkPatientExistence = (fullName) => {
-    const patient = patients.find((patient) => patient.hoTen === fullName);
+    const patient = patients.find((patient) => patient.HOTEN === fullName);
     return patient ? patient : null;
   };
 
@@ -82,20 +82,20 @@ function DangKyKham() {
       if (patient) {
         setFormData({
           ...formData,
-          hoTen: patient.hoTen,
-          gioiTinh: patient.gioiTinh,
-          diaChi: patient.diaChi,
-          ngaySinh: new Date(patient.formattedNgaySinh),
-          cccd: patient.cccd,
-          soDienThoai: patient.sdt,
-          diUng: patient.diUng,
-          tienSuBenh: patient.tienSuBenh,
+          hoTen: patient.HOTEN,
+          gioiTinh: patient.GIOITINH,
+          diaChi: patient.DIACHI,
+          ngaySinh: new Date(patient.NGAYSINH),
+          cccd: patient.CCCD,
+          soDienThoai: patient.SDT,
+          diUng: patient.DIUNG,
+          tienSuBenh: patient.TIENSUBENH,
         });
-        setOldPatientID(patient.mabn);
+        setOldPatientID(patient.MABN);
         //console.log("patient[4]", patient[4]);
         console.log("formData.ngaySinh", formData.ngaySinh);
 
-        const age = calculateAge(patient.formattedNgaySinh);
+        const age = calculateAge(patient.NGAYSINH);
         setAge(age);
       } else {
         setFormData({ ...formData, [fieldName]: value });
@@ -177,7 +177,7 @@ function DangKyKham() {
     if (selected) {
       const updatedServices = [...selectedServices, selected];
       const selectedNoServices = updatedServices.map(
-        (selectedService) => selectedService.madv
+        (selectedService) => selectedService.MADV
       );
       console.log(selectedNoServices);
       setSelectedServices(updatedServices);
@@ -190,7 +190,7 @@ function DangKyKham() {
     updatedServices.splice(index, 1);
     setSelectedServices(updatedServices);
     const selectedNoServices = updatedServices.map(
-      (selectedService) => selectedService.madv
+      (selectedService) => selectedService.MADV
     );
     setFormData({ ...formData, dichVu: selectedNoServices });
   };
@@ -276,14 +276,14 @@ function DangKyKham() {
                 options={doctors}
                 onChange={(value) => {
                   const selected = doctors.find(
-                    (doctor) => doctor.hoTen === value
+                    (doctor) => doctor.HOTEN === value
                   );
                   console.log(selected);
                   if (selected) {
-                    handleChange("maBS", selected.mabs);
+                    handleChange("maBS", selected.MABS);
                   }
                 }}
-                keyObj={"hoTen"}
+                keyObj={"HOTEN"}
               />
               <IFInputText
                 title={"Lý do khám"}
@@ -311,11 +311,11 @@ function DangKyKham() {
                 options={services}
                 onChange={(value) => {
                   const selected = services.find(
-                    (service) => service.tendv === value
+                    (service) => service.TENDV === value
                   );
                   if (selected) {
                     const alreadySelected = selectedServices.find(
-                      (item) => item.madv === selected.madv
+                      (item) => item.MADV === selected.MADV
                     );
 
                     if (alreadySelected) {

@@ -200,7 +200,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
         <datalist id="servicesDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option.tendv} />
+              <option key={index} value={option.TENDV} />
             ))
           ) : (
             <option value="Loading..." />
@@ -238,7 +238,7 @@ export function IFSearchHT({ title, size, options, required, onChange }) {
         <datalist id="hoTenDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option.hoTen} />
+              <option key={index} value={option.HOTEN} />
             ))
           ) : (
             <option value="Loading..." />
