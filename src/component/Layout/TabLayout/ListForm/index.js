@@ -300,7 +300,6 @@ export function ListFormThuoc({ columns, data, loading }) {
                 <td>
                   <CTPhieuKham props={row}/>
                   <button className="btn btn-primary ml-">
-                    <FaCommentDollar />
                   </button>
                 </td>
               </tr>
