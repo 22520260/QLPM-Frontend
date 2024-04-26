@@ -1,19 +1,11 @@
 import { IFInputText, IFPassword } from "../../component/Layout/TabLayout/InputForm";
 import { Link } from "react-router-dom";
-import { RiEyeCloseLine } from "react-icons/ri";
+import { Lg_nameunder } from "../../component/Logo";
 
 function Login() {
     return (
         <div className="p-5 pb-4" style={{ backgroundColor: 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(20px)' }}>
-            <div className="text-center">
-                <img className="mx-auto d-block" style={{ maxHeight: '10vw' }} src='../../assets/images/Logo.svg' alt="..." />
-                <h1>
-                    <strong>
-                        BCare
-                    </strong>
-                </h1>
-            </div>
-
+            <Lg_nameunder size={'10vw'} />
             <div className="py-3">
                 <div className="py-2">
                     <IFInputText

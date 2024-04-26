@@ -8,6 +8,7 @@ import Dashboard from "../pages/Dashboard";
 import StartLayout from "../component/Layout/StartLayout";
 import Login from "../pages/Login";
 import InOutLayout from "../component/Layout/InOutLayout";
+import ForgotPass from "../pages/ForgotPass";
 
 const publicRoutes = [
     { path: '/tiepdon', component: TiepDon},
@@ -23,7 +24,8 @@ const publicRoutes = [
 
     { path: '', component: Start, layout: StartLayout},
 
-    { path: '/login', component: Login, layout: InOutLayout}
+    { path: '/login', component: Login, layout: InOutLayout},
+    { path: '/login/quenmatkhau', component: ForgotPass, layout: InOutLayout}
 
 ]
 
