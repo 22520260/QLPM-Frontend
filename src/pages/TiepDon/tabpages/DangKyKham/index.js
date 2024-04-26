@@ -15,8 +15,6 @@ import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
-import Alert from "../../../../component/Alert";
-import { type } from "@testing-library/user-event/dist/type";
 
 function DangKyKham() {
   const dispatch = useDispatch();
@@ -152,7 +150,7 @@ function DangKyKham() {
   //   window.location.reload();
   // };
 
-  const handleAddService = (selected) => {
+  const handleAddService = (selected, e) => {
     if (selected) {
       const updatedServices = [...selectedServices, selected];
       const selectedNoServices = updatedServices.map(
@@ -162,6 +160,7 @@ function DangKyKham() {
       setSelectedServices(updatedServices);
       setFormData({ ...formData, dichVu: selectedNoServices });
     }
+    e.target.value = "";
   };
 
   const handleDeleteService = (index) => {
@@ -282,7 +281,8 @@ function DangKyKham() {
                 title={"Nhập dịch vụ"}
                 size={6}
                 options={services}
-                onChange={(value) => {
+                onChange={(e) => {
+                  const value = e.target.value;
                   const selected = services.find(
                     (service) => service[2] === value
                   );
@@ -295,7 +295,7 @@ function DangKyKham() {
                       setShowError(true);
                     } else {
                       setShowError(false);
-                      handleAddService(selected);
+                      handleAddService(selected, e);
                     }
                   }
                 }}
