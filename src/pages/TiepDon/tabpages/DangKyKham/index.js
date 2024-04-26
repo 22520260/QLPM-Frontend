@@ -4,23 +4,27 @@ import {
   IFSelect,
   IFNgay,
   IFSearchDV,
+  IFSearchHT,
+  IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { postAllDataDKKAction } from "../../../../redux/action/postDataAction/postAllDataDKKAction";
 import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fetchAllBacSiAction";
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
+import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
-import Alert from "../../../../component/Alert";
-import { type } from "@testing-library/user-event/dist/type";
 
 function DangKyKham() {
   const dispatch = useDispatch();
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
   const services = useSelector((state) => state.fetchAllDichVu.services);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState("");
+  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
+  console.log("patients", patients);
+  console.log("services", services);
+
+  const [showError, setShowError] = useState(false);
 
   const [age, setAge] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
@@ -33,7 +37,7 @@ function DangKyKham() {
     cccd: "",
     soDienThoai: "",
     diUng: "",
-    ngayKham: "",
+    ngayKham: new Date(),
     bacSi: "",
     lyDoKham: "",
     chuThich: "",
@@ -50,14 +54,53 @@ function DangKyKham() {
   useEffect(() => {
     dispatch(fetchAllBacSiAction());
     dispatch(fetchAllDichVuAction());
+    dispatch(fetchAllBenhNhanAction());
   }, []);
 
-  const handleChange = (fieldName, value) => {
-    setFormData({ ...formData, [fieldName]: value });
+  // const handleChange = (fieldName, value) => {
+  //   setFormData({ ...formData, [fieldName]: value });
 
-    if (fieldName === "ngaySinh") {
-      const age = calculateAge(value);
-      setAge(age);
+  //   if (fieldName === "ngaySinh") {
+  //     const age = calculateAge(value);
+  //     setAge(age);
+  //   }
+  // };
+
+  const checkPatientExistence = (fullName) => {
+    const patient = patients.find((patient) => patient[3] === fullName);
+    return patient ? patient : null;
+  };
+
+  const handleChange = (fieldName, value) => {
+    if (fieldName === "hoTen") {
+      const patient = checkPatientExistence(value);
+      console.log("patient", patient);
+      if (patient) {
+        setFormData({
+          ...formData,
+          hoTen: patient[3],
+          gioiTinh: patient[5],
+          diaChi: patient[7],
+          ngaySinh: new Date(patient[4]),
+          cccd: patient[2],
+          soDienThoai: patient[6],
+          diUng: patient[9],
+        });
+        console.log("patient[4]", patient[4]);
+        console.log("formData.ngaySinh", formData.ngaySinh);
+
+        const age = calculateAge(patient[4]);
+        setAge(age);
+      } else {
+        setFormData({ ...formData, [fieldName]: value });
+      }
+    } else {
+      setFormData({ ...formData, [fieldName]: value });
+
+      if (fieldName === "ngaySinh") {
+        const age = calculateAge(value);
+        setAge(age);
+      }
     }
   };
 
@@ -107,8 +150,7 @@ function DangKyKham() {
   //   window.location.reload();
   // };
 
-
-  const handleAddService = (selected) => {
+  const handleAddService = (selected, e) => {
     if (selected) {
       const updatedServices = [...selectedServices, selected];
       const selectedNoServices = updatedServices.map(
@@ -118,6 +160,7 @@ function DangKyKham() {
       setSelectedServices(updatedServices);
       setFormData({ ...formData, dichVu: selectedNoServices });
     }
+    e.target.value = "";
   };
 
   const handleDeleteService = (index) => {
@@ -138,22 +181,25 @@ function DangKyKham() {
         <div className="py-3 border border-primary">
           <div className="container-fluid mb-">
             <div className="row py-2">
-              <IFInputText
+              <IFSearchHT
                 title={"Họ và Tên"}
                 size={4}
-                onChange={(value) => handleChange("hoTen", value)}
+                options={patients}
                 required={true}
+                onChange={(value) => handleChange("hoTen", value)}
               />
               <IFSelect
                 title={"Giới tính"}
                 size={2}
                 option={["Nam", "Nữ", "Khác"]}
                 onChange={(value) => handleChange("gioiTinh", value)}
+                selected={formData.gioiTinh}
               />
               <IFInputText
                 title={"Địa chỉ"}
                 size={6}
                 onChange={(value) => handleChange("diaChi", value)}
+                value={formData.diaChi}
               />
             </div>
             <div className="row py-2">
@@ -161,7 +207,7 @@ function DangKyKham() {
                 title={"Ngày sinh"}
                 size={2}
                 onChange={(value) => handleChange("ngaySinh", value)}
-                
+                value={formData.ngaySinh}
               />
               <IFInputText
                 title={"Tuổi"}
@@ -175,16 +221,19 @@ function DangKyKham() {
                 size={3}
                 onChange={(value) => handleChange("cccd", value)}
                 required={true}
+                value={formData.cccd}
               />
               <IFInputText
                 title={"Số điện thoại"}
                 size={3}
                 onChange={(value) => handleChange("soDienThoai", value)}
+                value={formData.soDienThoai}
               />
               <IFInputText
                 title={"Dị ứng"}
                 size={3}
                 onChange={(value) => handleChange("diUng", value)}
+                value={formData.diUng}
               />
             </div>
             <div className="row py-2">
@@ -203,9 +252,9 @@ function DangKyKham() {
                   const selected = doctors.find(
                     (doctor) => doctor[3] === value
                   );
-                  console.log(selected)
-                  if(selected) {
-                    handleChange("bacSi", selected[0])
+                  console.log(selected);
+                  if (selected) {
+                    handleChange("bacSi", selected[0]);
                   }
                 }}
               />
@@ -232,13 +281,28 @@ function DangKyKham() {
                 title={"Nhập dịch vụ"}
                 size={6}
                 options={services}
-                onChange={(value) => {
+                onChange={(e) => {
+                  const value = e.target.value;
                   const selected = services.find(
                     (service) => service[2] === value
                   );
-                  handleAddService(selected);
+                  if (selected) {
+                    const alreadySelected = selectedServices.find(
+                      (item) => item[0] === selected[0]
+                    );
+
+                    if (alreadySelected) {
+                      setShowError(true);
+                    } else {
+                      setShowError(false);
+                      handleAddService(selected, e);
+                    }
+                  }
                 }}
               />
+              {showError && selectedServices.length > 0 && (
+                <div className="text-danger">Dịch vụ này đã được chọn.</div>
+              )}
             </div>
             {selectedServices.length > 0 ? (
               <ListForm
@@ -247,7 +311,7 @@ function DangKyKham() {
                 onDeleteService={handleDeleteService}
               />
             ) : (
-              <div className="d-flex justify-content-center">
+              <div className="d-flex justify-content-center text-danger">
                 Chưa thêm dịch vụ nào.
               </div>
             )}
