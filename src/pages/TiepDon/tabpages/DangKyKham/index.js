@@ -50,7 +50,7 @@ function DangKyKham() {
   console.log(formData);
   const columns = [
     { title: "Mã dịch vụ", key: "MADV" },
-    { title: "Mã loại dịch vụ", key: "MALDV" },
+    { title: "Mã loại dịch vụ", key: "MALOAIDV" },
     { title: "Tên dịch vụ", key: "TENDV" },
     { title: "Giá dịch vụ", key: "GIADV" },
   ];
@@ -125,43 +125,52 @@ function DangKyKham() {
     return age > 0 ? age : 0;
   };
 
+  function timeout(delay) {
+    return new Promise((res) => setTimeout(res, delay));
+  }
+
+  const insertPK = async (maBN) => {
+    formData.dichVu.forEach(async (maDV) => {
+      let bodyReq = formData;
+      bodyReq.dichVu = maDV;
+      bodyReq["maBN"] = maBN;
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/phieukham/insert-pk",
+          bodyReq
+        );
+        if (response.status === 200) {
+          alert("Thêm phiếu khám thành công!!!");
+        }
+      } catch (error) {
+        alert("Thêm phiếu khám không thành công");
+      }
+    });
+  };
+
   const handleFormSubmit = async () => {
     if (selectedServices.length > 0) {
       if (formData.cccd !== "" && formData.hoTen !== "") {
-        let apiPath = "",
-          bodyReq = {};
-        formData.dichVu.forEach(async (maDV) => {
-          if (oldPatientID !== 0) {
-            apiPath = "http://localhost:3001/phieukham/insert-pk";
-            bodyReq = {
-              maBN: oldPatientID,
-              maBS: formData.maBS,
-              ngayKham: formData.ngayKham,
-              lyDoKham: formData.lyDoKham,
-            };
-          } else {
-            apiPath = "http://localhost:3001/phieukham/insert-bn-pk";
-            bodyReq = formData;
-          }
-          bodyReq.dichVu = maDV;
+        if (oldPatientID === 0) {
+          let bien = "";
           try {
-            const response = await axios.post(apiPath, bodyReq);
-
-            if (response.status === 200) {
-              if (response.data.maBNOld) {
-                setOldPatientID(response.data.maBNOld);
-              }
-              alert("Thêm thành công!!!");
-              console.log("Thêm thành công!!!");
-            } else {
-              console.log("Thêm không thành công, vui lòng thử lại.");
-              alert("Thêm không thành công, vui lòng thử lại.");
+            const response1 = await axios.post(
+              "http://localhost:3001/benhnhan/insert",
+              formData
+            );
+            if (response1.status === 200) {
+              bien = response1.data.MABN;
+              alert("Thêm bệnh nhân thành công!!!");
+              await insertPK(bien);
             }
           } catch (error) {
-            console.log("Failed to submit data", error);
-            alert("Failed to submit data", error);
+            alert("Thêm bệnh nhân không thành công");
           }
-        });
+        } else {
+          await insertPK(oldPatientID);
+        }
+        await timeout(1000);
+        window.location.reload();
       }
     } else {
       alert("Chưa thêm dịch vụ nào.");
@@ -348,7 +357,7 @@ function DangKyKham() {
         <div className="d-flex justify-content-center px-3 py-2">
           <button
             className="btn btn-primary"
-            type="submit"
+            type="button"
             onClick={handleFormSubmit}
           >
             Đăng kí

@@ -5,7 +5,7 @@ export const postAllDataDKKAction = createAsyncThunk(
   "registration/submit",
   async ({formData }) => {
     try {
-      const response = await axios.post('http://localhost:3001/patient/store', formData);
+      const response = await axios.post('http://localhost:3001/benhnhan/insert', formData);
       console.log(response.data)
 
       return response.data;
