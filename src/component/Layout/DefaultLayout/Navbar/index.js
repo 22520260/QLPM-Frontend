@@ -24,19 +24,19 @@ function Navbar() {
             </ul>
           </li>
 
-          <li className="nav-item dropdown">
+          <li className="nav-item ">
             <Link className="nav-link"to="/khachhang" role="button" aria-expanded="false">
               Khách hàng
             </Link> 
           </li>
 
-          <li className="nav-item dropdown">
+          <li className="nav-item ">
             <Link className="nav-link"to="/thuoc" role="button" aria-expanded="false">
               Thuốc
             </Link> 
           </li>
 
-          <li className="nav-item dropdown">
+          <li className="nav-item ">
             <Link className="nav-link"to="/dashboard" role="button" aria-expanded="false">
               Dashboard
             </Link> 
