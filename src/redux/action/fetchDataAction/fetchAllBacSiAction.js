@@ -6,7 +6,7 @@ export const fetchAllBacSiAction = createAsyncThunk(
   async () => {
     try {
       console.log('fetchAllBacSi')
-      const response = await axios.get('http://localhost:3001/doctor');
+      const response = await axios.get('http://localhost:3001/bacsi');
       return response.data; 
     } catch (error) {
       return error.message;

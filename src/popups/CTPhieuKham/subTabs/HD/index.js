@@ -3,17 +3,16 @@ import { useSelector } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 function HoaDon() {
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
-
   const handleChange = (page) => {
     console.log(page);
   };
 
   const columns = [
-    { title: "Mã hóa đơn", key: "0" },
-    { title: "Loại", key: "2" },
-    { title: "Tổng tiền", key: "3" },
-    { title: "Trạng thái", key: "4" },
-    { title: "Thời gian thanh toán", key: "5" },
+    { title: "Mã hóa đơn", key: "MABS" },
+    { title: "Loại", key: "HOTEN" },
+    { title: "Tổng tiền", key: "HOTEN" },
+    { title: "Trạng thái", key: "HOTEN" },
+    { title: "Thời gian thanh toán", key: "HOTEN" },
   ];
 
   return (
@@ -43,9 +42,7 @@ function HoaDon() {
                     key={rowIndex}
                   >
                     {columns.map((column, colIndex) => (
-                      <td key={colIndex}>
-                        {column.render ? column.render(row) : row[column.key]}
-                      </td>
+                      <td key={colIndex}>{row[column.key] || ""}</td>
                     ))}
                   </tr>
                 ) : null
@@ -69,9 +66,7 @@ function HoaDon() {
                     key={rowIndex}
                   >
                     {columns.map((column, colIndex) => (
-                      <td key={colIndex}>
-                        {column.render ? column.render(row) : row[column.key]}
-                      </td>
+                      <td key={colIndex}>{row[column.key] || ""}</td>
                     ))}
                   </tr>
                 ) : null
@@ -95,9 +90,7 @@ function HoaDon() {
                     key={rowIndex}
                   >
                     {columns.map((column, colIndex) => (
-                      <td key={colIndex}>
-                        {column.render ? column.render(row) : row[column.key]}
-                      </td>
+                      <td key={colIndex}>{row[column.key] || ""}</td>
                     ))}
                   </tr>
                 ) : null

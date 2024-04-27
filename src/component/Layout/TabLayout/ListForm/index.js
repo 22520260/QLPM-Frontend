@@ -18,7 +18,6 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            <th>#</th>
             {columns.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
@@ -40,7 +39,6 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
           ) : (
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                <td>{rowIndex + 1}</td>
                 {columns.map((column, colIndex) => (
                   <td key={colIndex}>
                     {column.render ? column.render(row) : row[column.key]}
@@ -64,11 +62,10 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
 }
 
 export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
-  const [selectedRow, setSelectedRow] = useState([]);
+  const [selectedRow, setSelectedRow] = useState({});
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
-    console.log("selectedRow", selectedRow);
   };
   const handleSave = () => {
     console.log("SAVE");
@@ -107,8 +104,8 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
                   <td key={colIndex}>
-                    {column.render ? column.render(row) : row[column.key]}
-                  </td>
+                  {row[column.key] || ""}
+                </td>
                 ))}
                 <td>
                   <button
@@ -127,8 +124,6 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
                   >
                     <FaDollarSign />
                   </button>
-                  {/* <CTPhieuKham info={selectedRow} id={rowIndex}/>
-                  <ThanhToan props={selectedRow} /> */}
                 </td>
               </tr>
             ))
@@ -148,7 +143,7 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow[0]}
+                Thông tin phiếu khám {selectedRow.MABN}
               </h1>
               <button
                 type="button"
@@ -222,7 +217,7 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
                       value={"Le Thi Thanh Thao"}
                     />
                     <IFNgayNgang title={"Ngày bán"} onChange={()=>{}}/>
-                    <ListGroupItem title={"Mã phiếu"} value={selectedRow[0]} disable={true}/>
+                    <ListGroupItem title={"Mã phiếu"} value={selectedRow.MABN} disable={true}/>
                     <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true}/>
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
                     <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true}/>

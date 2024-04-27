@@ -19,7 +19,7 @@ const fetchAllBacSiSlice = createSlice({
       })
       .addCase(fetchAllBacSiAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.doctors = action.payload;
+        state.doctors = action.payload.data;
       })
       .addCase(fetchAllBacSiAction.rejected, (state, action) => {
         state.loading = false;

@@ -6,7 +6,7 @@ export const fetchAllDichVuAction = createAsyncThunk(
   async () => {
     try {
       console.log('fetchAllDichVu')
-      const response = await axios.get('http://localhost:3001/service');
+      const response = await axios.get('http://localhost:3001/dichvu');
       return response.data;
     } catch (error) {
       return error.message;

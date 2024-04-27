@@ -8,10 +8,10 @@ import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 export function IFSelect({
   title,
   size,
-  option,
+  options,
   selected,
-  indexName,
   onChange,
+  keyObj,
   required,
 }) {
   const style = "col-md-" + size;
@@ -35,12 +35,9 @@ export function IFSelect({
         value={selected}
       >
         <option selected>Chọn</option>
-        {option.map((value, index) => (
-          <option
-            key={index}
-            value={Array.isArray(value) ? value[indexName] : value}
-          >
-            {Array.isArray(value) ? value[indexName] : value}
+        {options.map((value, index) => (
+          <option key={index} value={value[keyObj]}>
+            {value[keyObj]}
           </option>
         ))}
       </select>
@@ -50,6 +47,7 @@ export function IFSelect({
 
 export function IFInputText({
   title,
+  valid,
   size,
   value,
   readOnly,
@@ -74,7 +72,7 @@ export function IFInputText({
       <div className="input-group">
         <input
           type={type}
-          className="form-control"
+          className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
@@ -89,6 +87,7 @@ export function IFInputText({
 
 export function IFPassword({
   title,
+  valid,
   size,
   value,
   readOnly,
@@ -119,7 +118,7 @@ export function IFPassword({
       <div className="input-group">
         <input
           type={isViewPass ? 'text' : 'password'}
-          className="form-control"
+          className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
@@ -252,7 +251,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
         <datalist id="servicesDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option[2]} />
+              <option key={index} value={option.TENDV} />
             ))
           ) : (
             <option value="Loading..." />
@@ -290,7 +289,7 @@ export function IFSearchHT({ title, size, options, required, onChange }) {
         <datalist id="hoTenDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option[3]} />
+              <option key={index} value={option.HOTEN} />
             ))
           ) : (
             <option value="Loading..." />
