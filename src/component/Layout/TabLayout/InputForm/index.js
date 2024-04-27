@@ -3,6 +3,7 @@ import { FaSearch, FaRedoAlt } from "react-icons/fa";
 import { useState } from "react";
 import "rsuite/DatePicker/styles/index.css";
 import "./style.css";
+import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 
 export function IFSelect({
   title,
@@ -46,11 +47,13 @@ export function IFSelect({
 
 export function IFInputText({
   title,
+  valid,
   size,
   value,
   readOnly,
   onChange,
   required,
+  type = 'text'
 }) {
   const style = "col-md-" + size;
 
@@ -68,8 +71,8 @@ export function IFInputText({
 
       <div className="input-group">
         <input
-          type="text"
-          className="form-control"
+          type={type}
+          className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
@@ -77,6 +80,56 @@ export function IFInputText({
           readOnly={readOnly}
           required={required}
         />
+      </div>
+    </div>
+  );
+}
+
+export function IFPassword({
+  title,
+  valid,
+  size,
+  value,
+  readOnly,
+  onChange,
+}) {
+  const style = "col-md-" + size;
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  const [isViewPass, setIsViewPass] = useState(false);
+  const [btnClass, setBtnClass] = useState('btn btn-outline-primary');
+
+  const toggleEye = () => {
+    setIsViewPass(!isViewPass);
+    setBtnClass(isViewPass ? 'btn btn-outline-primary' : 'btn btn-primary');
+  };
+
+  return (
+    <div className={style}>
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+        <div className="text-danger ms-1">*</div>
+      </label>
+
+      <div className="input-group">
+        <input
+          type={isViewPass ? 'text' : 'password'}
+          className={valid ? "form-control" : "form-control is-invalid"}
+          id={title}
+          aria-describedby="basic-addon3 basic-addon4"
+          onChange={handleInputChange}
+          value={value}
+          readOnly={readOnly}
+          required='true'
+        />
+
+<button className={btnClass} type="button" id="button-addon2" onClick={toggleEye}>
+      {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
+    </button>
       </div>
     </div>
   );
@@ -179,9 +232,7 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
 
 export function IFSearchDV({ title, size, options, onChange }) {
   const handleChange = (e) => {
-    const value = e.target.value;
-    onChange(value);
-    e.target.value = "";
+    onChange(e);
   };
 
   return (
