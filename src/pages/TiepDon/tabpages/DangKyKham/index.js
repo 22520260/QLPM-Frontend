@@ -13,7 +13,7 @@ import { postAllDataDKKAction } from "../../../../redux/action/postDataAction/po
 import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fetchAllBacSiAction";
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
-
+import { toast } from "react-toastify";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 
 function DangKyKham() {
@@ -42,6 +42,14 @@ function DangKyKham() {
     tienSuBenh: "",
     dichVu: [],
   });
+
+  const defaultObjValidInput = {
+    isValidHoTen: true,
+    isValidCCCD: true,
+    isValidDichVu: true
+  };
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
   const columns = [
     { title: "Mã dịch vụ", key: "MADV" },
     { title: "Mã loại dịch vụ", key: "MALOAIDV" },
@@ -54,15 +62,6 @@ function DangKyKham() {
     dispatch(fetchAllDichVuAction());
     dispatch(fetchAllBenhNhanAction());
   }, []);
-
-  // const handleChange = (fieldName, value) => {
-  //   setFormData({ ...formData, [fieldName]: value });
-
-  //   if (fieldName === "ngaySinh") {
-  //     const age = calculateAge(value);
-  //     setAge(age);
-  //   }
-  // };
 
   const checkPatientExistence = (fullName) => {
     const patient = patients.find((patient) => patient.HOTEN === fullName);
@@ -140,38 +139,43 @@ function DangKyKham() {
   };
 
   const handleFormSubmit = async () => {
+    setObjValidInput(defaultObjValidInput);
     if (selectedServices.length > 0) {
-      if (formData.cccd !== "" && formData.hoTen !== "") {
-        if (oldPatientID === 0) {
-          let bien = "";
-          try {
-            const response1 = await axios.post(
-              "http://localhost:3001/benhnhan/insert",
-              formData
-            );
-            if (response1.status === 200) {
-              bien = response1.data.MABN;
-              alert("Thêm bệnh nhân thành công!!!");
-              await insertPK(bien);
-            }
-          } catch (error) {
-            alert("Thêm bệnh nhân không thành công");
-          }
-        } else {
-          await insertPK(oldPatientID);
-        }
-        await timeout(1000);
-        window.location.reload();
+      if (formData.hoTen === "") {
+        setObjValidInput({ ...defaultObjValidInput, isValidHoTen: false });
+        toast.error("Chưa nhập họ tên");
+        return;
       }
+      if (formData.cccd === "") {
+        setObjValidInput({ ...defaultObjValidInput, isValidCCCD: false });
+        toast.error("Chưa nhập CCCD");
+        return;
+      }
+      if (oldPatientID === 0) {
+        let bien = "";
+        try {
+          const response1 = await axios.post(
+            "http://localhost:3001/benhnhan/insert",
+            formData
+          );
+          if (response1.status === 200) {
+            bien = response1.data.MABN;
+            alert("Thêm bệnh nhân thành công!!!");
+            await insertPK(bien);
+          }
+        } catch (error) {
+          alert("Thêm bệnh nhân không thành công");
+        }
+      } else {
+        await insertPK(oldPatientID);
+      }
+      await timeout(1000);
+      window.location.reload();
     } else {
-      alert("Chưa thêm dịch vụ nào.");
+      setObjValidInput({ ...defaultObjValidInput, isValidDichVu: false });
+      toast.error("Chưa thêm dịch vụ nào.");
     }
   };
-
-  // const handleOK = () => {
-  //   setShowAlert(false);
-  //   window.location.reload();
-  // };
 
   const handleAddService = (selected, e) => {
     if (selected) {
@@ -205,6 +209,7 @@ function DangKyKham() {
             <div className="row py-2">
               <IFSearchHT
                 title={"Họ và Tên"}
+                valid={objValidInput.isValidHoTen}
                 size={4}
                 options={patients}
                 required={true}
@@ -225,6 +230,7 @@ function DangKyKham() {
               <IFInputText
                 title={"Địa chỉ"}
                 size={6}
+                valid={true}
                 onChange={(value) => handleChange("diaChi", value)}
                 value={formData.diaChi}
               />
@@ -240,11 +246,13 @@ function DangKyKham() {
                 title={"Tuổi"}
                 size={1}
                 value={age}
+                valid={true}
                 readOnly={true}
                 onChange={(value) => handleChange("tuoi", value)}
               />
               <IFInputText
                 title={"CCCD"}
+                valid={objValidInput.isValidCCCD}
                 size={3}
                 onChange={(value) => handleChange("cccd", value)}
                 required={true}
@@ -253,12 +261,14 @@ function DangKyKham() {
               <IFInputText
                 title={"Số điện thoại"}
                 size={3}
+                valid={true}
                 onChange={(value) => handleChange("soDienThoai", value)}
                 value={formData.soDienThoai}
               />
               <IFInputText
                 title={"Dị ứng"}
                 size={3}
+                valid={true}
                 onChange={(value) => handleChange("diUng", value)}
                 value={formData.diUng}
               />
@@ -287,11 +297,13 @@ function DangKyKham() {
               <IFInputText
                 title={"Lý do khám"}
                 size={4}
+                valid={true}
                 onChange={(value) => handleChange("lyDoKham", value)}
               />
               <IFInputText
                 title={"Tiền sử bệnh"}
                 size={3}
+                valid={true}
                 value={formData.tienSuBenh}
                 onChange={(value) => handleChange("tienSuBenh", value)}
               />
@@ -306,6 +318,7 @@ function DangKyKham() {
             <div className="row py-2">
               <IFSearchDV
                 title={"Nhập dịch vụ"}
+                valid={objValidInput.isValidDichVu}
                 size={6}
                 options={services}
                 onChange={(e) => {
@@ -355,13 +368,6 @@ function DangKyKham() {
           </button>
         </div>
       </form>
-      {/* {showAlert && (
-        <Alert
-          type={alertType}
-          message={alertMessage}
-          onClose={() => setShowAlert(false)}
-        />
-      )} */}
     </div>
   );
 }
