@@ -21,12 +21,9 @@ function DangKyKham() {
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
   const services = useSelector((state) => state.fetchAllDichVu.services);
   const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
-  console.log("patients", patients);
-  console.log("services", services);
 
   const [showError, setShowError] = useState(false);
   const [oldPatientID, setOldPatientID] = useState(0);
-  console.log(oldPatientID);
 
   const [age, setAge] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
@@ -45,7 +42,6 @@ function DangKyKham() {
     tienSuBenh: "",
     dichVu: [],
   });
-  console.log(formData);
   const columns = [
     { title: "Mã dịch vụ", key: "MADV" },
     { title: "Mã loại dịch vụ", key: "MALOAIDV" },
@@ -76,7 +72,6 @@ function DangKyKham() {
   const handleChange = (fieldName, value) => {
     if (fieldName === "hoTen") {
       const patient = checkPatientExistence(value);
-      console.log("patient", patient);
       if (patient) {
         setFormData({
           ...formData,
@@ -90,8 +85,6 @@ function DangKyKham() {
           tienSuBenh: patient.TIENSUBENH,
         });
         setOldPatientID(patient.MABN);
-        //console.log("patient[4]", patient[4]);
-        console.log("formData.ngaySinh", formData.ngaySinh);
 
         const age = calculateAge(patient.NGAYSINH);
         setAge(age);
@@ -186,7 +179,6 @@ function DangKyKham() {
       const selectedNoServices = updatedServices.map(
         (selectedService) => selectedService.MADV
       );
-      console.log(selectedNoServices);
       setSelectedServices(updatedServices);
       setFormData({ ...formData, dichVu: selectedNoServices });
     }
@@ -286,7 +278,6 @@ function DangKyKham() {
                   const selected = doctors.find(
                     (doctor) => doctor.HOTEN === value
                   );
-                  console.log(selected);
                   if (selected) {
                     handleChange("maBS", selected.MABS);
                   }

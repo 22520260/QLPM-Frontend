@@ -47,6 +47,7 @@ export function IFSelect({
 
 export function IFInputText({
   title,
+  valid,
   size,
   value,
   readOnly,
@@ -71,7 +72,7 @@ export function IFInputText({
       <div className="input-group">
         <input
           type={type}
-          className="form-control"
+          className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
@@ -86,6 +87,7 @@ export function IFInputText({
 
 export function IFPassword({
   title,
+  valid,
   size,
   value,
   readOnly,
@@ -116,7 +118,7 @@ export function IFPassword({
       <div className="input-group">
         <input
           type={isViewPass ? 'text' : 'password'}
-          className="form-control"
+          className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}

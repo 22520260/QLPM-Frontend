@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import {ListForm, ListFormAddBtnThanhToanAndChiTiet} from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormAddBtnThanhToanAndChiTiet} from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -14,96 +14,88 @@ function DanhSachDangKy() {
   const dispatch = useDispatch();
   const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
   const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
-
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const [displayedCustomers, setDisplayedCustomers] = useState([]);
+  const [displayedPatients, setDisplayedPatients] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-
+  
   const columns = [
-    { title: "Mã phiếu", key: "0" },
-    { title: "STT", key: "1" },
-    { title: "Họ Tên", key: "2" },
-    { title: "Tên Bác sĩ", key: "3" },
-    { title: "Tổng tiền", key: "4" },
-    { title: "Trạng thái", key: "5" },
-
-
+    { title: "Mã phiếu", key: "MABN" },
+    { title: "STT", key: "MABN" },
+    { title: "Họ Tên", key: "HOTEN" },
+    { title: "Tên Bác sĩ", key: "HOTEN" },
+    { title: "Tổng tiền", key: "HOTEN" },
+    { title: "Trạng thái", key: "HOTEN" },
   ];
 
   useEffect(() => {
     dispatch(fetchAllBenhNhanAction());
-    console.log('call api DanhSachDangKy')
-
   }, []);
 
   useEffect(() => {
     if (patients) {
-      let filteredCustomers = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
-
+      let filteredPatients = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
       // Lọc theo ngày bắt đầu và ngày kết thúc
       if (startDate && endDate) {
-        filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]);
+        filteredPatients = filteredPatients.filter((patient) => {
+          const patientDate = new Date(patient.NGAYSINH);
           return (
-            compareDates(startDate, customerDate) >= 0 &&
-            compareDates(customerDate, endDate) >= 0
+            compareDates(startDate, patientDate) >= 0 &&
+            compareDates(patientDate, endDate) >= 0
           );
         });
       } else if (startDate) {
         // Chỉ có ngày bắt đầu
-        filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]);
+        filteredPatients = filteredPatients.filter((patient) => {
+          const patientDate = new Date(patient.NGAYSINH);
 
-          return compareDates(startDate, customerDate) >= 0;
+          return compareDates(startDate, patientDate) >= 0;
         });
       } else if (endDate) {
         // Chỉ có ngày kết thúc
-        filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]);
+        filteredPatients = filteredPatients.filter((patient) => {
+          const patientDate = new Date(patient.NGAYSINH);
 
-          return compareDates(customerDate, endDate) >= 0;
+          return compareDates(patientDate, endDate) >= 0;
         });
       }
 
       // Lọc theo từ khóa tìm kiếm
       if (searchKeyword) {
-        filteredCustomers = filteredCustomers.filter((customer) =>
-          customer[3].toLowerCase().includes(searchKeyword.toLowerCase())
+        filteredPatients = filteredPatients.filter((patient) =>
+          patient.HOTEN.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
 
-      const formattedCustomers = filteredCustomers.map(customer => {
-        const [mabn, matk, cccd, hoTen, ngaySinh, gioiTinh, sdt, diaChi, tienSuBenh, diUng] = customer;
-  
-        const formattedNgaySinh = formatDate(ngaySinh);
-  
-        return [
-          mabn,
-          matk,
-          cccd,
-          hoTen,
+      const formattedPatients = filteredPatients.map(patient => {
+        const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
+        const formattedNgaySinh = formatDate(NGAYSINH);
+
+        return {
+          MABN,
+          MATK,
+          CCCD,
+          HOTEN,
           formattedNgaySinh,
-          gioiTinh,
-          sdt,
-          diaChi,
-          tienSuBenh,
-          diUng
-        ];
+          GIOITINH,
+          SDT,
+          DIACHI,
+          TIENSUBENH,
+          DIUNG
+        };
       });
 
-      const calculatedTotalPages = Math.ceil(filteredCustomers.length / limit);
+      const calculatedTotalPages = Math.ceil(filteredPatients.length / limit);
       setTotalPages(calculatedTotalPages);
 
       const startIdx = (page - 1) * limit;
-      const endIdx = Math.min(startIdx + limit, filteredCustomers.length);
-      const pageCustomers = formattedCustomers.slice(startIdx, endIdx);
+      const endIdx = Math.min(startIdx + limit, filteredPatients.length);
+      const pagePatients = formattedPatients.slice(startIdx, endIdx);
 
-
-      setDisplayedCustomers(pageCustomers);
+      setDisplayedPatients(pagePatients);
     }
   }, [patients, page, limit, searchKeyword, startDate, endDate]);
 
@@ -141,7 +133,7 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListFormAddBtnThanhToanAndChiTiet columns={columns} data={displayedCustomers} loading={isLoading}/>
+      <ListFormAddBtnThanhToanAndChiTiet columns={columns} data={displayedPatients} loading={isLoading}/>
       <Pagination
         totalPages={totalPages}
         page={page}
