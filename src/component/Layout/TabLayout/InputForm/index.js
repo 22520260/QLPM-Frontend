@@ -8,10 +8,10 @@ import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 export function IFSelect({
   title,
   size,
-  option,
+  options,
   selected,
-  indexName,
   onChange,
+  keyObj,
   required,
 }) {
   const style = "col-md-" + size;
@@ -35,12 +35,9 @@ export function IFSelect({
         value={selected}
       >
         <option selected>Chọn</option>
-        {option.map((value, index) => (
-          <option
-            key={index}
-            value={Array.isArray(value) ? value[indexName] : value}
-          >
-            {Array.isArray(value) ? value[indexName] : value}
+        {options.map((value, index) => (
+          <option key={index} value={value[keyObj]}>
+            {value[keyObj]}
           </option>
         ))}
       </select>
@@ -252,7 +249,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
         <datalist id="servicesDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option[2]} />
+              <option key={index} value={option.TENDV} />
             ))
           ) : (
             <option value="Loading..." />
@@ -290,7 +287,7 @@ export function IFSearchHT({ title, size, options, required, onChange }) {
         <datalist id="hoTenDatalist">
           {Array.isArray(options) ? (
             options.map((option, index) => (
-              <option key={index} value={option[3]} />
+              <option key={index} value={option.HOTEN} />
             ))
           ) : (
             <option value="Loading..." />
