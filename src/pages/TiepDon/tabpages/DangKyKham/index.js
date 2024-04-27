@@ -119,14 +119,16 @@ function DangKyKham() {
     return new Promise((res) => setTimeout(res, delay));
   }
 
-  const insertPK = async (maBN) => {
+  const insertPK = async (maBN, maHD) => {
+    // với mỗi dịch vụ thì gọi 1 api tạo phiếu khám cho DV đó
     formData.dichVu.forEach(async (maDV) => {
       let bodyReq = formData;
       bodyReq.dichVu = maDV;
       bodyReq["maBN"] = maBN;
+      bodyReq["maHD"] = maHD;
       try {
         const response = await axios.post(
-          "http://localhost:3001/phieukham/insert-pk",
+          "http://localhost:3001/phieukham/insert-just-pk",
           bodyReq
         );
         if (response.status === 200) {
@@ -151,26 +153,44 @@ function DangKyKham() {
         toast.error("Chưa nhập CCCD");
         return;
       }
-      if (oldPatientID === 0) {
-        let bien = "";
+        let maHDinserted = "";
+        // thêm hóa đơn mới
         try {
           const response1 = await axios.post(
-            "http://localhost:3001/benhnhan/insert",
-            formData
+            "http://localhost:3001/hoadon/insert",
+            { maLT: 1, maLHD: 1, tttt: "Chưa thanh toán" }
           );
           if (response1.status === 200) {
-            bien = response1.data.MABN;
-            alert("Thêm bệnh nhân thành công!!!");
-            await insertPK(bien);
+            maHDinserted = response1.data.MAHD;
+            alert("Thêm hóa đơn thành công!!!");
           }
         } catch (error) {
-          alert("Thêm bệnh nhân không thành công");
+          console.log(error);
+          alert("Thêm hóa đơn không thành công");
         }
-      } else {
-        await insertPK(oldPatientID);
-      }
-      await timeout(1000);
-      window.location.reload();
+        // nếu là bệnh nhân mới thì thêm hồ sơ bệnh nhân trước
+        if (oldPatientID === 0) {
+          let maBNinserted = "";
+          try {
+            const response2 = await axios.post(
+              "http://localhost:3001/benhnhan/insert",
+              formData
+            );
+            if (response2.status === 200) {
+              maBNinserted = response2.data.MABN;
+              alert("Thêm bệnh nhân thành công!!!");
+              await insertPK(maBNinserted, maHDinserted);
+            }
+          } catch (error) {
+            console.log(error);
+            alert("Thêm bệnh nhân không thành công");
+          }
+        } else {
+          await insertPK(oldPatientID, maHDinserted);
+        }
+        // chờ 1 giây đề các api call thực hiện xong rồi mới load lại trang
+        await timeout(1000);
+        window.location.reload();
     } else {
       setObjValidInput({ ...defaultObjValidInput, isValidDichVu: false });
       toast.error("Chưa thêm dịch vụ nào.");

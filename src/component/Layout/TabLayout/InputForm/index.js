@@ -230,7 +230,7 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
   );
 }
 
-export function IFSearchDV({ title, size, options, onChange }) {
+export function IFSearchDV({ title, valid, size, options, onChange }) {
   const handleChange = (e) => {
     onChange(e);
   };
@@ -242,7 +242,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
       </label>
       <div className="input-group">
         <input
-          className="form-control rounded"
+          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
           list="servicesDatalist"
           id="servicesDataList"
           type="text"
@@ -262,7 +262,7 @@ export function IFSearchDV({ title, size, options, onChange }) {
   );
 }
 
-export function IFSearchHT({ title, size, options, required, onChange }) {
+export function IFSearchHT({ title, valid, size, options, required, onChange }) {
   const handleInputChange = (e) => {
     const value = e.target.value;
     onChange(value);
@@ -280,7 +280,7 @@ export function IFSearchHT({ title, size, options, required, onChange }) {
 
       <div className="input-group">
         <input
-          className="form-control rounded"
+          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
           list="hoTenDatalist"
           id="hoTenInput"
           onChange={handleInputChange}
