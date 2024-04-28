@@ -1,6 +1,8 @@
 import { FaRegBell } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 function NavIcon() {
+    const navigate = useNavigate();
     return (
         <>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +22,10 @@ function NavIcon() {
                         <ul className="dropdown-menu dropdown-menu-end">
                             <li><a className="dropdown-item" href="#">Xem hồ sơ</a></li>
                             <li><a className="dropdown-item" href="#">Đổi mật khẩu</a></li>
-                            <li><a className="dropdown-item" href="#">Đăng xuất</a></li>
+                            <li><a className="dropdown-item" href="#" onClick={() => {
+                                sessionStorage.clear();
+                                navigate('/login')
+                            }}>Đăng xuất</a></li>
                         </ul>
                     </li>
                 </ul>
