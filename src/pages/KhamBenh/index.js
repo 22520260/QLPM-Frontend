@@ -1,121 +1,109 @@
-import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
-import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
-import { ListFormAddBtnThanhToanAndChiTiet } from "../../component/Layout/TabLayout/ListForm";
-import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import {
+  IFNgay,
+  IFSearch,
+} from "../../component/Layout/TabLayout/InputForm";
+import { ListFormDSDK} from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
-import { usePaginationHandler } from "../../utils/appUtils";
-import { compareDates, formatDate } from "../../utils/appUtils";
+import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
+import { useDispatch, useSelector } from "react-redux";
+import { compareDates, usePaginationHandler } from "../../utils/appUtils";
 
-function KhamBenh() {
+function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
-  const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
-
+  const data = useSelector((state) => state.fetchDSDK.data);
+  const DSDK = data.data;
+  console.log('CHECK DSDK',DSDK)
+  const isLoading = useSelector((state) => state.fetchDSDK.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const [displayedCustomers, setDisplayedCustomers] = useState([]);
+  const [displayDSDK, setDisplayDSDK] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-
+  
   const columns = [
-    { title: "Mã phiếu", key: "0" },
-    { title: "STT", key: "1" },
-    { title: "Họ Tên", key: "2" },
-    { title: "Tên Bác sĩ", key: "3" },
-    { title: "Tổng tiền", key: "4" },
-    { title: "Trạng thái", key: "5" },
+    { title: "Mã phiếu", key: "MAPK" },
+    { title: "STT", key: "STT" },
+    { title: "Họ Tên", key: "TENBN" },
+    { title: "Tên Bác sĩ", key: "TENBS" },
+    { title: "Tổng tiền", key: "TIENTHUOC" },
+    { title: "Trạng thái", key: "TRANGTHAITH" },
   ];
 
   useEffect(() => {
-    dispatch(fetchAllBenhNhanAction());
-    console.log("call api DanhSachDangKy");
+    dispatch(fetchDSDKAction());
+
   }, []);
 
   useEffect(() => {
-    if (patients) {
-      let filteredCustomers = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
-
+    if (DSDK) {
+      let filteredDSDK = [...DSDK];
       // Lọc theo ngày bắt đầu và ngày kết thúc
       if (startDate && endDate) {
-        filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]);
+        filteredDSDK = filteredDSDK.filter((data) => {
+          const formatedNGAYKHAM = new Date(data.NGAYKHAM);
           return (
-            compareDates(startDate, customerDate) >= 0 &&
-            compareDates(customerDate, endDate) >= 0
+            compareDates(startDate, formatedNGAYKHAM) >= 0 &&
+            compareDates(formatedNGAYKHAM, endDate) >= 0
           );
         });
       } else if (startDate) {
         // Chỉ có ngày bắt đầu
-        filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]);
+        filteredDSDK = filteredDSDK.filter((data) => {
+          const formatedNGAYKHAM = new Date(data.NGAYKHAM);
 
-          return compareDates(startDate, customerDate) >= 0;
+          return compareDates(startDate, formatedNGAYKHAM) >= 0;
         });
       } else if (endDate) {
         // Chỉ có ngày kết thúc
-        filteredCustomers = filteredCustomers.filter((customer) => {
-          const customerDate = new Date(customer[4]);
+        filteredDSDK = filteredDSDK.filter((data) => {
+          const formatedNGAYKHAM = new Date(data.NGAYKHAM);
 
-          return compareDates(customerDate, endDate) >= 0;
+          return compareDates(formatedNGAYKHAM, endDate) >= 0;
         });
       }
 
       // Lọc theo từ khóa tìm kiếm
       if (searchKeyword) {
-        filteredCustomers = filteredCustomers.filter((customer) =>
-          customer[3].toLowerCase().includes(searchKeyword.toLowerCase())
+        filteredDSDK = filteredDSDK.filter((data) =>
+          data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
 
-      const formattedCustomers = filteredCustomers.map((customer) => {
-        const [
-          mabn,
-          matk,
-          cccd,
-          hoTen,
-          ngaySinh,
-          gioiTinh,
-          sdt,
-          diaChi,
-          tienSuBenh,
-          diUng,
-        ] = customer;
+      // const formattedDSDK = filteredDSDK.map(data => {
+      //   const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
+      //   const formattedNgaySinh = formatDate(NGAYSINH);
 
-        const formattedNgaySinh = formatDate(ngaySinh);
+      //   return {
+      //     MABN,
+      //     MATK,
+      //     CCCD,
+      //     HOTEN,
+      //     formattedNgaySinh,
+      //     GIOITINH,
+      //     SDT,
+      //     DIACHI,
+      //     TIENSUBENH,
+      //     DIUNG
+      //   };
+      // });
 
-        return [
-          mabn,
-          matk,
-          cccd,
-          hoTen,
-          formattedNgaySinh,
-          gioiTinh,
-          sdt,
-          diaChi,
-          tienSuBenh,
-          diUng,
-        ];
-      });
-
-      const calculatedTotalPages = Math.ceil(filteredCustomers.length / limit);
+      const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
       setTotalPages(calculatedTotalPages);
 
       const startIdx = (page - 1) * limit;
-      const endIdx = Math.min(startIdx + limit, filteredCustomers.length);
-      const pageCustomers = formattedCustomers.slice(startIdx, endIdx);
+      const endIdx = Math.min(startIdx + limit, filteredDSDK.length);
+      const pageDSDK = filteredDSDK.slice(startIdx, endIdx);
 
-      setDisplayedCustomers(pageCustomers);
+      setDisplayDSDK(pageDSDK);
     }
-  }, [patients, page, limit, searchKeyword, startDate, endDate]);
+  }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
   };
-
-  const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
   const handleChange_NBD = (value) => {
     setStartDate(value);
@@ -125,42 +113,39 @@ function KhamBenh() {
     setEndDate(value);
   };
 
+  const handlePageChange = usePaginationHandler(setPage, page, totalPages);
+
+
   return (
     <>
-      <div className="container-fluid">
-        <div className="row py-2">
-          <IFNgay
-            title={"Từ ngày"}
-            size={2}
-            onChange={(value) => handleChange_NBD(value)}
-          />
-          <IFNgay
-            title={"Đến ngày"}
-            size={2}
-            onChange={(value) => handleChange_NKT(value)}
-          />
-          <IFSearch
-            title={"Tìm kiếm từ khóa"}
-            size={4}
-            onChange={(value) => handleIFSearchChange(value)}
-          />
-        </div>
-
-        <ListFormAddBtnThanhToanAndChiTiet
-          columns={columns}
-          data={displayedCustomers}
-          loading={isLoading}
+      <div className="row py-2">
+        <IFNgay
+          title={"Từ ngày"}
+          size={2}
+          onChange={(value) => handleChange_NBD(value)}
         />
-        <Pagination
-          totalPages={totalPages}
-          page={page}
-          limit={limit}
-          siblings={1}
-          onPageChange={handlePageChange}
+        <IFNgay
+          title={"Đến ngày"}
+          size={2}
+          onChange={(value) => handleChange_NKT(value)}
+        />
+        <IFSearch
+          title={"Tìm kiếm từ khóa"}
+          size={4}
+          onChange={(value) => handleIFSearchChange(value)}
         />
       </div>
+
+      <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading}/>
+      <Pagination
+        totalPages={totalPages}
+        page={page}
+        limit={limit}
+        siblings={1}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 }
 
-export default KhamBenh;
+export default DanhSachDangKy;
