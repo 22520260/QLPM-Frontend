@@ -128,9 +128,9 @@ export function IFPassword({
           required='true'
         />
 
-<button className={btnClass} type="button" id="button-addon2" onClick={toggleEye}>
-      {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
-    </button>
+        <button className={btnClass} type="button" id="button-addon2" onClick={toggleEye}>
+          {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
+        </button>
       </div>
     </div>
   );
@@ -171,7 +171,7 @@ export function TextArea({
   );
 }
 
-export function IFNgay({ title, size, defaultValue, value, onChange }) {
+export function IFNgay({ title, size, defaultValue, value, onChange, required }) {
   const style = "col-md-" + size;
   const handleDateChange = (date) => {
     if (date) {
@@ -184,8 +184,9 @@ export function IFNgay({ title, size, defaultValue, value, onChange }) {
 
   return (
     <div className={style}>
-      <label htmlFor={title} className="form-label">
-        {title}
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
       </label>
       <div className="input-group">
         <DatePicker
@@ -196,6 +197,8 @@ export function IFNgay({ title, size, defaultValue, value, onChange }) {
           onChange={handleDateChange}
           defaultValue={defaultValue}
           value={value}
+          required={required}
+
         />
       </div>
     </div>

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import CTPhieuKham from "../../../../popups/CTPhieuKham";
 import ThanhToan from "../../../../popups/ThanhToan";
-import { FaEye, FaDollarSign } from "react-icons/fa";
+import { FaEye, FaDollarSign, FaPencilRuler } from "react-icons/fa";
 import NavTabVertical from "../../../NavTabVertical";
 import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
-import { IFNgayNgang, ListGroupItem, TextArea } from "../InputForm";
+import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay } from "../InputForm";
+
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -221,11 +222,11 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
                       title={"Người bán"}
                       value={"Le Thi Thanh Thao"}
                     />
-                    <IFNgayNgang title={"Ngày bán"} onChange={()=>{}}/>
-                    <ListGroupItem title={"Mã phiếu"} value={selectedRow[0]} disable={true}/>
-                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true}/>
+                    <IFNgayNgang title={"Ngày bán"} onChange={() => { }} />
+                    <ListGroupItem title={"Mã phiếu"} value={selectedRow[0]} disable={true} />
+                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true} />
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
-                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true}/>
+                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true} />
                     <ListGroupItem
                       title={"Phương thức TT"}
                       value={"Tiền mặt"}
@@ -309,13 +310,17 @@ export function ListFormThuoc({ columns, data, loading }) {
                 <td>
                   <button
                     type="button"
-                    className="btn btn-primary rounded-circle"
+                    className="btn btn-primary rounded-circle mx-1"
                     data-bs-toggle="modal"
                     data-bs-target="#idctlt"
                   >
-                    <FaEye />
+                    <FaPencilRuler />
                   </button>
-                  
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
                 </td>
               </tr>
             ))
@@ -335,7 +340,7 @@ export function ListFormThuoc({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow[0]}
+                Thông tin lô thuốc {selectedRow[0]}
               </h1>
               <button
                 type="button"
@@ -347,7 +352,60 @@ export function ListFormThuoc({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTPK} />
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Số lô"}
+                    size={2}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên thuốc"}
+                    size={7}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Số lượng nhập"}
+                    size={3}
+                    required={'true'}
+                  />
+                </div>
+                <div className="row py-2">
+
+                  <IFInputText
+                    title={"Hoạt chất"}
+                    size={7}
+                  />
+                  <IFInputText
+                    title={"Đơn vị"}
+                    size={2}
+                  />
+                  <IFInputText
+                    title={"Số lượng tồn"}
+                    size={3}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFNgay
+                    title={"Ngày nhập"}
+                    size={3}
+                    defaultValue={new Date()}
+                  />
+                  <IFNgay
+                    title={"Hạn sử dụng"}
+                    size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Giá nhập (VNĐ)"}
+                    size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Giá bán (VNĐ)"}
+                    size={3}
+                    required={'true'}
+                  />
+                </div>
               </div>
             </div>
             <div className="modal-footer">
