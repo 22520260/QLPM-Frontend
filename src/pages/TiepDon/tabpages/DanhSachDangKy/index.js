@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormAddBtnThanhToanAndChiTiet} from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormAddBtnThanhToanAndChiTiet } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -21,7 +21,7 @@ function DanhSachDangKy() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  
+
   const columns = [
     { title: "Mã phiếu", key: "MABN" },
     { title: "STT", key: "MABN" },
@@ -70,8 +70,19 @@ function DanhSachDangKy() {
         );
       }
 
-      const formattedPatients = filteredPatients.map(patient => {
-        const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
+      const formattedPatients = filteredPatients.map((patient) => {
+        const {
+          MABN,
+          MATK,
+          CCCD,
+          HOTEN,
+          NGAYSINH,
+          GIOITINH,
+          SDT,
+          DIACHI,
+          TIENSUBENH,
+          DIUNG,
+        } = patient;
         const formattedNgaySinh = formatDate(NGAYSINH);
 
         return {
@@ -84,7 +95,7 @@ function DanhSachDangKy() {
           SDT,
           DIACHI,
           TIENSUBENH,
-          DIUNG
+          DIUNG,
         };
       });
 
@@ -133,7 +144,11 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListFormAddBtnThanhToanAndChiTiet columns={columns} data={displayedPatients} loading={isLoading}/>
+      <ListFormAddBtnThanhToanAndChiTiet
+        columns={columns}
+        data={displayedPatients}
+        loading={isLoading}
+      />
       <Pagination
         totalPages={totalPages}
         page={page}
