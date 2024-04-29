@@ -7,6 +7,8 @@ import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { IFNgayNgang, ListGroupItem, TextArea } from "../InputForm";
+import { useDispatch, useSelector } from "react-redux";
+import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -61,11 +63,11 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
   );
 }
 
-export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
-  const [selectedRow, setSelectedRow] = useState({});
-
+export function ListFormDSDK({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
   const handleRowClick = (row) => {
-    setSelectedRow(row);
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
   };
   const handleSave = () => {
     console.log("SAVE");
@@ -143,7 +145,7 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MABN}
+                Thông tin phiếu khám {selectedRow.MAPK}
               </h1>
               <button
                 type="button"
@@ -217,7 +219,7 @@ export function ListFormAddBtnThanhToanAndChiTiet({ columns, data, loading }) {
                       value={"Le Thi Thanh Thao"}
                     />
                     <IFNgayNgang title={"Ngày bán"} onChange={()=>{}}/>
-                    <ListGroupItem title={"Mã phiếu"} value={selectedRow.MABN} disable={true}/>
+                    <ListGroupItem title={"Mã phiếu"} value={'qqq'} disable={true}/>
                     <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true}/>
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
                     <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true}/>

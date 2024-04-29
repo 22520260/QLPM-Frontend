@@ -2,119 +2,107 @@ import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
 import { ListFormThuoc } from "../../component/Layout/TabLayout/ListForm";
-import { fetchAllBenhNhanAction } from "../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../utils/appUtils";
 import { compareDates, formatDate } from "../../utils/appUtils";
 
-function KhamBenh() {
+function Thuoc() {
     const dispatch = useDispatch();
-    const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
-    const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
-
+    const data = useSelector((state) => state.fetchDSDK.data);
+    const DSDK = data.data
+    const isLoading = useSelector((state) => state.fetchDSDK.loading);
+    console.log("THUOC", data)
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
-    const [displayedCustomers, setDisplayedCustomers] = useState([]);
+    const [displayDSDK, setDisplayDSDK] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [totalPages, setTotalPages] = useState(0);
 
     const columns = [
-        { title: "STT", key: "0" },
-        { title: "Số lô", key: "1" },
-        { title: "Tên thuốc", key: "2" },
-        { title: "Hoạt chất", key: "3" },
-        { title: "Số lượng nhập", key: "4" },
-        { title: "Số lượng tồn", key: "5" },
-        { title: "Ngày nhập", key: "6" },
-        { title: "HSD", key: "7" },
-        { title: "Đơn vị", key: "8" },
-        { title: "Giá nhập", key: "9" },
-        { title: "Giá bán", key: "10" },
+        { title: "STT", key: "MAPK" },
+        { title: "Số lô", key: "MAPK" },
+        { title: "Tên thuốc", key: "MAPK" },
+        { title: "Hoạt chất", key: "MAPK" },
+        { title: "Số lượng nhập", key: "MAPK" },
+        { title: "Số lượng tồn", key: "MAPK" },
+        { title: "Ngày nhập", key: "MAPK" },
+        { title: "HSD", key: "MAPK" },
+        { title: "Đơn vị", key: "MAPK" },
+        { title: "Giá nhập", key: "MAPK" },
+        { title: "Giá bán", key: "MAPK" },
     ];
 
     useEffect(() => {
-        dispatch(fetchAllBenhNhanAction());
+        dispatch(fetchDSDKAction());
         console.log("call api DanhSachDangKy");
     }, []);
 
     useEffect(() => {
-        if (patients) {
-            let filteredCustomers = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
-
-            // Lọc theo ngày bắt đầu và ngày kết thúc
-            if (startDate && endDate) {
-                filteredCustomers = filteredCustomers.filter((customer) => {
-                    const customerDate = new Date(customer[4]);
-                    return (
-                        compareDates(startDate, customerDate) >= 0 &&
-                        compareDates(customerDate, endDate) >= 0
-                    );
-                });
-            } else if (startDate) {
-                // Chỉ có ngày bắt đầu
-                filteredCustomers = filteredCustomers.filter((customer) => {
-                    const customerDate = new Date(customer[4]);
-
-                    return compareDates(startDate, customerDate) >= 0;
-                });
-            } else if (endDate) {
-                // Chỉ có ngày kết thúc
-                filteredCustomers = filteredCustomers.filter((customer) => {
-                    const customerDate = new Date(customer[4]);
-
-                    return compareDates(customerDate, endDate) >= 0;
-                });
-            }
-
-            // Lọc theo từ khóa tìm kiếm
-            if (searchKeyword) {
-                filteredCustomers = filteredCustomers.filter((customer) =>
-                    customer[3].toLowerCase().includes(searchKeyword.toLowerCase())
-                );
-            }
-
-            const formattedCustomers = filteredCustomers.map((customer) => {
-                const [
-                    mabn,
-                    matk,
-                    cccd,
-                    hoTen,
-                    ngaySinh,
-                    gioiTinh,
-                    sdt,
-                    diaChi,
-                    tienSuBenh,
-                    diUng,
-                ] = customer;
-
-                const formattedNgaySinh = formatDate(ngaySinh);
-
-                return [
-                    mabn,
-                    matk,
-                    cccd,
-                    hoTen,
-                    formattedNgaySinh,
-                    gioiTinh,
-                    sdt,
-                    diaChi,
-                    tienSuBenh,
-                    diUng,
-                ];
+        if (DSDK) {
+          let filteredDSDK = [...DSDK];
+          // Lọc theo ngày bắt đầu và ngày kết thúc
+          if (startDate && endDate) {
+            filteredDSDK = filteredDSDK.filter((data) => {
+              const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+              return (
+                compareDates(startDate, formatedNGAYKHAM) >= 0 &&
+                compareDates(formatedNGAYKHAM, endDate) >= 0
+              );
             });
-
-            const calculatedTotalPages = Math.ceil(filteredCustomers.length / limit);
-            setTotalPages(calculatedTotalPages);
-
-            const startIdx = (page - 1) * limit;
-            const endIdx = Math.min(startIdx + limit, filteredCustomers.length);
-            const pageCustomers = formattedCustomers.slice(startIdx, endIdx);
-
-            setDisplayedCustomers(pageCustomers);
+          } else if (startDate) {
+            // Chỉ có ngày bắt đầu
+            filteredDSDK = filteredDSDK.filter((data) => {
+              const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+    
+              return compareDates(startDate, formatedNGAYKHAM) >= 0;
+            });
+          } else if (endDate) {
+            // Chỉ có ngày kết thúc
+            filteredDSDK = filteredDSDK.filter((data) => {
+              const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+    
+              return compareDates(formatedNGAYKHAM, endDate) >= 0;
+            });
+          }
+    
+          // Lọc theo từ khóa tìm kiếm
+          if (searchKeyword) {
+            filteredDSDK = filteredDSDK.filter((data) =>
+              data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
+            );
+          }
+    
+          // const formattedDSDK = filteredDSDK.map(data => {
+          //   const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
+          //   const formattedNgaySinh = formatDate(NGAYSINH);
+    
+          //   return {
+          //     MABN,
+          //     MATK,
+          //     CCCD,
+          //     HOTEN,
+          //     formattedNgaySinh,
+          //     GIOITINH,
+          //     SDT,
+          //     DIACHI,
+          //     TIENSUBENH,
+          //     DIUNG
+          //   };
+          // });
+    
+          const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
+          setTotalPages(calculatedTotalPages);
+    
+          const startIdx = (page - 1) * limit;
+          const endIdx = Math.min(startIdx + limit, filteredDSDK.length);
+          const pageDSDK = filteredDSDK.slice(startIdx, endIdx);
+    
+          setDisplayDSDK(pageDSDK);
         }
-    }, [patients, page, limit, searchKeyword, startDate, endDate]);
+      }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
 
     const handleIFSearchChange = (value) => {
         setSearchKeyword(value);
@@ -156,7 +144,7 @@ function KhamBenh() {
 
                 <ListFormThuoc
                     columns={columns}
-                    data={displayedCustomers}
+                    data={displayDSDK}
                     loading={isLoading}
                 />
                 <Pagination
@@ -171,4 +159,4 @@ function KhamBenh() {
     );
 }
 
-export default KhamBenh;
+export default Thuoc;

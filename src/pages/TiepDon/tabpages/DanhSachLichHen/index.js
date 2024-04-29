@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormAddBtnThanhToanAndChiTiet} from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDSDK} from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -133,7 +133,7 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListFormAddBtnThanhToanAndChiTiet columns={columns} data={displayedPatients} loading={isLoading}/>
+      <ListFormDSDK columns={columns} data={displayedPatients} loading={isLoading}/>
       <Pagination
         totalPages={totalPages}
         page={page}

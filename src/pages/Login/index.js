@@ -5,63 +5,58 @@ import {
 import { Link } from "react-router-dom";
 import { Lg_nameunder } from "../../component/Logo";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { loginUser } from "../../services/userServices";
 
 function Login() {
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const defaultObjValidInput = {
+    isValidUsername: true,
+    isValidPassword: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setObjValidInput(defaultObjValidInput);
-    if (!userName) {
-      setObjValidInput({ ...defaultObjValidInput, isValidUserName: false });
-      toast.error("Chưa nhập username", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+    if (!username) {
+      setObjValidInput({ ...defaultObjValidInput, isValidUsername: false });
+      toast.error("Chưa nhập username");
       return;
     }
     if (!password) {
       setObjValidInput({ ...defaultObjValidInput, isValidPassword: false });
-      toast.error("Chưa nhập password", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error("Chưa nhập password");
       return;
     }
 
-    console.log("call API");
-    if (1) {
+    const response = await loginUser(username, password);
+    if (response && response.data && response.data.errcode === 0) {
       let data = {
         isAuthenticated: true,
         token: "fake token",
       };
       sessionStorage.setItem("account", JSON.stringify(data));
-      navigate('/tiepdon')
+      navigate('/')
     }
-    //ngược lại báo lỗi
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message)
+    }
   };
 
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-  const defaultObjValidInput = {
-    isValidUserName: true,
-    isValidPassword: true,
-  };
-  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+  useEffect(() => {
+    let session  = sessionStorage.getItem('account');
+    if(session) {
+      navigate('/')
+      window.location.reload();
+    }
+  })
 
   return (
     <div
@@ -77,11 +72,11 @@ function Login() {
           <div className="py-2">
             <IFInputText
               title={"Tên đăng nhập"}
-              valid={objValidInput.isValidUserName}
-              value={userName}
+              valid={objValidInput.isValidUsername}
+              value={username}
               size={12}
               required={true}
-              onChange={(value) => setUserName(value)}
+              onChange={(value) => setUsername(value)}
             />
           </div>
           <div className="py-2">
