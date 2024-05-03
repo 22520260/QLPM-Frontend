@@ -1,8 +1,11 @@
 import { FaRegBell } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../redux/slice/other/authSlices';
 
 function NavIcon() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     return (
         <>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +26,8 @@ function NavIcon() {
                             <li><a className="dropdown-item" href="#">Xem hồ sơ</a></li>
                             <li><a className="dropdown-item" href="#">Đổi mật khẩu</a></li>
                             <li><a className="dropdown-item" href="#" onClick={() => {
-                                sessionStorage.clear();
+                                
+                                dispatch(logout());
                                 navigate('/login')
                             }}>Đăng xuất</a></li>
                         </ul>
