@@ -117,32 +117,34 @@ function DanhSachDangKy() {
 
   return (
     <>
-      <div className="row py-2">
-        <IFNgay
-          title={"Từ ngày"}
-          size={2}
-          onChange={(value) => handleChange_NBD(value)}
-        />
-        <IFNgay
-          title={"Đến ngày"}
-          size={2}
-          onChange={(value) => handleChange_NKT(value)}
-        />
-        <IFSearch
-          title={"Tìm kiếm từ khóa"}
-          size={4}
-          onChange={(value) => handleIFSearchChange(value)}
+    <h1>Khám Bệnh</h1>
+      <div className="container-fluid">
+        <div className="row py-2">
+          <IFNgay
+            title={"Từ ngày"}
+            size={2}
+            onChange={(value) => handleChange_NBD(value)}
+          />
+          <IFNgay
+            title={"Đến ngày"}
+            size={2}
+            onChange={(value) => handleChange_NKT(value)}
+          />
+          <IFSearch
+            title={"Tìm kiếm từ khóa"}
+            size={4}
+            onChange={(value) => handleIFSearchChange(value)}
+          />
+        </div>
+        <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading}/>
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          limit={limit}
+          siblings={1}
+          onPageChange={handlePageChange}
         />
       </div>
-
-      <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading}/>
-      <Pagination
-        totalPages={totalPages}
-        page={page}
-        limit={limit}
-        siblings={1}
-        onPageChange={handlePageChange}
-      />
     </>
   );
 }
