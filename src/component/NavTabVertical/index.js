@@ -35,7 +35,7 @@ function NavTabVertical({ tabsData }) {
         </div>
 
         {/* Content */}
-        <div className="col-md-10 px-4">
+        <div className="col-md-10 ps-4">
           <div className="tab-content">{renderActiveTabContent()}</div>
         </div>
       </div>
