@@ -5,7 +5,6 @@ export const fetchAllBenhNhanAction = createAsyncThunk(
   'fetchAllBenhNhanAction',
   async () => {
     try {
-      console.log('fetchAllBenhNhan')
       const response = await axios.get('/benhnhan/getAll');
       return response.data;
     } catch (error) {

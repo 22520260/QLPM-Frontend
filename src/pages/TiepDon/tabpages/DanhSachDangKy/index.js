@@ -15,7 +15,6 @@ function DanhSachDangKy() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.fetchDSDK.data);
   const DSDK = data.data;
-  console.log('CHECK DSDK',DSDK)
   const isLoading = useSelector((state) => state.fetchDSDK.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
