@@ -7,9 +7,8 @@ import {
   IFSearchHT,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import axios from "axios";
+import axios from "../../../../setup/axios";
 import { useDispatch, useSelector } from "react-redux";
-import { postAllDataDKKAction } from "../../../../redux/action/postDataAction/postAllDataDKKAction";
 import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fetchAllBacSiAction";
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
@@ -18,9 +17,15 @@ import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 
 function DangKyKham() {
   const dispatch = useDispatch();
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
-  const services = useSelector((state) => state.fetchAllDichVu.services);
-  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
+
+  const services = useSelector((state) => state.fetchAllDichVu.services) || [];
+  console.log(">>> CHECK SERVICES", services)
+
+  const patients = useSelector((state) => state.fetchAllBenhNhan.patients)|| [];
+  console.log(">>> CHECK PATIENTS", patients)
+
+  const doctors = useSelector((state) => state.fetchAllBacSi.doctors)|| [];
+  console.log(">>> CHECK DOCTORS", doctors)
 
   const [showError, setShowError] = useState(false);
   const [oldPatientID, setOldPatientID] = useState(0);
@@ -58,9 +63,10 @@ function DangKyKham() {
   ];
 
   useEffect(() => {
-    dispatch(fetchAllBacSiAction());
     dispatch(fetchAllDichVuAction());
     dispatch(fetchAllBenhNhanAction());
+    dispatch(fetchAllBacSiAction());
+
   }, []);
 
   const checkPatientExistence = (fullName) => {
@@ -128,7 +134,7 @@ function DangKyKham() {
       bodyReq["maHD"] = maHD;
       try {
         const response = await axios.post(
-          "http://localhost:3001/phieukham/insert-just-pk",
+          "/phieukham/insert-just-pk",
           bodyReq
         );
         if (response.status === 200) {
@@ -157,7 +163,7 @@ function DangKyKham() {
         // thêm hóa đơn mới
         try {
           const response1 = await axios.post(
-            "http://localhost:3001/hoadon/insert",
+            "/hoadon/insert",
             { maLT: 1, maLHD: 1, tttt: "Chưa thanh toán" }
           );
           if (response1.status === 200) {
@@ -173,7 +179,7 @@ function DangKyKham() {
           let maBNinserted = "";
           try {
             const response2 = await axios.post(
-              "http://localhost:3001/benhnhan/insert",
+              "/benhnhan/insert",
               formData
             );
             if (response2.status === 200) {

@@ -17,7 +17,7 @@ function ThongTinKham() {
     <div className="shadow rounded">
       {/* Thông tin */}
       <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
-      <div className="container-fluid mb-">
+      <div className="container-fluid mb-2 py-2">
         <div className="row py-2">
           <IFInputText
             title={"Trạng thái"}

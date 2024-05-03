@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../../setup/axios';
 
 export const fetchAllBenhNhanAction = createAsyncThunk(
   'fetchAllBenhNhanAction',
   async () => {
     try {
       console.log('fetchAllBenhNhan')
-      const response = await axios.get('http://localhost:3001/benhnhan');
+      const response = await axios.get('/benhnhan/getAll');
       return response.data;
     } catch (error) {
       return error.message;

@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../../setup/axios";
 
 export const postAllDataDKKAction = createAsyncThunk(
   "registration/submit",
   async ({formData }) => {
     try {
-      const response = await axios.post('http://localhost:3001/benhnhan/insert', formData);
+      const response = await axios.post('/benhnhan/insert', formData);
       console.log(response.data)
 
       return response.data;
