@@ -15,10 +15,10 @@ function NavTabVertical({ tabsData }) {
 
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid p-0">
       <div className="row">
         {/* Sidebar */}
-        <div className="col-md-3">
+        <div className="col-md-2 p-0">
 
           <ul className="nav flex-column nav-pills">
             {tabsData.map((tab, index) => (
@@ -35,7 +35,7 @@ function NavTabVertical({ tabsData }) {
         </div>
 
         {/* Content */}
-        <div className="col-md-9">
+        <div className="col-md-10 px-4">
           <div className="tab-content">{renderActiveTabContent()}</div>
         </div>
       </div>
