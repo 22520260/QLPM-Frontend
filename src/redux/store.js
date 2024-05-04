@@ -4,10 +4,10 @@ import fetchAllBacSiReducer from './slice/getDataSlice/getAllBacSiSlice'
 import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
-// import authReducer from './slice/other/authSlices'
+import authReducer from './slice/other/authSlices'
 import { persistStore } from 'redux-persist';
-import persistedAuthSlice from '../redux/slice/other/authSlices';
-
+// import persistedAuthSlice from '../redux/slice/other/authSlices';
+import getAllUserInfoReducer from './slice/getDataSlice/getAllUserInfoSlice'
 
 export default configureStore({
   reducer: {
@@ -16,7 +16,8 @@ export default configureStore({
     fetchAllDichVu: fetchAllDichVuReducer,
     fetchDSDK: getDSDKRecuder,
     selectedRow: selectedRowReducer,
-    auth: persistedAuthSlice
+    auth: authReducer,
+    userInfo: getAllUserInfoReducer
   },
   devTools: true,
 })

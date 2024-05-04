@@ -43,6 +43,8 @@ function Login() {
     if (response && response.data && response.data.errcode === 0) {
       const groupWithRoles = response.data.data.groupWithRoles;
       const username = response.data.data.username;
+      const groupName = response.data.data.groupName;
+      const userInfo = response.data.data.userInfo;
       const token = response.data.data.access_token; // token chứa username và groupWithRoles
 
       let data = {
@@ -50,11 +52,13 @@ function Login() {
         token,
         account: {
           groupWithRoles,
-          username
+          groupName,
+          username,
+          userInfo
         }
       };
       // sessionStorage.setItem("account", JSON.stringify(data));
-      localStorage.setItem('jwt', token)
+      // localStorage.setItem('jwt', token)
       dispatch(login(data));
 
       navigate('/')
