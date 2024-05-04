@@ -13,11 +13,11 @@ function NavIcon() {
   let userInfo = {};
   let groupNameUser = "";
   if (user && user.account) {
-    if(user.account.userInfo) {
+    if (user.account.userInfo) {
       userInfo = user.account.userInfo[0];
     }
-    if(user.account.groupName) {
-      groupNameUser= user.account.groupName;
+    if (user.account.groupName) {
+      groupNameUser = user.account.groupName;
     }
   }
   console.log("user.userInfo", userInfo);
@@ -66,15 +66,20 @@ function NavIcon() {
               <span className="ms-2 me-1">{user.account.username}</span>
             </a>
             <ul className="dropdown-menu dropdown-menu-end">
-              <li>
-                <a
-                  className="dropdown-item"
-                  data-bs-toggle="modal"
-                  data-bs-target="#hosobenhnhan"
-                >
-                  Xem hồ sơ
-                </a>
-              </li>
+              {Object.keys(userInfo).length === 0 ? (
+                <></>
+              ) : (
+                <li>
+                  <a
+                    className="dropdown-item"
+                    data-bs-toggle="modal"
+                    data-bs-target="#hosobenhnhan"
+                  >
+                    Xem hồ sơ
+                  </a>
+                </li>
+              )}
+
               <li>
                 <a className="dropdown-item" href="#">
                   Đổi mật khẩu
