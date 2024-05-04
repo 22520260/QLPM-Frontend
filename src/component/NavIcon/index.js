@@ -24,7 +24,7 @@ function NavIcon() {
                         </a>
                         <ul className="dropdown-menu dropdown-menu-end">
                             <li><a className="dropdown-item" href="#">Xem hồ sơ</a></li>
-                            <li><a className="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                            <li><a className="dropdown-item" href="./admin">Giao diện Admin</a></li>
                             <li><a className="dropdown-item" href="#" onClick={() => {
                                 
                                 dispatch(logout());
