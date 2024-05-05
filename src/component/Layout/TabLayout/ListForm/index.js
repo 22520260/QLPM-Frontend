@@ -107,8 +107,8 @@ export function ListFormDSDK({ columns, data, loading }) {
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
                   <td key={colIndex}>
-                  {row[column.key] || ""}
-                </td>
+                    {row[column.key] || ""}
+                  </td>
                 ))}
                 <td>
                   <button
@@ -219,11 +219,11 @@ export function ListFormDSDK({ columns, data, loading }) {
                       title={"Người bán"}
                       value={"Le Thi Thanh Thao"}
                     />
-                    <IFNgayNgang title={"Ngày bán"} onChange={()=>{}}/>
-                    <ListGroupItem title={"Mã phiếu"} value={'qqq'} disable={true}/>
-                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true}/>
+                    <IFNgayNgang title={"Ngày bán"} onChange={() => { }} />
+                    <ListGroupItem title={"Mã phiếu"} value={'qqq'} disable={true} />
+                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true} />
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
-                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true}/>
+                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true} />
                     <ListGroupItem
                       title={"Phương thức TT"}
                       value={"Tiền mặt"}
@@ -429,7 +429,7 @@ export function ListFormThuoc({ columns, data, loading }) {
   );
 }
 
-export function ListFormKhamBenh({ columns, data, loading }) {
+export function ListFormDSTK({ columns, data, loading }) {
   const dispatch = useDispatch();
   const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
   const handleRowClick = (row) => {
@@ -480,14 +480,9 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#idkb"
+                    data-bs-target="#idtm"
                   >
-                    <FaStethoscope />
-                  </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                    <FaEye />
                   </button>
                 </td>
               </tr>
@@ -495,18 +490,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-      
 
-      {/* Modal KhamBenh */}
-      <div
-        className="modal fade modal-xl" id="idkb" 
-        data-bs-backdrop="static" 
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div className="modal fade modal-xl" id="idtm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MAPK}
+                Thông tin lô thuốc
               </h1>
               <button
                 type="button"
@@ -518,7 +508,60 @@ export function ListFormKhamBenh({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTKB} />
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Số lô"}
+                    size={2}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên thuốc"}
+                    size={7}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Số lượng nhập"}
+                    size={3}
+                    required={'true'}
+                  />
+                </div>
+                <div className="row py-2">
+
+                  <IFInputText
+                    title={"Hoạt chất"}
+                    size={7}
+                  />
+                  <IFInputText
+                    title={"Đơn vị"}
+                    size={2}
+                  />
+                  <IFInputText
+                    title={"Số lượng tồn"}
+                    size={3}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFNgay
+                    title={"Ngày nhập"}
+                    size={3}
+                    defaultValue={new Date()}
+                  />
+                  <IFNgay
+                    title={"Hạn sử dụng"}
+                    size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Giá nhập (VNĐ)"}
+                    size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Giá bán (VNĐ)"}
+                    size={3}
+                    required={'true'}
+                  />
+                </div>
               </div>
             </div>
             <div className="modal-footer">
@@ -532,15 +575,14 @@ export function ListFormKhamBenh({ columns, data, loading }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleSave}
+                onClick={() => { }}
               >
-                Lưu những thay đổi
+                Lưu
               </button>
             </div>
           </div>
         </div>
       </div>
-
     </>
   );
 }
