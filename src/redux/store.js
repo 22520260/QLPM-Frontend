@@ -5,7 +5,6 @@ import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
 // import authReducer from './slice/other/authSlices'
-import { persistStore } from 'redux-persist';
 import persistedAuthSlice from '../redux/slice/other/authSlices';
 
 
