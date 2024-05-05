@@ -6,7 +6,7 @@ import NavTabVertical from "../../../NavTabVertical";
 import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
-import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay } from "../InputForm";
+import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay, IFPassword } from "../InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
 
@@ -438,10 +438,6 @@ export function ListFormDSTK({ columns, data, loading }) {
     console.log("SAVE");
   };
 
-  const handleThanhToan = () => {
-    console.log("Thanh toan");
-  };
-
   return (
     <>
       {/* ListForm */}
@@ -481,8 +477,15 @@ export function ListFormDSTK({ columns, data, loading }) {
                     data-bs-toggle="modal"
                     data-bs-target="#idtm"
                   >
-                    <FaEye />
+                    <FaPencilRuler />
                   </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                  
                 </td>
               </tr>
             ))
@@ -495,7 +498,7 @@ export function ListFormDSTK({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin lô thuốc
+                Thông tin tài khoản
               </h1>
               <button
                 type="button"
@@ -509,17 +512,17 @@ export function ListFormDSTK({ columns, data, loading }) {
               <div className="container-fluid">
                 <div className="row py-2">
                   <IFInputText
-                    title={"Số lô"}
-                    size={2}
+                    title={"Tên tài khoản"}
+                    size={5}
+                    required={'true'}
+                  />
+                  <IFPassword
+                    title={"Password"}
+                    size={4}
                     required={'true'}
                   />
                   <IFInputText
-                    title={"Tên thuốc"}
-                    size={7}
-                    required={'true'}
-                  />
-                  <IFInputText
-                    title={"Số lượng nhập"}
+                    title={"Vai trò"}
                     size={3}
                     required={'true'}
                   />
@@ -527,37 +530,386 @@ export function ListFormDSTK({ columns, data, loading }) {
                 <div className="row py-2">
 
                   <IFInputText
-                    title={"Hoạt chất"}
-                    size={7}
+                    title={"Họ và tên"}
+                    size={5}
                   />
                   <IFInputText
-                    title={"Đơn vị"}
+                    title={"Trình độ"}
                     size={2}
                   />
                   <IFInputText
-                    title={"Số lượng tồn"}
+                    title={"Ghi chú"}
+                    size={5}
+                  />
+                </div>
+                {/* <div className="row py-2">
+                  
+                </div> */}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => { }}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDSDV({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#iddsdv"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="modal fade modal-lg" id="iddsdv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin tài khoản
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã dịch vụ"}
                     size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên dịch vụ"}
+                    size={9}
+                    required={'true'}
                   />
                 </div>
                 <div className="row py-2">
-                  <IFNgay
-                    title={"Ngày nhập"}
-                    size={3}
-                    defaultValue={new Date()}
+
+                  <IFInputText
+                    title={"Loại dịch vụ"}
+                    size={7}
                   />
-                  <IFNgay
-                    title={"Hạn sử dụng"}
+                  <IFInputText
+                    title={"Giá tiền"}
+                    size={5}
+                  />
+                </div>
+                {/* <div className="row py-2">
+                  
+                </div> */}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => { }}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDSLB({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#iddslb"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="modal fade " id="iddslb" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Bệnh
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã ICD"}
                     size={3}
                     required={'true'}
                   />
                   <IFInputText
-                    title={"Giá nhập (VNĐ)"}
+                    title={"Tên bệnh"}
+                    size={9}
+                    required={'true'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => { }}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDVT({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Đơn vị tính</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#iddsdvt"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="modal fade " id="iddsdvt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Bệnh
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã đơn vị"}
                     size={3}
                     required={'true'}
                   />
                   <IFInputText
-                    title={"Giá bán (VNĐ)"}
-                    size={3}
+                    title={"Tên đơn vị"}
+                    size={9}
                     required={'true'}
                   />
                 </div>
