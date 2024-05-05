@@ -12,13 +12,10 @@ function DichVu() {
     const dispatch = useDispatch();
 
     const services = useSelector((state) => state.fetchAllDichVu.services) || [];
-    console.log(">>> CHECK SERVICES", services)
 
     const patients = useSelector((state) => state.fetchAllBenhNhan.patients) || [];
-    console.log(">>> CHECK PATIENTS", patients)
 
     const doctors = useSelector((state) => state.fetchAllBacSi.doctors) || [];
-    console.log(">>> CHECK DOCTORS", doctors)
 
     const [showError, setShowError] = useState(false);
     const [oldPatientID, setOldPatientID] = useState(0);

@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import CTPhieuKham from "../../../../popups/CTPhieuKham";
 import ThanhToan from "../../../../popups/ThanhToan";
-import { FaEye, FaDollarSign, FaPencilRuler, FaStethoscope } from "react-icons/fa";
+import {
+  FaEye,
+  FaDollarSign,
+  FaPencilRuler,
+  FaStethoscope,
+} from "react-icons/fa";
 import NavTabVertical from "../../../NavTabVertical";
 import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
-import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay } from "../InputForm";
+import {
+  IFNgayNgang,
+  ListGroupItem,
+  TextArea,
+  IFInputText,
+  IFNgay,
+} from "../InputForm";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
+import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
+import { MdDeleteForever } from "react-icons/md";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -49,10 +61,10 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
                 ))}
                 <td>
                   <button
-                    className="btn btn-danger"
+                    className="btn btn-danger rounded-circle"
                     onClick={() => onDeleteService(rowIndex)}
                   >
-                    Xóa
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -106,9 +118,7 @@ export function ListFormDSDK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -219,11 +229,23 @@ export function ListFormDSDK({ columns, data, loading }) {
                       title={"Người bán"}
                       value={"Le Thi Thanh Thao"}
                     />
-                    <IFNgayNgang title={"Ngày bán"} onChange={() => { }} />
-                    <ListGroupItem title={"Mã phiếu"} value={'qqq'} disable={true} />
-                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true} />
+                    <IFNgayNgang title={"Ngày bán"} onChange={() => {}} />
+                    <ListGroupItem
+                      title={"Mã phiếu"}
+                      value={"qqq"}
+                      disable={true}
+                    />
+                    <ListGroupItem
+                      title={"Tổng tiền"}
+                      value={"4.370.000"}
+                      disable={true}
+                    />
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
-                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true} />
+                    <ListGroupItem
+                      title={"Thành tiền"}
+                      value={"4.370.000"}
+                      disable={true}
+                    />
                     <ListGroupItem
                       title={"Phương thức TT"}
                       value={"Tiền mặt"}
@@ -262,7 +284,6 @@ export function ListFormThuoc({ columns, data, loading }) {
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
-    console.log("selectedRow", selectedRow);
   };
   const handleSave = () => {
     console.log("SAVE");
@@ -313,10 +334,8 @@ export function ListFormThuoc({ columns, data, loading }) {
                   >
                     <FaPencilRuler />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -350,36 +369,18 @@ export function ListFormThuoc({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row py-2">
-                  <IFInputText
-                    title={"Số lô"}
-                    size={2}
-                    required={'true'}
-                  />
-                  <IFInputText
-                    title={"Tên thuốc"}
-                    size={7}
-                    required={'true'}
-                  />
+                  <IFInputText title={"Số lô"} size={2} required={"true"} />
+                  <IFInputText title={"Tên thuốc"} size={7} required={"true"} />
                   <IFInputText
                     title={"Số lượng nhập"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                 </div>
                 <div className="row py-2">
-
-                  <IFInputText
-                    title={"Hoạt chất"}
-                    size={7}
-                  />
-                  <IFInputText
-                    title={"Đơn vị"}
-                    size={2}
-                  />
-                  <IFInputText
-                    title={"Số lượng tồn"}
-                    size={3}
-                  />
+                  <IFInputText title={"Hoạt chất"} size={7} />
+                  <IFInputText title={"Đơn vị"} size={2} />
+                  <IFInputText title={"Số lượng tồn"} size={3} />
                 </div>
                 <div className="row py-2">
                   <IFNgay
@@ -387,20 +388,16 @@ export function ListFormThuoc({ columns, data, loading }) {
                     size={3}
                     defaultValue={new Date()}
                   />
-                  <IFNgay
-                    title={"Hạn sử dụng"}
-                    size={3}
-                    required={'true'}
-                  />
+                  <IFNgay title={"Hạn sử dụng"} size={3} required={"true"} />
                   <IFInputText
                     title={"Giá nhập (VNĐ)"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                   <IFInputText
                     title={"Giá bán (VNĐ)"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                 </div>
               </div>
@@ -424,7 +421,6 @@ export function ListFormThuoc({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }
@@ -471,9 +467,7 @@ export function ListFormDSTK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -491,7 +485,13 @@ export function ListFormDSTK({ columns, data, loading }) {
         </tbody>
       </table>
 
-      <div className="modal fade modal-xl" id="idtm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        className="modal fade modal-xl"
+        id="idtm"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -509,36 +509,18 @@ export function ListFormDSTK({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row py-2">
-                  <IFInputText
-                    title={"Số lô"}
-                    size={2}
-                    required={'true'}
-                  />
-                  <IFInputText
-                    title={"Tên thuốc"}
-                    size={7}
-                    required={'true'}
-                  />
+                  <IFInputText title={"Số lô"} size={2} required={"true"} />
+                  <IFInputText title={"Tên thuốc"} size={7} required={"true"} />
                   <IFInputText
                     title={"Số lượng nhập"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                 </div>
                 <div className="row py-2">
-
-                  <IFInputText
-                    title={"Hoạt chất"}
-                    size={7}
-                  />
-                  <IFInputText
-                    title={"Đơn vị"}
-                    size={2}
-                  />
-                  <IFInputText
-                    title={"Số lượng tồn"}
-                    size={3}
-                  />
+                  <IFInputText title={"Hoạt chất"} size={7} />
+                  <IFInputText title={"Đơn vị"} size={2} />
+                  <IFInputText title={"Số lượng tồn"} size={3} />
                 </div>
                 <div className="row py-2">
                   <IFNgay
@@ -546,20 +528,16 @@ export function ListFormDSTK({ columns, data, loading }) {
                     size={3}
                     defaultValue={new Date()}
                   />
-                  <IFNgay
-                    title={"Hạn sử dụng"}
-                    size={3}
-                    required={'true'}
-                  />
+                  <IFNgay title={"Hạn sử dụng"} size={3} required={"true"} />
                   <IFInputText
                     title={"Giá nhập (VNĐ)"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                   <IFInputText
                     title={"Giá bán (VNĐ)"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                 </div>
               </div>
@@ -575,7 +553,7 @@ export function ListFormDSTK({ columns, data, loading }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => { }}
+                onClick={() => {}}
               >
                 Lưu
               </button>
@@ -629,9 +607,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -642,10 +618,8 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -653,13 +627,17 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-      
 
       {/* Modal KhamBenh */}
       <div
-        className="modal fade modal-xl" id="idkb" 
-        data-bs-backdrop="static" 
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        className="modal fade modal-xl"
+        id="idkb"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -698,7 +676,6 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }

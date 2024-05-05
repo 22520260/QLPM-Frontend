@@ -13,7 +13,6 @@ const authSlice = createSlice({
   reducers: {
     login(state, action) {
       state.isLoading = false;
-      console.log('action.payload',action.payload)
 
       state.user = action.payload;
     },
@@ -24,7 +23,6 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserAccountAction.pending, (state) => {
-        console.log('>>>> PENDING', state.isLoading, state.user)
         state.isLoading = true;
         state.user = state.user;
       })
@@ -44,13 +42,11 @@ const authSlice = createSlice({
         };
 
         state.user = data;
-        console.log('>>>> SUCCESS', state.isLoading, state.user)
 
       })
       .addCase(fetchUserAccountAction.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
-        console.log('>>>> FAILED', state.isLoading, state.user)
 
       });
   },

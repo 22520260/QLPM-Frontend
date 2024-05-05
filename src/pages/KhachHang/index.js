@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  IFNgay,
-  IFSearch,
-} from "../../component/Layout/TabLayout/InputForm";
-import { ListFormDSDK} from "../../component/Layout/TabLayout/ListForm";
+import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
+import { ListFormDSDK } from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +18,7 @@ function DanhSachDangKy() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  
+
   const columns = [
     { title: "Mã phiếu", key: "MAPK" },
     { title: "STT", key: "STT" },
@@ -33,7 +30,6 @@ function DanhSachDangKy() {
 
   useEffect(() => {
     dispatch(fetchDSDKAction());
-
   }, []);
 
   useEffect(() => {
@@ -114,35 +110,40 @@ function DanhSachDangKy() {
 
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
-
   return (
     <>
-      <div className="row py-2">
-        <IFNgay
-          title={"Từ ngày"}
-          size={2}
-          onChange={(value) => handleChange_NBD(value)}
+      <div className="container-fluid">
+        <div className="row py-2">
+          <IFNgay
+            title={"Từ ngày"}
+            size={2}
+            onChange={(value) => handleChange_NBD(value)}
+          />
+          <IFNgay
+            title={"Đến ngày"}
+            size={2}
+            onChange={(value) => handleChange_NKT(value)}
+          />
+          <IFSearch
+            title={"Tìm kiếm từ khóa"}
+            size={4}
+            onChange={(value) => handleIFSearchChange(value)}
+          />
+        </div>
+
+        <ListFormDSDK
+          columns={columns}
+          data={displayDSDK}
+          loading={isLoading}
         />
-        <IFNgay
-          title={"Đến ngày"}
-          size={2}
-          onChange={(value) => handleChange_NKT(value)}
-        />
-        <IFSearch
-          title={"Tìm kiếm từ khóa"}
-          size={4}
-          onChange={(value) => handleIFSearchChange(value)}
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          limit={limit}
+          siblings={1}
+          onPageChange={handlePageChange}
         />
       </div>
-
-      <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading}/>
-      <Pagination
-        totalPages={totalPages}
-        page={page}
-        limit={limit}
-        siblings={1}
-        onPageChange={handlePageChange}
-      />
     </>
   );
 }

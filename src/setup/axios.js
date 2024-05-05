@@ -16,7 +16,6 @@ instance.interceptors.request.use(
   (config) => {
     const bearerToken = `Bearer ${store.getState().auth.user?.token}`
 
-    console.log('>>>bearerToken', bearerToken)
     return {
       ...config,
       headers: {

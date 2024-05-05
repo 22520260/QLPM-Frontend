@@ -14,17 +14,13 @@ import store from "./redux/store";
 function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log("window.location.pathname", window.location.pathname);
     if (window.location.pathname !== "/login") {
-      console.log("GOI FETCHUSERACCOUNT");
-
       dispatch(fetchUserAccountAction());
     }
   }, []);
 
   const isLoading = useSelector((state) => state.auth.isLoading);
   const user = useSelector((state) => state.auth.user);
-  console.log("CHECK isLoading", isLoading);
   console.log("CHECK user", user);
 
   return (

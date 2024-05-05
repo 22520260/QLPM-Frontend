@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  IFNgay,
-  IFSearch,
-} from "../../component/Layout/TabLayout/InputForm";
-import { ListFormKhamBenh} from "../../component/Layout/TabLayout/ListForm";
+import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
+import { ListFormKhamBenh } from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +18,7 @@ function DanhSachDangKy() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  
+
   const columns = [
     { title: "Mã phiếu", key: "MAPK" },
     { title: "STT", key: "STT" },
@@ -33,7 +30,6 @@ function DanhSachDangKy() {
 
   useEffect(() => {
     dispatch(fetchDSDKAction());
-
   }, []);
 
   useEffect(() => {
@@ -114,11 +110,10 @@ function DanhSachDangKy() {
 
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
-
   return (
     <>
-    <h1>Khám Bệnh</h1>
       <div className="container-fluid">
+        <h1>Khám Bệnh</h1>
         <div className="row py-2">
           <IFNgay
             title={"Từ ngày"}
@@ -136,7 +131,11 @@ function DanhSachDangKy() {
             onChange={(value) => handleIFSearchChange(value)}
           />
         </div>
-        <ListFormKhamBenh columns={columns} data={displayDSDK} loading={isLoading}/>
+        <ListFormKhamBenh
+          columns={columns}
+          data={displayDSDK}
+          loading={isLoading}
+        />
         <Pagination
           totalPages={totalPages}
           page={page}

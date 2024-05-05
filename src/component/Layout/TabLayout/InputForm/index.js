@@ -53,7 +53,7 @@ export function IFInputText({
   readOnly,
   onChange,
   required,
-  type = 'text'
+  type = "text",
 }) {
   const style = "col-md-" + size;
 
@@ -85,14 +85,7 @@ export function IFInputText({
   );
 }
 
-export function IFPassword({
-  title,
-  valid,
-  size,
-  value,
-  readOnly,
-  onChange,
-}) {
+export function IFPassword({ title, valid, size, value, readOnly, onChange }) {
   const style = "col-md-" + size;
 
   const handleInputChange = (e) => {
@@ -101,11 +94,11 @@ export function IFPassword({
   };
 
   const [isViewPass, setIsViewPass] = useState(false);
-  const [btnClass, setBtnClass] = useState('btn btn-outline-primary');
+  const [btnClass, setBtnClass] = useState("btn btn-outline-primary");
 
   const toggleEye = () => {
     setIsViewPass(!isViewPass);
-    setBtnClass(isViewPass ? 'btn btn-outline-primary' : 'btn btn-primary');
+    setBtnClass(isViewPass ? "btn btn-outline-primary" : "btn btn-primary");
   };
 
   return (
@@ -117,19 +110,24 @@ export function IFPassword({
 
       <div className="input-group">
         <input
-          type={isViewPass ? 'text' : 'password'}
+          type={isViewPass ? "text" : "password"}
           className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
           value={value}
           readOnly={readOnly}
-          required='true'
+          required="true"
         />
 
-<button className={btnClass} type="button" id="button-addon2" onClick={toggleEye}>
-      {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
-    </button>
+        <button
+          className={btnClass}
+          type="button"
+          id="button-addon2"
+          onClick={toggleEye}
+        >
+          {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
+        </button>
       </div>
     </div>
   );
@@ -242,7 +240,9 @@ export function IFSearchDV({ title, valid, size, options, onChange }) {
       </label>
       <div className="input-group">
         <input
-          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
           list="servicesDatalist"
           id="servicesDataList"
           type="text"
@@ -262,7 +262,14 @@ export function IFSearchDV({ title, valid, size, options, onChange }) {
   );
 }
 
-export function IFSearchHT({ title, valid, size, options, required, onChange }) {
+export function IFSearchHT({
+  title,
+  valid,
+  size,
+  options,
+  required,
+  onChange,
+}) {
   const handleInputChange = (e) => {
     const value = e.target.value;
     onChange(value);
@@ -280,7 +287,9 @@ export function IFSearchHT({ title, valid, size, options, required, onChange }) 
 
       <div className="input-group">
         <input
-          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
           list="hoTenDatalist"
           id="hoTenInput"
           onChange={handleInputChange}
@@ -349,4 +358,3 @@ export function ListGroupItem({ title, value, disable }) {
     </div>
   );
 }
-

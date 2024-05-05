@@ -44,6 +44,7 @@ function Login() {
       const groupWithRoles = response.data.data.groupWithRoles;
       const username = response.data.data.username;
       const groupName = response.data.data.groupName;
+      const groupID = response.data.data.groupID;
       const userInfo = response.data.data.userInfo;
       const token = response.data.data.access_token; // token chứa username và groupWithRoles
 
@@ -53,6 +54,7 @@ function Login() {
         account: {
           groupWithRoles,
           groupName,
+          groupID,
           username,
           userInfo
         }

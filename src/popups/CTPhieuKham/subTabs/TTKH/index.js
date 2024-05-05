@@ -10,7 +10,6 @@ function ThongTinKhachHang() {
   const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
   const data = useSelector((state) => state.selectedRow.selectedRow);
 
-  console.log('>>>SELECTED ROW', data)
   const handleChange = (page) => {
     console.log(page);
   };
