@@ -47,7 +47,7 @@ export function IFSelect({
 
 export function IFInputText({
   title,
-  valid,
+  valid = true,
   size,
   value,
   readOnly,
@@ -349,3 +349,4 @@ export function ListGroupItem({ title, value, disable }) {
     </div>
   );
 }
+
