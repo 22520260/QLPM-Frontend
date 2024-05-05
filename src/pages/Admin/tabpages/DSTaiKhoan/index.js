@@ -90,7 +90,7 @@ function DSTaiKhoan() {
     const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
     return (
-        <>
+        <div className="container-fluid">
             <div className="row py-2 align-items-end">
                 <IFSearch
                     title={"Tìm theo vai trò"}
@@ -125,7 +125,7 @@ function DSTaiKhoan() {
             />
 
 
-        </>
+        </div>
     );
 }
 

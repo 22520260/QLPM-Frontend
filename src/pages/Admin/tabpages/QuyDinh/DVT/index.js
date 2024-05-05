@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import {
     IFSearch, IFInputText, IFNgay
-} from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSTK } from "../../../../component/Layout/TabLayout/ListForm";
-import Pagination from "../../../../component/Layout/TabLayout/Pagination";
-import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+} from "../../../../../component/Layout/TabLayout/InputForm";
+import { ListFormDVT } from "../../../../../component/Layout/TabLayout/ListForm";
+import Pagination from "../../../../../component/Layout/TabLayout/Pagination";
+import { usePaginationHandler } from "../../../../../utils/appUtils";
+import { fetchDSDKAction } from "../../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { useDispatch, useSelector } from "react-redux";
-import { compareDates, formatDate } from "../../../../utils/appUtils";
+import { compareDates, formatDate } from "../../../../../utils/appUtils";
 
-function PhanQuyen() {
+function DVT() {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.fetchDSDK.data);
     const DSDK = data.data;
@@ -23,12 +23,8 @@ function PhanQuyen() {
     const [totalPages, setTotalPages] = useState(0);
 
     const columns = [
-        { title: "Họ tên", key: "MAPK" },
-        { title: "Vai trò", key: "STT" },
-        { title: "Tên tài khoản", key: "TENBN" },
-        { title: "Giới tính", key: "TENBS" },
-        { title: "SĐT", key: "TIENTHUOC" },
-        { title: "Ngày sinh", key: "TRANGTHAITH" },
+        { title: "Mã đơn vị", key: "MADV" },
+        { title: "Tên đơn vị", key: "STT" },
     ];
 
     useEffect(() => {
@@ -87,40 +83,32 @@ function PhanQuyen() {
     };
 
     const handlePageChange = usePaginationHandler(setPage, page, totalPages);
-
     return (
-        <div className="container-fluid">
-            <div className="row py-2 align-items-end">
-                <IFSearch
-                    title={"Tìm theo vai trò"}
-                    size={5}
-                    onChange={(value) => handleIFSearchChange(value)}
-                />
-                <div className="col col-md-7 d-flex justify-content-end">
+        <>
+            <h4>Danh sách các đơn vị tính:</h4>
+            <div className="row align-items-end">
+                <IFSearch title={"Tìm kiếm"} size={7} />
+                <div className="col col-md-5 d-flex justify-content-end">
                     <button
                         className="btn btn-primary"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#idtm"
-                    >
+                        type="button">
                         Thêm mới
                     </button>
                 </div>
             </div>
+            <div className="container-fluid py-3">
 
-
-            <ListFormDSTK columns={columns} data={displayDSDK} loading={isLoading} />
-            <Pagination
-                totalPages={totalPages}
-                page={page}
-                limit={limit}
-                siblings={1}
-                onPageChange={handlePageChange}
-            />
-
-
-        </div>
+                <ListFormDVT columns={columns} data={displayDSDK} loading={isLoading} />
+                <Pagination
+                    totalPages={totalPages}
+                    page={page}
+                    limit={limit}
+                    siblings={1}
+                    onPageChange={handlePageChange}
+                />
+            </div>
+        </>
     );
 }
 
-export default PhanQuyen;
+export default DVT;

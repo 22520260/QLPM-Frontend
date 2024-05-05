@@ -11,13 +11,7 @@ import NavTabVertical from "../../../NavTabVertical";
 import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
-import {
-  IFNgayNgang,
-  ListGroupItem,
-  TextArea,
-  IFInputText,
-  IFNgay,
-} from "../InputForm";
+import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay, IFPassword } from "../InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
@@ -61,10 +55,10 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
                 ))}
                 <td>
                   <button
-                    className="btn btn-danger rounded-circle"
+                    className="btn btn-danger"
                     onClick={() => onDeleteService(rowIndex)}
                   >
-                    <MdDeleteForever />
+                    Xóa
                   </button>
                 </td>
               </tr>
@@ -118,7 +112,9 @@ export function ListFormDSDK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.key] || ""}</td>
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
                 ))}
                 <td>
                   <button
@@ -229,23 +225,11 @@ export function ListFormDSDK({ columns, data, loading }) {
                       title={"Người bán"}
                       value={"Le Thi Thanh Thao"}
                     />
-                    <IFNgayNgang title={"Ngày bán"} onChange={() => {}} />
-                    <ListGroupItem
-                      title={"Mã phiếu"}
-                      value={"qqq"}
-                      disable={true}
-                    />
-                    <ListGroupItem
-                      title={"Tổng tiền"}
-                      value={"4.370.000"}
-                      disable={true}
-                    />
+                    <IFNgayNgang title={"Ngày bán"} onChange={() => { }} />
+                    <ListGroupItem title={"Mã phiếu"} value={'qqq'} disable={true} />
+                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true} />
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
-                    <ListGroupItem
-                      title={"Thành tiền"}
-                      value={"4.370.000"}
-                      disable={true}
-                    />
+                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true} />
                     <ListGroupItem
                       title={"Phương thức TT"}
                       value={"Tiền mặt"}
@@ -284,6 +268,7 @@ export function ListFormThuoc({ columns, data, loading }) {
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
+    console.log("selectedRow", selectedRow);
   };
   const handleSave = () => {
     console.log("SAVE");
@@ -334,8 +319,10 @@ export function ListFormThuoc({ columns, data, loading }) {
                   >
                     <FaPencilRuler />
                   </button>
-                  <button className="btn btn-danger mx-1 rounded-circle">
-                    <MdDeleteForever />
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
                   </button>
                 </td>
               </tr>
@@ -369,18 +356,36 @@ export function ListFormThuoc({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row py-2">
-                  <IFInputText title={"Số lô"} size={2} required={"true"} />
-                  <IFInputText title={"Tên thuốc"} size={7} required={"true"} />
+                  <IFInputText
+                    title={"Số lô"}
+                    size={2}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên thuốc"}
+                    size={7}
+                    required={'true'}
+                  />
                   <IFInputText
                     title={"Số lượng nhập"}
                     size={3}
-                    required={"true"}
+                    required={'true'}
                   />
                 </div>
                 <div className="row py-2">
-                  <IFInputText title={"Hoạt chất"} size={7} />
-                  <IFInputText title={"Đơn vị"} size={2} />
-                  <IFInputText title={"Số lượng tồn"} size={3} />
+
+                  <IFInputText
+                    title={"Hoạt chất"}
+                    size={7}
+                  />
+                  <IFInputText
+                    title={"Đơn vị"}
+                    size={2}
+                  />
+                  <IFInputText
+                    title={"Số lượng tồn"}
+                    size={3}
+                  />
                 </div>
                 <div className="row py-2">
                   <IFNgay
@@ -388,16 +393,20 @@ export function ListFormThuoc({ columns, data, loading }) {
                     size={3}
                     defaultValue={new Date()}
                   />
-                  <IFNgay title={"Hạn sử dụng"} size={3} required={"true"} />
+                  <IFNgay
+                    title={"Hạn sử dụng"}
+                    size={3}
+                    required={'true'}
+                  />
                   <IFInputText
                     title={"Giá nhập (VNĐ)"}
                     size={3}
-                    required={"true"}
+                    required={'true'}
                   />
                   <IFInputText
                     title={"Giá bán (VNĐ)"}
                     size={3}
-                    required={"true"}
+                    required={'true'}
                   />
                 </div>
               </div>
@@ -421,6 +430,7 @@ export function ListFormThuoc({ columns, data, loading }) {
           </div>
         </div>
       </div>
+
     </>
   );
 }
@@ -433,10 +443,6 @@ export function ListFormDSTK({ columns, data, loading }) {
   };
   const handleSave = () => {
     console.log("SAVE");
-  };
-
-  const handleThanhToan = () => {
-    console.log("Thanh toan");
   };
 
   return (
@@ -467,7 +473,9 @@ export function ListFormDSTK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.key] || ""}</td>
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
                 ))}
                 <td>
                   <button
@@ -476,8 +484,15 @@ export function ListFormDSTK({ columns, data, loading }) {
                     data-bs-toggle="modal"
                     data-bs-target="#idtm"
                   >
-                    <FaEye />
+                    <FaPencilRuler />
                   </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                  
                 </td>
               </tr>
             ))
@@ -485,18 +500,12 @@ export function ListFormDSTK({ columns, data, loading }) {
         </tbody>
       </table>
 
-      <div
-        className="modal fade modal-xl"
-        id="idtm"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
+      <div className="modal fade modal-xl" id="idtm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin lô thuốc
+                Thông tin tài khoản
               </h1>
               <button
                 type="button"
@@ -509,35 +518,288 @@ export function ListFormDSTK({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row py-2">
-                  <IFInputText title={"Số lô"} size={2} required={"true"} />
-                  <IFInputText title={"Tên thuốc"} size={7} required={"true"} />
                   <IFInputText
-                    title={"Số lượng nhập"}
+                    title={"Tên tài khoản"}
+                    size={5}
+                    required={'true'}
+                  />
+                  <IFPassword
+                    title={"Password"}
+                    size={4}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Vai trò"}
                     size={3}
-                    required={"true"}
+                    required={'true'}
                   />
                 </div>
                 <div className="row py-2">
-                  <IFInputText title={"Hoạt chất"} size={7} />
-                  <IFInputText title={"Đơn vị"} size={2} />
-                  <IFInputText title={"Số lượng tồn"} size={3} />
+
+                  <IFInputText
+                    title={"Họ và tên"}
+                    size={5}
+                  />
+                  <IFInputText
+                    title={"Trình độ"}
+                    size={2}
+                  />
+                  <IFInputText
+                    title={"Ghi chú"}
+                    size={5}
+                  />
+                </div>
+                {/* <div className="row py-2">
+                  
+                </div> */}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => { }}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDSDV({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#iddsdv"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="modal fade modal-lg" id="iddsdv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin tài khoản
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã dịch vụ"}
+                    size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên dịch vụ"}
+                    size={9}
+                    required={'true'}
+                  />
                 </div>
                 <div className="row py-2">
-                  <IFNgay
-                    title={"Ngày nhập"}
-                    size={3}
-                    defaultValue={new Date()}
-                  />
-                  <IFNgay title={"Hạn sử dụng"} size={3} required={"true"} />
+
                   <IFInputText
-                    title={"Giá nhập (VNĐ)"}
-                    size={3}
-                    required={"true"}
+                    title={"Loại dịch vụ"}
+                    size={7}
                   />
                   <IFInputText
-                    title={"Giá bán (VNĐ)"}
+                    title={"Giá tiền"}
+                    size={5}
+                  />
+                </div>
+                {/* <div className="row py-2">
+                  
+                </div> */}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => { }}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDSLB({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#iddslb"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="modal fade " id="iddslb" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Bệnh
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã ICD"}
                     size={3}
-                    required={"true"}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên bệnh"}
+                    size={9}
+                    required={'true'}
                   />
                 </div>
               </div>
@@ -553,7 +815,125 @@ export function ListFormDSTK({ columns, data, loading }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => {}}
+                onClick={() => { }}
+              >
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDVT({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Đơn vị tính</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#iddsdvt"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <div className="modal fade " id="iddsdvt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Bệnh
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã đơn vị"}
+                    size={3}
+                    required={'true'}
+                  />
+                  <IFInputText
+                    title={"Tên đơn vị"}
+                    size={9}
+                    required={'true'}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => { }}
               >
                 Lưu
               </button>
@@ -607,7 +987,9 @@ export function ListFormKhamBenh({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.key] || ""}</td>
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
                 ))}
                 <td>
                   <button
@@ -618,8 +1000,10 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button className="btn btn-danger mx-1 rounded-circle">
-                    <MdDeleteForever />
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
                   </button>
                 </td>
               </tr>
@@ -627,17 +1011,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           )}
         </tbody>
       </table>
+      
 
       {/* Modal KhamBenh */}
       <div
-        className="modal fade modal-xl"
-        id="idkb"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
+        className="modal fade modal-xl" id="idkb" 
+        data-bs-backdrop="static" 
+        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -676,6 +1056,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           </div>
         </div>
       </div>
+
     </>
   );
 }
