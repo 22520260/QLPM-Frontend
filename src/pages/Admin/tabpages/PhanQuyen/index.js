@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from "react";
 import {
-    IFSearch, IFInputText, IFNgay
+    IFSearch, IFSelect, IFNgay
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSTK } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormPQ } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+
 import { useDispatch, useSelector } from "react-redux";
 import { compareDates, formatDate } from "../../../../utils/appUtils";
 
-function PhanQuyen() {
+function DSTaiKhoan() {
     const dispatch = useDispatch();
     const data = useSelector((state) => state.fetchDSDK.data);
     const DSDK = data.data;
     const isLoading = useSelector((state) => state.fetchDSDK.loading);
+    const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(5);
     const [displayDSDK, setDisplayDSDK] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
-    const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [role, setRole] = useState("");
 
     const columns = [
-        { title: "Họ tên", key: "MAPK" },
-        { title: "Vai trò", key: "STT" },
-        { title: "Tên tài khoản", key: "TENBN" },
-        { title: "Giới tính", key: "TENBS" },
-        { title: "SĐT", key: "TIENTHUOC" },
-        { title: "Ngày sinh", key: "TRANGTHAITH" },
+        { title: "URL", key: "MAPK" },
     ];
+
+    const roles = [
+        {title: "Lễ tân", key: "0"},
+        {title: "Bác sĩ", key: "1"},
+    ]
 
     useEffect(() => {
         dispatch(fetchDSDKAction());
@@ -82,21 +84,23 @@ function PhanQuyen() {
         }
     }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
 
-    const handleIFSearchChange = (value) => {
-        setSearchKeyword(value);
-    };
+
 
     const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
     return (
         <div className="container-fluid">
             <div className="row py-2 align-items-end">
-                <IFSearch
-                    title={"Tìm theo vai trò"}
-                    size={5}
-                    onChange={(value) => handleIFSearchChange(value)}
+                <IFSelect
+                    title={"Vai trò"}
+                    size={4}
+                    options={roles}
+                    // def='Tất cả'
+                    onChange={(value) => setRole(value)}
+                    keyObj={'title'}
                 />
-                <div className="col col-md-7 d-flex justify-content-end">
+                
+                <div className="col col-md-8 d-flex justify-content-end">
                     <button
                         className="btn btn-primary"
                         type="button"
@@ -109,7 +113,7 @@ function PhanQuyen() {
             </div>
 
 
-            <ListFormDSTK columns={columns} data={displayDSDK} loading={isLoading} />
+            <ListFormPQ columns={columns} data={displayDSDK} loading={isLoading} />
             <Pagination
                 totalPages={totalPages}
                 page={page}
@@ -123,4 +127,4 @@ function PhanQuyen() {
     );
 }
 
-export default PhanQuyen;
+export default DSTaiKhoan;

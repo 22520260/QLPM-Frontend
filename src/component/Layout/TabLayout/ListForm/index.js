@@ -485,7 +485,7 @@ export function ListFormDSTK({ columns, data, loading }) {
                   >
                     Xóa
                   </button>
-                  
+
                 </td>
               </tr>
             ))
@@ -934,6 +934,75 @@ export function ListFormDVT({ columns, data, loading }) {
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+export function ListFormPQ({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const [selectedRows, setSelectedRows] = useState([]); // Define selectedRows state
+  
+  const handleRowClick = (rowIndex) => {
+    if (selectedRows.includes(rowIndex)) {
+      setSelectedRows(selectedRows.filter(row => row !== rowIndex)); // Deselect the row if it's already selected
+    } else {
+      setSelectedRows([...selectedRows, rowIndex]); // Select the row
+    }
+  };
+
+  const isChecked = (rowIndex) => {
+    return selectedRows.includes(rowIndex);
+  };
+
+  return (
+    <>
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Chọn</th>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
+                <td>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value=""
+                      id={rowIndex}
+                      checked={isChecked(rowIndex)}
+                      readOnly // Make the checkbox read-only to prevent user interaction
+                    />
+                    <label className="form-check-label" htmlFor={rowIndex}></label>
+                  </div>
+                </td>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </>
   );
 }
