@@ -35,8 +35,7 @@ function DoanhThuLuotKhach() {
     const [axisData, setAxisData] = useState();
 
 
-    const onAxisClick = (event, d) =>
-    {
+    const onAxisClick = (event, d) => {
         setAxisData(d)
     }
 
@@ -58,7 +57,7 @@ function DoanhThuLuotKhach() {
                 dataset={dataset}
                 height={400}
                 margin={{ left: 90, right: 50 }}
-                
+
             >
                 <ChartsGrid horizontal />
                 <ChartsOnAxisClickHandler onAxisClick={onAxisClick} />

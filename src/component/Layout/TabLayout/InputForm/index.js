@@ -6,6 +6,7 @@ import "./style.css";
 import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 
 export function IFSelect({
+  def = 'Chọn',
   title,
   size,
   options,
@@ -34,7 +35,7 @@ export function IFSelect({
         required={required}
         value={selected}
       >
-        <option selected>Chọn</option>
+        <option selected>{def}</option>
         {options.map((value, index) => (
           <option key={index} value={value[keyObj]}>
             {value[keyObj]}

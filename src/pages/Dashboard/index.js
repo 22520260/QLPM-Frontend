@@ -1,5 +1,7 @@
 import DoanhThuLuotKhach from "./DoanhThuLuotKhach";
 import Pie from "./Pie"
+import LoaiBenh from "./LoaiBenh";
+import DichVu from "./DichVu";
 
 function Dashboard() {
 
@@ -11,7 +13,10 @@ function Dashboard() {
                     <DoanhThuLuotKhach />
                 </div>
                 <div className="col col-md-5 px-3">
-                    <Pie />
+                    <DichVu />
+                </div>
+                <div>
+                    <LoaiBenh />
                 </div>
             </div>
         </>
