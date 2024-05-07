@@ -4,6 +4,7 @@ import fetchAllBacSiReducer from './slice/getDataSlice/getAllBacSiSlice'
 import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
 import fetchAllThuocReducer from './slice/getDataSlice/getAllThuocSlice'
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
+import getCTDTByIdRecuder from './slice/getDataSlice/getCTDTByIdSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
 import authReducer from './slice/other/authSlices'
 // import persistedAuthSlice from '../redux/slice/other/authSlices';
@@ -16,6 +17,7 @@ export default configureStore({
     fetchAllDichVu: fetchAllDichVuReducer,
     fetchAllThuoc: fetchAllThuocReducer,
     fetchDSDK: getDSDKRecuder,
+    existedCTDT: getCTDTByIdRecuder,
     selectedRow: selectedRowReducer,
     auth: authReducer,
     userInfo: getAllUserInfoReducer

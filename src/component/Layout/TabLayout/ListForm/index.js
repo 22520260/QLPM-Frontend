@@ -9,6 +9,7 @@ import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay } from "../InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
+import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
@@ -158,7 +159,7 @@ export function ListFormDSDK({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTPK} />
+                <NavTabVertical tabsData={tabsDataCTPK} maPK={selectedRow.MAPK}/>
               </div>
             </div>
             <div className="modal-footer">

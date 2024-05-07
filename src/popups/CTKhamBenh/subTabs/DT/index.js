@@ -11,16 +11,16 @@ import {
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { toast } from "react-toastify";
 
 function DonThuoc() {
   const dispatch = useDispatch();
   const dsThuoc = useSelector((state) => state.fetchAllThuoc.dsThuoc) || [];
-  const selectedPK = useSelector((state) => state.selectedRow.selectedRow) || {};
+  const selectedPK =
+    useSelector((state) => state.selectedRow.selectedRow) || {};
+  const existedCTDT = useSelector((state) => state.existedCTDT.data) || [];
 
-  const handleChange = (page) => {
-    console.log(page);
-  };
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
   const [note, setNote] = useState("");
@@ -28,40 +28,46 @@ function DonThuoc() {
   const [medicines, setMedicines] = useState([]);
 
   const [rowData, setRowData] = useState({
-    maThuoc: "",
-    tenThuoc: "",
-    hoatChat: "",
-    dosage: "",
-    donViThuoc: "",
-    totalDosage: 0,
-    donGia: 0,
+    MATHUOC: "",
+    TENTHUOC: "",
+    THANHPHAN: "",
+    GHICHU: "",
+    TENDONVI: "",
+    SOLUONGTHUOC: 0,
+    GIABAN: 0,
     thanhTien: 0,
     soLuongTon: 0,
     // cần sửa lại code để 2 trường này cập nhật tự động khi bs nhập liều dùng
-    soLanUong: 0, 
-    soLuongUong: 0,
+    SOLANUONG: 0,
+    SOLUONGUONG: 0,
   });
 
   useEffect(() => {
     dispatch(fetchAllThuocAction());
-  }, []);
+    dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
+    if (existedCTDT) {
+      setMedicines(existedCTDT);
+    }
+  }, [existedCTDT]);
+  // chuyển tab thì chuyển data được rồi nhưng kê thuốc thì ko vào đơn
+  // có lẽ là do component render và tự set medicines thành existedCTDT rỗng
 
-  const checkThuocExistence = (tenThuoc) => {
-    const thuocExisted = dsThuoc.find((thuoc) => thuoc.TENTHUOC === tenThuoc);
+  const checkThuocExistence = (TENTHUOC) => {
+    const thuocExisted = dsThuoc.find((thuoc) => thuoc.TENTHUOC === TENTHUOC);
     return thuocExisted ? thuocExisted : null;
   };
 
   const handleFormChange = (fieldName, value) => {
-    if (fieldName === "tenThuoc") {
+    if (fieldName === "TENTHUOC") {
       const thuocExisted = checkThuocExistence(value);
       if (thuocExisted) {
         setRowData({
           ...rowData,
-          maThuoc: thuocExisted.MATHUOC,
-          tenThuoc: thuocExisted.TENTHUOC,
-          hoatChat: thuocExisted.THANHPHAN,
-          donViThuoc: thuocExisted.TENDONVI,
-          donGia: thuocExisted.GIABAN,
+          MATHUOC: thuocExisted.MATHUOC,
+          TENTHUOC: thuocExisted.TENTHUOC,
+          THANHPHAN: thuocExisted.THANHPHAN,
+          TENDONVI: thuocExisted.TENDONVI,
+          GIABAN: thuocExisted.GIABAN,
           soLuongTon: thuocExisted.SOLUONGTON,
         });
       } else {
@@ -152,8 +158,8 @@ function DonThuoc() {
       console.log(totalDailyDose.toString());
 
       let bien = totalDailyDose * parseInt(day);
-      newRowData.totalDosage = bien;
-      newRowData.thanhTien = bien * newRowData.donGia;
+      newRowData.SOLUONGTHUOC = bien;
+      newRowData.thanhTien = bien * newRowData.GIABAN;
     }
 
     // Add dose parts if any
@@ -165,24 +171,24 @@ function DonThuoc() {
     if (note) {
       dosageText += " " + note.trim() + ".";
     }
-    newRowData.dosage = dosageText.trim();
+    newRowData.GHICHU = dosageText.trim();
     setRowData(newRowData);
   };
 
   const handleAddMedicine = () => {
-    if (rowData.totalDosage > rowData.soLuongTon) {
+    if (rowData.SOLUONGTHUOC > rowData.soLuongTon) {
       toast.error("Số lượng tồn không đủ");
       return;
     }
     setMedicines([...medicines, rowData]);
     const newRowData = {
-      maThuoc: "",
-      tenThuoc: "",
-      hoatChat: "",
-      dosage: "",
-      donViThuoc: "",
-      totalDosage: 0,
-      donGia: 0,
+      MATHUOC: "",
+      TENTHUOC: "",
+      THANHPHAN: "",
+      GHICHU: "",
+      TENDONVI: "",
+      SOLUONGTHUOC: 0,
+      GIABAN: 0,
       thanhTien: 0,
       soLuongTon: 0,
     };
@@ -191,11 +197,11 @@ function DonThuoc() {
 
   const columns = [
     { title: "STT", key: "" }, //STT
-    { title: "Tên thuốc", key: "tenThuoc" },
-    { title: "Liều dùng", key: "dosage" },
-    { title: "Đơn vị thuốc", key: "donViThuoc" },
-    { title: "Số lượng thuốc", key: "totalDosage" },
-    { title: "Đơn giá", key: "donGia" }, //Giá 1 đơn vị thuốc
+    { title: "Tên thuốc", key: "TENTHUOC" },
+    { title: "Liều dùng", key: "GHICHU" },
+    { title: "Đơn vị thuốc", key: "TENDONVI" },
+    { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
+    { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
     { title: "Thanh toán", key: "3" }, //Yes/no
   ];
@@ -213,8 +219,8 @@ function DonThuoc() {
       try {
         const response = await axios.post(
           "http://localhost:3001/donthuoc/insert-ctdt",
-          { ...medicine, maDT }, 
-          {withCredentials: true}
+          { ...medicine, maDT },
+          { withCredentials: true }
         );
         if (response.status === 200) {
           toast("Thêm chi tiết đơn thuốc thành công");
@@ -225,22 +231,22 @@ function DonThuoc() {
         console.log(error);
         toast.error("Thêm chi tiết đơn thuốc không thành công");
       }
-    })
+    });
     // for (const isComplete of isCompletes) {
     //   if (isComplete === false) {
     //     return false;
-    //   } 
+    //   }
     // }
     // return true;
-  }
+  };
 
   const handleAddDonThuoc = async () => {
     let maDTinserted = "";
     try {
       const response = await axios.post(
         "http://localhost:3001/donthuoc/insert",
-        { maPK: selectedPK.MAPK, maLT: 999}, 
-        {withCredentials: true}
+        { maPK: selectedPK.MAPK, maLT: 999 },
+        { withCredentials: true }
       );
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
@@ -258,7 +264,7 @@ function DonThuoc() {
       console.log(error);
       toast.error("Thêm đơn thuốc không thành công");
     }
-  }
+  };
 
   return (
     <div className="shadow rounded">
@@ -271,7 +277,7 @@ function DonThuoc() {
             options={dsThuoc}
             name={"TENTHUOC"}
             required={true}
-            onChange={(value) => handleFormChange("tenThuoc", value)}
+            onChange={(value) => handleFormChange("TENTHUOC", value)}
           />
           <IFInputText
             title={"Số ngày"}
@@ -292,19 +298,19 @@ function DonThuoc() {
             title={"Hoạt chất"}
             size={3}
             readOnly={"true"}
-            value={rowData.hoatChat}
+            value={rowData.THANHPHAN}
           />
           <IFInputText
             title={"Đơn vị thuốc"}
             size={2}
             readOnly={"true"}
-            value={rowData.donViThuoc}
+            value={rowData.TENDONVI}
           />
           <IFInputText
             title={"Đơn giá"}
             size={3}
             readOnly={"true"}
-            value={rowData.donGia}
+            value={rowData.GIABAN}
           />
           <IFInputText
             title={"Ghi chú (VD: Sau ăn, trước ăn,...)"}
@@ -328,16 +334,16 @@ function DonThuoc() {
           <IFInputText
             title={"Số thuốc kê đơn"}
             size={2}
-            value={rowData.totalDosage}
+            value={rowData.SOLUONGTHUOC}
             readOnly={false}
-            onChange={(value) => handleFormChange("totalDosage", value)}
+            onChange={(value) => handleFormChange("SOLUONGTHUOC", value)}
           />
           <IFInputText
             title={"Liều dùng"}
             size={6}
-            value={rowData.dosage}
+            value={rowData.GHICHU}
             readOnly={false}
-            onChange={(value) => handleFormChange("dosage", value)}
+            onChange={(value) => handleFormChange("GHICHU", value)}
           />
         </div>
         <div className="d-flex justify-content-center px-3 py-2">

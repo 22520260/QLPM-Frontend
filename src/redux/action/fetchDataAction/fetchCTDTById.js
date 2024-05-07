@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../../setup/axios";
 
-export const fetchDsThuocByIdAction = createAsyncThunk(
-  "fetchDsThuocById",
-  async (maPK) => {
+export const fetchCTDTByIdAction = createAsyncThunk(
+  "fetchCTDTById",
+  async (maPK, { meta }) => {
     try {
       // chỉnh lại các controller, sử dụng body request trong get
-      const response = await axios.get("/donthuoc/ds-thuoc");
+      const response = await axios.get(`/donthuoc/ds-thuoc/${maPK}`);
       return response.data;
     } catch (error) {
       return error.message;
