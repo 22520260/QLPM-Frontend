@@ -10,6 +10,7 @@ import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay } from "../In
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
+import RichText from "../InputForm/RichText";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -653,12 +654,12 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-      
+
 
       {/* Modal KhamBenh */}
       <div
-        className="modal fade modal-xl" id="idkb" 
-        data-bs-backdrop="static" 
+        className="modal fade modal-xl" id="idkb"
+        data-bs-backdrop="static"
         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
@@ -677,6 +678,151 @@ export function ListFormKhamBenh({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <NavTabVertical tabsData={tabsDataCTKB} />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSave}
+              >
+                Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </>
+  );
+}
+
+export function ListFormCLS({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#idcls"
+                  >
+                    <FaStethoscope />
+                  </button>
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+
+      {/* Modal CLS */}
+      <div
+        className="modal fade modal-xl" id="idcls"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin phiếu khám {selectedRow.MAPK}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid px-0">
+                <table className="table">
+                  <tr className="row">
+                    <th className="border col col-md-1">Bệnh nhân</th>
+                    <td className="border col col-md-3">
+
+                    </td>
+                    <th className="border col col-md-1">Bác sĩ</th>
+                    <td className="border col col-md-3">
+                      BSCKI. Le Thi Thanh Thao
+                    </td>
+                    <th className="border col col-md-1">Ghi chú</th>
+                    <td className="border col col-md-3">
+
+                    </td>
+                  </tr>
+                  <tr className="row">
+                    <th className="border col col-md-1">Dịch vụ</th>
+                    <td className="border col col-md-3">
+                      Noi Soi Tai Mũi Hong
+                    </td>
+                    <th className="border col col-md-1">Thực hiện</th>
+                    <td className="border col col-md-3">
+                      BSCKI. Lê Thi Thanh Thao
+                    </td>
+                    <th className="border col col-md-1">Thời gian</th>
+                    <td className="border col col-md-3">
+
+                    </td>
+                  </tr>
+                </table>
+
+                <RichText />
+
+
               </div>
             </div>
             <div className="modal-footer">
