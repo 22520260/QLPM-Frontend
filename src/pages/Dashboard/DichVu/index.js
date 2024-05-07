@@ -87,7 +87,7 @@ export default function DichVu() {
                     {
                         scaleType: 'band',
                         dataKey: 'name',
-                        label: 'Tên bệnh',
+                        label: 'Tên dịch vụ',
                     },
                 ]}
                 yAxis={[

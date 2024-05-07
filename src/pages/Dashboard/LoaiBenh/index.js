@@ -1,13 +1,6 @@
-import { ResponsiveChartContainer } from '@mui/x-charts/ResponsiveChartContainer';
-import { LinePlot, MarkPlot } from '@mui/x-charts/LineChart';
-import { BarPlot } from '@mui/x-charts/BarChart';
-import { ChartsXAxis } from '@mui/x-charts/ChartsXAxis';
-import { ChartsYAxis } from '@mui/x-charts/ChartsYAxis';
-import { ChartsGrid } from '@mui/x-charts/ChartsGrid';
-import { ChartsTooltip } from '@mui/x-charts/ChartsTooltip';
-import { ChartsOnAxisClickHandler } from '@mui/x-charts';
+import React, { useState, useEffect } from 'react';
+import { ResponsiveChartContainer, BarPlot, ChartsXAxis, ChartsYAxis, ChartsGrid, ChartsTooltip } from '@mui/x-charts';
 import { IFSelect } from '../../../component/Layout/TabLayout/InputForm';
-import { useState } from 'react';
 
 const dataset = [
     { month: '1', year: '2024', name: 'A', frequency: 43, },
@@ -71,63 +64,119 @@ const dataset = [
     { month: '12', year: '2023', name: 'I', frequency: 43, },
 ];
 
-const series = [
-    { type: 'bar', dataKey: 'frequency', color: 'var(--sub)', yAxisKey: 'leftAxis', label: 'Cường độ', },
-];
 
-const sorted = dataset.sort((a, b) => b.frequency - a.frequency);
+const LoaiBenh = () => {
+    const d = new Date();
+    const defaultMonth = d.getMonth();
+    const defaultYear = d.getFullYear().toString();
 
+    const [month, setMonth] = useState(defaultMonth);
+    const [year, setYear] = useState(defaultYear);
+    const [totalIntensityData, setTotalIntensityData] = useState([]);
+    const [monthlyIntensityData, setMonthlyIntensityData] = useState([]);
 
-export default function LoaiBenh() {
+    // Tính tổng cường độ cho mỗi loại bệnh trong năm được chọn
+    useEffect(() => {
+        if (year) {
+            const yearData = dataset.filter(item => item.year === year);
+            const intensityMap = {};
+            yearData.forEach(item => {
+                if (!intensityMap[item.name]) {
+                    intensityMap[item.name] = 0;
+                }
+                intensityMap[item.name] += item.frequency;
+            });
+            const totalIntensity = Object.keys(intensityMap).map(name => ({
+                name,
+                totalIntensity: intensityMap[name],
+            }));
+            setTotalIntensityData(totalIntensity);
+        }
+    }, [year]);
 
-    const [loai, setLoai] = useState('');
-    
+    // Tính tổng cường độ cho mỗi loại bệnh trong từng tháng của năm được chọn
+    useEffect(() => {
+        if (year && month) {
+            const monthlyData = dataset.filter(item => item.year === year && item.month === month.toString());
+            const intensityMap = {};
+            monthlyData.forEach(item => {
+                if (!intensityMap[item.name]) {
+                    intensityMap[item.name] = 0;
+                }
+                intensityMap[item.name] += item.frequency;
+            });
+            const monthlyIntensity = Object.keys(intensityMap).map(name => ({
+                name,
+                monthlyIntensity: intensityMap[name],
+            }));
+            setMonthlyIntensityData(monthlyIntensity);
+        }
+    }, [year, month]);
 
     return (
         <div>
             <div className='row align-items-end'>
                 <IFSelect
-                    title={"Loại dịch vụ"}
-                    size={4}
-                    options={[
-                        { loai: 'CLS' },
-                        { loai: 'Khám' },
-                    ]}
-                    def='Tất cả'
-                    onChange={(value) => setLoai(value === 'Tất cả' ? '' : value)}
-                    selected={loai}
-                    keyObj={'loai'}
+                    title="Tháng"
+                    size={1}
+                    options={Array.from({ length: 12 }, (_, i) => ({ month: `${i + 1}` }))}
+                    def={"Chọn"}
+                    onChange={(value) => setMonth(value === "Chọn" ? defaultMonth : value)}
+                    selected={month.toString()}
+                    keyObj='month'
+                />
+
+                <IFSelect
+                    title="Năm"
+                    size={1}
+                    options={[{ year: '2022' }, { year: '2023' }, { year: '2024' }]}
+                    def={"Chọn"}
+                    onChange={(value) => setYear(value === "Chọn" ? defaultYear : value)}
+                    selected={year}
+                    keyObj='year'
                 />
             </div>
 
-            <ResponsiveChartContainer
-                series={series}
-                xAxis={[
-                    {
-                        scaleType: 'band',
-                        dataKey: 'name',
-                        label: 'Tên bệnh',
-                    },
-                ]}
-                yAxis={[
-                    { id: 'leftAxis' },
-                ]}
-                dataset={dataset}
-                height={400}
-                margin={{ left: 90, right: 50 }}
-
-            >
-                <ChartsGrid horizontal />
-                <BarPlot />
-                <LinePlot />
-                <MarkPlot />
-                <ChartsXAxis />
-                <ChartsYAxis axisId="leftAxis" label="Cường độ" />
-                <ChartsTooltip />
-            </ResponsiveChartContainer>
-
-            <div>
+            <div className='row'>
+                <div className='col col-md-6'>
+                    <h2>Thống kê trong cả năm {year}</h2>
+                    <ResponsiveChartContainer
+                        series={[{ type: 'bar', dataKey: 'totalIntensity', color: 'var(--sub)' }]}
+                        xAxis={[{ scaleType: 'band', dataKey: 'name', label: 'Tên bệnh' }]}
+                        yAxis={[{ label: 'Tổng cường độ' }]}
+                        dataset={totalIntensityData}
+                        height={400}
+                        margin={{ left: 90, right: 50 }}
+                    >
+                        <ChartsGrid horizontal />
+                        <BarPlot />
+                        <ChartsXAxis />
+                        <ChartsYAxis label="Tổng cường độ" labelStyle={{ translate: '-25px 0px' }} />
+                        <ChartsTooltip />
+                    </ResponsiveChartContainer>
+                </div>
+                {month && (
+                    <div className='col col-md-6'>
+                        <h2>Thống kê trong tháng {month}/{year}</h2>
+                        <ResponsiveChartContainer
+                            series={[{ type: 'bar', dataKey: 'monthlyIntensity', color: 'var(--sub)' }]}
+                            xAxis={[{ scaleType: 'band', dataKey: 'name', label: 'Tên bệnh' }]}
+                            yAxis={[{ label: 'Cường độ trong tháng' }]}
+                            dataset={monthlyIntensityData}
+                            height={400}
+                            margin={{ left: 90, right: 50 }}
+                        >
+                            <ChartsGrid horizontal />
+                            <BarPlot />
+                            <ChartsXAxis />
+                            <ChartsYAxis label="Cường độ trong tháng"  labelStyle={{ translate: '-25px 0px' }}/>
+                            <ChartsTooltip />
+                        </ResponsiveChartContainer>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
+
+export default LoaiBenh;
