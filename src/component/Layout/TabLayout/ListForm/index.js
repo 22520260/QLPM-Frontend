@@ -959,7 +959,7 @@ export function ListFormPQ({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            <th>Chọn</th>
+            <th style={{ width: "5%" }}>Chọn</th>
             {columns.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}

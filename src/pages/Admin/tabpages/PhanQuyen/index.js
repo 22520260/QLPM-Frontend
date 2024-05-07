@@ -29,8 +29,8 @@ function DSTaiKhoan() {
     ];
 
     const roles = [
-        {title: "Lễ tân", key: "0"},
-        {title: "Bác sĩ", key: "1"},
+        { title: "Lễ tân", key: "0" },
+        { title: "Bác sĩ", key: "1" },
     ]
 
     useEffect(() => {
@@ -99,13 +99,12 @@ function DSTaiKhoan() {
                     onChange={(value) => setRole(value)}
                     keyObj={'title'}
                 />
-                
+
                 <div className="col col-md-8 d-flex justify-content-end">
                     <button
                         className="btn btn-primary"
                         type="button"
                         data-bs-toggle="modal"
-                        data-bs-target="#idtm"
                     >
                         Thêm mới
                     </button>
@@ -122,6 +121,14 @@ function DSTaiKhoan() {
                 onPageChange={handlePageChange}
             />
 
+            <div className="d-flex justify-content-center px-3 py-2">
+                <button
+                    className="btn btn-primary"
+                    type="button"
+                >
+                    Lưu
+                </button>
+            </div>
 
         </div>
     );
