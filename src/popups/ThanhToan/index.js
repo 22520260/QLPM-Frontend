@@ -6,7 +6,6 @@
 
 // function ThanhToan({ props }) {
 //   const handleThanhToan = () => {
-//     console.log("Thanh toan");
 //   };
 
 //   return (

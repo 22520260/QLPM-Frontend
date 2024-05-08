@@ -2,9 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllDichVuAction } from '../../action/fetchDataAction/fetchAllDichVuAction';
 
 const initialState = {
-  services: [],
-  loading: false,
-  error: null,
+  data: [],
+  isLoading: false,
 };
 
 const fetchAllDichVuSlice = createSlice({
@@ -13,17 +12,15 @@ const fetchAllDichVuSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchAllDichVuAction.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
+      .addCase(fetchAllDichVuAction.pending, (state) => {
+        state.isLoading = true;
       })
       .addCase(fetchAllDichVuAction.fulfilled, (state, action) => {
-        state.loading = false;
-        state.services = action.payload.data;
+        state.isLoading = false;
+        state.data = action.payload.data;
       })
-      .addCase(fetchAllDichVuAction.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+      .addCase(fetchAllDichVuAction.rejected, (state) => {
+        state.isLoading = false;
       });
   },
 });

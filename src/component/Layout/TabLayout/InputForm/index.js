@@ -6,12 +6,14 @@ import "./style.css";
 import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 
 export function IFSelect({
+  id,
   title,
   size,
   options,
-  selected,
+  value,
   onChange,
   keyObj,
+  showObj,
   required,
 }) {
   const style = "col-md-" + size;
@@ -32,12 +34,12 @@ export function IFSelect({
         aria-label="Default select example"
         onChange={handleSelectChange}
         required={required}
-        value={selected}
+        value={value}
       >
-        <option selected>Chọn</option>
+        <option value={0}>Chọn</option>
         {options.map((value, index) => (
           <option key={index} value={value[keyObj]}>
-            {value[keyObj]}
+            {value[showObj]}
           </option>
         ))}
       </select>
@@ -319,22 +321,23 @@ export function IFSearch({ title, size, onChange }) {
   return (
     <div className={style}>
       <label htmlFor="exampleDataList" className="form-label">
+        <FaSearch className="me-2 mb-1" />
         {title}
       </label>
       <div className="input-group">
         <input
-          className="form-control"
+          className="form-control rounded"
           id="exampleDataList"
           type="text"
           onChange={handleInputChange}
           required
         />
-        <button className="input-group-text bg-primary">
+        {/* <button className="input-group-text bg-primary">
           <FaSearch />
         </button>
         <button className="input-group-text">
           <FaRedoAlt />
-        </button>
+        </button> */}
       </div>
     </div>
   );

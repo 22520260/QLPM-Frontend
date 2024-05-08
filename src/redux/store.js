@@ -5,21 +5,28 @@ import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
 import authReducer from './slice/other/authSlices'
-import { persistStore } from 'redux-persist';
-// import persistedAuthSlice from '../redux/slice/other/authSlices';
-import getAllUserInfoReducer from './slice/getDataSlice/getAllUserInfoSlice'
+import getAllAccountReducer from './slice/getDataSlice/getAllAccountSlice'
+import getAllUserGroupReducer from './slice/getDataSlice/getAllUserGroupSlice'
+import getAllLoaiDichVuReducer from './slice/getDataSlice/getAllLoaiDichVuSlice'
+import getAllBenhReducer from './slice/getDataSlice/getAllBenhSlice'
+import getAllDVTReducer from './slice/getDataSlice/getAllDVTSlice'
+import getThamSoReducer from './slice/getDataSlice/getThamSoSlice'
+
 
 export default configureStore({
   reducer: {
     fetchAllBenhNhan: fetchAllBenhNhanReducer,
     fetchAllBacSi: fetchAllBacSiReducer,
-    fetchAllDichVu: fetchAllDichVuReducer,
+    services: fetchAllDichVuReducer,
     fetchDSDK: getDSDKRecuder,
     selectedRow: selectedRowReducer,
     auth: authReducer,
-    userInfo: getAllUserInfoReducer
+    account: getAllAccountReducer,
+    groupUsers: getAllUserGroupReducer,
+    loaiDichVu: getAllLoaiDichVuReducer,
+    benh: getAllBenhReducer,
+    dvt: getAllDVTReducer,
+    thamso: getThamSoReducer
   },
   devTools: true,
 })
-
-// export const persistor = persistStore(store);

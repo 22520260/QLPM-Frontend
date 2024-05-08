@@ -2,9 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllBacSiAction } from '../../action/fetchDataAction/fetchAllBacSiAction';
 
 const initialState = {
-  doctors: [],
+  data: [],
   loading: false,
-  error: null,
 };
 
 const fetchAllBacSiSlice = createSlice({
@@ -13,17 +12,15 @@ const fetchAllBacSiSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchAllBacSiAction.pending, (state, action) => {
+      .addCase(fetchAllBacSiAction.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchAllBacSiAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.doctors = action.payload.data;
+        state.data = action.payload;
       })
-      .addCase(fetchAllBacSiAction.rejected, (state, action) => {
+      .addCase(fetchAllBacSiAction.rejected, (state) => {
         state.loading = false;
-        state.error = action.error.message;
       });
   },
 });

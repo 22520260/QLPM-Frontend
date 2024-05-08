@@ -1,13 +1,11 @@
 import React from "react";
 import {
   IFInputText,
-  IFSelect,
   IFNgay,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { useSelector } from "react-redux";
 
 function ThongTinKhachHang() {
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
   const data = useSelector((state) => state.selectedRow.selectedRow);
 
   const handleChange = (page) => {
@@ -17,7 +15,9 @@ function ThongTinKhachHang() {
   return (
     <div className="shadow rounded">
       {/* Thông tin */}
-      <div className="px-3 py-2 bg-primary rounded-top">Thông tin khách hàng</div>
+      <div className="px-3 py-2 bg-primary rounded-top">
+        Thông tin khách hàng
+      </div>
       <div className="container-fluid mb-2 py-2">
         <div className="row py-2">
           <IFInputText
@@ -43,8 +43,6 @@ function ThongTinKhachHang() {
             value={data.GIOITINH}
             onChange={(value) => handleChange(1)}
           />
-
-
         </div>
         <div className="row py-2">
           <IFNgay
@@ -70,7 +68,7 @@ function ThongTinKhachHang() {
             value={data.CCCD}
             onChange={(value) => handleChange(1)}
           />
-                    <IFInputText
+          <IFInputText
             title={"Số điện thoại"}
             valid={true}
             readOnly={true}
@@ -80,9 +78,6 @@ function ThongTinKhachHang() {
           />
         </div>
         <div className="row py-2">
-
-
-
           <IFInputText
             title={"Địa chỉ"}
             valid={true}
@@ -91,7 +86,7 @@ function ThongTinKhachHang() {
             onChange={(value) => handleChange(1)}
           />
 
-<IFInputText
+          <IFInputText
             title={"Dị ứng"}
             valid={true}
             readOnly={true}

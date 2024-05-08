@@ -2,13 +2,8 @@ import React from "react";
 import {
   IFInputText,
   TextArea,
-  IFSelect,
-  IFNgay,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { useSelector } from "react-redux";
 function ThongTinKham() {
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
-
   const handleChange = (page) => {
     console.log(page);
   };

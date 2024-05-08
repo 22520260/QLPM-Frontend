@@ -24,30 +24,32 @@ const authSlice = createSlice({
     builder
       .addCase(fetchUserAccountAction.pending, (state) => {
         state.isLoading = true;
-        state.user = state.user;
       })
       .addCase(fetchUserAccountAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        const groupWithRoles = action.payload.data.groupWithRoles;
-        const username = action.payload.data.username;
-        const token = action.payload.data.access_token; // token chứa username và groupWithRoles
-  
+        const groupWithRoles = action.payload.data?.groupWithRoles;
+        const username = action.payload.data?.username;
+        const token = action.payload.data?.access_token; // token chứa username và groupWithRoles
+        const groupName = action.payload.data?.groupName;
+        const groupID = action.payload.data?.groupID;
+        const userInfo = action.payload.data?.userInfo;
+
         const data = {
           isAuthenticated: true,
           token,
           account: {
             groupWithRoles,
-            username
+            username,
+            groupName,
+            groupID,
+            userInfo
           }
         };
-
         state.user = data;
 
       })
-      .addCase(fetchUserAccountAction.rejected, (state, action) => {
+      .addCase(fetchUserAccountAction.rejected, (state) => {
         state.isLoading = false;
-        state.error = action.error.message;
-
       });
   },
 });

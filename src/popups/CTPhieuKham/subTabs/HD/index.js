@@ -2,10 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 function HoaDon() {
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
-  const handleChange = (page) => {
-    console.log(page);
-  };
+  const doctors = useSelector((state) => state.fetchAllBacSi.data.data);
+
 
   const columns = [
     { title: "Mã hóa đơn", key: "MABS" },

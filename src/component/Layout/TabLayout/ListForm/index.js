@@ -1,26 +1,36 @@
-import React, { useState } from "react";
-import CTPhieuKham from "../../../../popups/CTPhieuKham";
-import ThanhToan from "../../../../popups/ThanhToan";
+import React, { useEffect, useState } from "react";
 import {
   FaEye,
   FaDollarSign,
   FaPencilRuler,
   FaStethoscope,
 } from "react-icons/fa";
+import {
+  IFNgayNgang,
+  ListGroupItem,
+  TextArea,
+  IFInputText,
+  IFNgay,
+  IFSelect,
+  IFPassword,
+} from "../InputForm";
 import NavTabVertical from "../../../NavTabVertical";
 import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
-import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay, IFPassword } from "../InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { MdDeleteForever } from "react-icons/md";
-
+import { toast } from "react-toastify";
+import { fetchAllAccountAction } from "../../../../redux/action/fetchDataAction/fetchAllAccountAction";
+import axios from "../../../../setup/axios";
+import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
+import { fetchAllBenhAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhAction";
+import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetchAllDVTAction";
+import { deFormatDate } from "../../../../utils/appUtils";
 export function ListForm({ columns, data, loading, onDeleteService }) {
-  function handleRowClick(row) {
-    console.log(row); // Log row object when clicked
-  }
+  function handleRowClick(row) {}
 
   return (
     <>
@@ -55,10 +65,10 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
                 ))}
                 <td>
                   <button
-                    className="btn btn-danger"
+                    className="btn btn-danger rounded-circle"
                     onClick={() => onDeleteService(rowIndex)}
                   >
-                    Xóa
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -76,13 +86,9 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
   };
-  const handleSave = () => {
-    console.log("SAVE");
-  };
+  const handleSave = () => {};
 
-  const handleThanhToan = () => {
-    console.log("Thanh toan");
-  };
+  const handleThanhToan = () => {};
 
   return (
     <>
@@ -112,9 +118,7 @@ export function ListFormDSDK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -225,11 +229,23 @@ export function ListFormDSDK({ columns, data, loading }) {
                       title={"Người bán"}
                       value={"Le Thi Thanh Thao"}
                     />
-                    <IFNgayNgang title={"Ngày bán"} onChange={() => { }} />
-                    <ListGroupItem title={"Mã phiếu"} value={'qqq'} disable={true} />
-                    <ListGroupItem title={"Tổng tiền"} value={"4.370.000"} disable={true} />
+                    <IFNgayNgang title={"Ngày bán"} onChange={() => {}} />
+                    <ListGroupItem
+                      title={"Mã phiếu"}
+                      value={"qqq"}
+                      disable={true}
+                    />
+                    <ListGroupItem
+                      title={"Tổng tiền"}
+                      value={"4.370.000"}
+                      disable={true}
+                    />
                     <ListGroupItem title={"Giảm giá"} value={"0"} />
-                    <ListGroupItem title={"Thành tiền"} value={"4.370.000"} disable={true} />
+                    <ListGroupItem
+                      title={"Thành tiền"}
+                      value={"4.370.000"}
+                      disable={true}
+                    />
                     <ListGroupItem
                       title={"Phương thức TT"}
                       value={"Tiền mặt"}
@@ -268,15 +284,10 @@ export function ListFormThuoc({ columns, data, loading }) {
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
-    console.log("selectedRow", selectedRow);
   };
-  const handleSave = () => {
-    console.log("SAVE");
-  };
+  const handleSave = () => {};
 
-  const handleThanhToan = () => {
-    console.log("Thanh toan");
-  };
+  const handleThanhToan = () => {};
 
   return (
     <>
@@ -319,10 +330,8 @@ export function ListFormThuoc({ columns, data, loading }) {
                   >
                     <FaPencilRuler />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -356,36 +365,18 @@ export function ListFormThuoc({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row py-2">
-                  <IFInputText
-                    title={"Số lô"}
-                    size={2}
-                    required={'true'}
-                  />
-                  <IFInputText
-                    title={"Tên thuốc"}
-                    size={7}
-                    required={'true'}
-                  />
+                  <IFInputText title={"Số lô"} size={2} required={"true"} />
+                  <IFInputText title={"Tên thuốc"} size={7} required={"true"} />
                   <IFInputText
                     title={"Số lượng nhập"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                 </div>
                 <div className="row py-2">
-
-                  <IFInputText
-                    title={"Hoạt chất"}
-                    size={7}
-                  />
-                  <IFInputText
-                    title={"Đơn vị"}
-                    size={2}
-                  />
-                  <IFInputText
-                    title={"Số lượng tồn"}
-                    size={3}
-                  />
+                  <IFInputText title={"Hoạt chất"} size={7} />
+                  <IFInputText title={"Đơn vị"} size={2} />
+                  <IFInputText title={"Số lượng tồn"} size={3} />
                 </div>
                 <div className="row py-2">
                   <IFNgay
@@ -393,20 +384,16 @@ export function ListFormThuoc({ columns, data, loading }) {
                     size={3}
                     defaultValue={new Date()}
                   />
-                  <IFNgay
-                    title={"Hạn sử dụng"}
-                    size={3}
-                    required={'true'}
-                  />
+                  <IFNgay title={"Hạn sử dụng"} size={3} required={"true"} />
                   <IFInputText
                     title={"Giá nhập (VNĐ)"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                   <IFInputText
                     title={"Giá bán (VNĐ)"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
                   />
                 </div>
               </div>
@@ -430,20 +417,135 @@ export function ListFormThuoc({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }
 
 export function ListFormDSTK({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
-  const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  const [formDataTTCN, setFormDataTTCN] = useState({});
+  const [formDataTTTK, setFormDataTTTK] = useState({});
+  const groupUsers = useSelector((state) => state.groupUsers.data.data) || [];
+
+  const handleRowClick = (selectedRow) => {
+    setFormDataTTCN({
+      maBS: selectedRow.MABS,
+      maLT: selectedRow.MALT,
+      maTK: selectedRow.MATK,
+      hoTen: selectedRow.HOTEN,
+      vaiTro: selectedRow.MANHOM,
+      sdt: selectedRow.SDT,
+      trinhDo: selectedRow.TRINHDO,
+      chuyenKhoa: selectedRow.CHUYENKHOA,
+      cccd: selectedRow.CCCD,
+      gioiTinh: selectedRow.GIOITINH,
+      ngaySinh: deFormatDate(selectedRow.NGAYSINH),
+      diaChi: selectedRow.DIACHI,
+      ghiChu: "",
+    });
+    setFormDataTTTK({
+      maTK: selectedRow.MATK,
+      username: selectedRow.USERNAME,
+      password: selectedRow.PASSWORD,
+    });
   };
-  const handleSave = () => {
-    console.log("SAVE");
+
+  const defaultObjValidInputTTCN = {
+    isValidHoTen: true,
+    isValidVaiTro: true,
+    isValidCCCD: true,
   };
+
+  const defaultObjValidInputTTTK = {
+    isValidUsername: true,
+    isValidPassword: true,
+  };
+
+  const [objValidInputTTCN, setObjValidInputTTCN] = useState(
+    defaultObjValidInputTTCN
+  );
+  const [objValidInputTTTK, setObjValidInputTTTK] = useState(
+    defaultObjValidInputTTTK
+  );
+
+  const handleUpdateTTCN = async (e) => {
+    e.preventDefault();
+    setObjValidInputTTCN(defaultObjValidInputTTCN);
+    if (!formDataTTCN.hoTen) {
+      setObjValidInputTTCN({ ...objValidInputTTCN, isValidHoTen: false });
+      toast.error("Chưa nhập họ tên");
+      return;
+    }
+    if (!formDataTTCN.vaiTro || formDataTTCN.vaiTro === "Chọn") {
+      setObjValidInputTTCN({ ...objValidInputTTCN, isValidVaiTro: false });
+      toast.error("Chưa nhập vai trò");
+      return;
+    }
+    if (!formDataTTCN.cccd) {
+      setObjValidInputTTCN({ ...objValidInputTTCN, isValidCCCD: false });
+      toast.error("Chưa nhập CCCD");
+      return;
+    }
+    const selected = groupUsers.find(
+      (groupUser) => groupUser.TENNHOM === formDataTTCN.vaiTro
+    );
+    if (selected) {
+      handleChangeTTCN("vaiTro", selected.MANHOM);
+    }
+
+    const response = await axios.post("/account/updateTTCN", formDataTTCN);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllAccountAction());
+      const cancelBtn = document.getElementById("cancelBtn");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleUpdateTTTK = async (e) => {
+    e.preventDefault();
+    setObjValidInputTTTK(defaultObjValidInputTTTK);
+    if (!formDataTTTK.username) {
+      setObjValidInputTTTK({ ...objValidInputTTTK, isValidUsername: false });
+      toast.error("Chưa nhập username");
+      return;
+    }
+    if (!formDataTTTK.password) {
+      setObjValidInputTTTK({ ...objValidInputTTTK, isValidPassword: false });
+      toast.error("Chưa nhập password");
+      return;
+    }
+
+    const response = await axios.post("/account/updateTTTK", formDataTTTK);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      const cancelBtn = document.getElementById("cancelBtn");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+      handleChangeTTTK("password", "");
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChangeTTCN = (fieldName, value) => {
+    setFormDataTTCN({ ...formDataTTCN, [fieldName]: value });
+  };
+
+  const handleChangeTTTK = (fieldName, value) => {
+    setFormDataTTTK({ ...formDataTTTK, [fieldName]: value });
+  };
+
+  const handleCancel = () => {};
 
   return (
     <>
@@ -473,26 +575,21 @@ export function ListFormDSTK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#idtm"
+                    data-bs-target="#updateModal"
                   >
                     <FaPencilRuler />
                   </button>
 
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
-                  
                 </td>
               </tr>
             ))
@@ -500,12 +597,18 @@ export function ListFormDSTK({ columns, data, loading }) {
         </tbody>
       </table>
 
-      <div className="modal fade modal-xl" id="idtm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        className="modal fade modal-xl"
+        id="updateModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin tài khoản
+                Cập nhật người dùng
               </h1>
               <button
                 type="button"
@@ -517,57 +620,134 @@ export function ListFormDSTK({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
+                <h4>Cập nhật thông tin cá nhân</h4>
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Họ tên"}
+                    size={4}
+                    required={"true"}
+                    value={formDataTTCN.hoTen}
+                    valid={objValidInputTTCN.isValidHoTen}
+                    onChange={(value) => handleChangeTTCN("hoTen", value)}
+                  />
+                  <IFNgay
+                    title={"Ngày sinh"}
+                    size={2}
+                    value={formDataTTCN.ngaySinh}
+                    onChange={(value) => handleChangeTTCN("ngaySinh", value)}
+                  />
+                  <IFInputText
+                    title={"Địa chỉ"}
+                    size={6}
+                    value={formDataTTCN.diaChi}
+                    onChange={(value) => handleChangeTTCN("diaChi", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFSelect
+                    title={"Giới tính"}
+                    size={2}
+                    options={[
+                      { gioiTinh: "Nam" },
+                      { gioiTinh: "Nữ" },
+                      { gioiTinh: "Khác" },
+                    ]}
+                    value={formDataTTCN.gioiTinh}
+                    keyObj={"gioiTinh"}
+                    showObj={"gioiTinh"}
+                    onChange={(value) => handleChangeTTCN("gioiTinh", value)}
+                  />
+                  <IFInputText
+                    title={"CCCD"}
+                    size={4}
+                    value={formDataTTCN.cccd}
+                    required={true}
+                    valid={objValidInputTTCN.isValidCCCD}
+                    onChange={(value) => handleChangeTTCN("cccd", value)}
+                  />
+                  <IFInputText
+                    title={"Số điện thoại"}
+                    size={4}
+                    value={formDataTTCN.sdt}
+                    onChange={(value) => handleChangeTTCN("sdt", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFSelect
+                    title={"Vai trò"}
+                    size={2}
+                    options={groupUsers}
+                    keyObj={"MANHOM"}
+                    showObj={"TENNHOM"}
+                    required={"true"}
+                    value={formDataTTCN.vaiTro}
+                    valid={objValidInputTTCN.isValidVaiTro}
+                    onChange={(value) => handleChangeTTCN("vaiTro", value)}
+                  />
+                  <IFInputText
+                    title={"Chuyên khoa"}
+                    size={3}
+                    value={formDataTTCN.chuyenKhoa}
+                    onChange={(value) => handleChangeTTCN("chuyenKhoa", value)}
+                  />
+                  <IFInputText
+                    title={"Trình độ"}
+                    size={3}
+                    value={formDataTTCN.trinhDo}
+                    onChange={(value) => handleChangeTTCN("trinhDo", value)}
+                  />
+                </div>
+                <div className="row py-2 d-flex justify-content-between">
+                  <button
+                    type="button"
+                    className="btn btn-primary ms-auto col-auto"
+                    onClick={handleUpdateTTCN}
+                  >
+                    Lưu thông tin cá nhân
+                  </button>
+                </div>
+
+                <div className="py-2 border-bottom border-primary"></div>
+
+                <h4 className="mt-4">Cập nhật thông tin tài khoản</h4>
                 <div className="row py-2">
                   <IFInputText
                     title={"Tên tài khoản"}
-                    size={5}
-                    required={'true'}
+                    size={3}
+                    required={"true"}
+                    value={formDataTTTK.username}
+                    valid={objValidInputTTTK.isValidUsername}
+                    onChange={(value) => handleChangeTTTK("username", value)}
                   />
                   <IFPassword
                     title={"Password"}
                     size={4}
-                    required={'true'}
-                  />
-                  <IFInputText
-                    title={"Vai trò"}
-                    size={3}
-                    required={'true'}
+                    required={"true"}
+                    value={formDataTTTK.password}
+                    valid={objValidInputTTTK.isValidPassword}
+                    onChange={(value) => handleChangeTTTK("password", value)}
                   />
                 </div>
-                <div className="row py-2">
-
-                  <IFInputText
-                    title={"Họ và tên"}
-                    size={5}
-                  />
-                  <IFInputText
-                    title={"Trình độ"}
-                    size={2}
-                  />
-                  <IFInputText
-                    title={"Ghi chú"}
-                    size={5}
-                  />
+                <div className="row py-2 d-flex justify-content-between">
+                  <button
+                    type="button"
+                    className="btn btn-primary ms-auto col-auto"
+                    onClick={(e) => handleUpdateTTTK(e)}
+                  >
+                    Lưu thông tin tài khoản
+                  </button>
                 </div>
-                {/* <div className="row py-2">
-                  
-                </div> */}
               </div>
             </div>
             <div className="modal-footer">
               <button
+                id="cancelBtn"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={handleCancel}
               >
-                Đóng
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => { }}
-              >
-                Lưu
+                Hủy
               </button>
             </div>
           </div>
@@ -579,13 +759,64 @@ export function ListFormDSTK({ columns, data, loading }) {
 
 export function ListFormDSDV({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const [formData, setFormData] = useState({});
+  const loaiDichVu = useSelector((state) => state.loaiDichVu.data) || [];
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    setFormData({
+      maDV: row.MADV,
+      maLDV: row.MALOAIDV,
+      tenDichVu: row.TENDV,
+      giaDichVu: row.GIADV,
+    });
   };
-  const handleSave = () => {
-    console.log("SAVE");
+
+  const defaultObjValidInput = {
+    isValidMaLDV: true,
+    isValidTenDV: true,
+    isValidGiaDV: true,
   };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.tenDichVu) {
+      setObjValidInput({ ...objValidInput, isValidTenDV: false });
+      toast.error("Chưa nhập tên dịch vụ");
+      return;
+    }
+    if (!formData.maLDV || formData.maLDV === 0) {
+      setObjValidInput({ ...objValidInput, isValidTenLDV: false });
+      toast.error("Chưa chọn loại dịch vụ");
+      return;
+    }
+    if (!formData.giaDichVu) {
+      setObjValidInput({ ...objValidInput, isValidGiaDV: false });
+      toast.error("Chưa nhập giá dịch vụ");
+      return;
+    }
+
+    const response = await axios.post("/dichvu/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllDichVuAction());
+      const cancelBtn = document.getElementById("cancelBtn");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleCancel = () => {};
 
   return (
     <>
@@ -615,9 +846,7 @@ export function ListFormDSDV({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -629,10 +858,8 @@ export function ListFormDSDV({ columns, data, loading }) {
                     <FaEye />
                   </button>
 
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -641,7 +868,13 @@ export function ListFormDSDV({ columns, data, loading }) {
         </tbody>
       </table>
 
-      <div className="modal fade modal-lg" id="iddsdv" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        className="modal fade modal-lg"
+        id="iddsdv"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -660,46 +893,52 @@ export function ListFormDSDV({ columns, data, loading }) {
               <div className="container-fluid">
                 <div className="row py-2">
                   <IFInputText
-                    title={"Mã dịch vụ"}
-                    size={3}
-                    required={'true'}
-                  />
-                  <IFInputText
                     title={"Tên dịch vụ"}
                     size={9}
-                    required={'true'}
+                    required={"true"}
+                    value={formData.tenDichVu}
+                    valid={objValidInput.isValidTenDV}
+                    onChange={(value) => handleChange("tenDichVu", value)}
                   />
                 </div>
                 <div className="row py-2">
-
-                  <IFInputText
+                  <IFSelect
+                    id={"loaiDV"}
                     title={"Loại dịch vụ"}
                     size={7}
+                    options={loaiDichVu}
+                    keyObj={"MALOAIDV"}
+                    showObj={"TENLOAIDV"}
+                    value={formData.maLDV}
+                    valid={objValidInput.isValidMaLDV}
+                    onChange={(value) => handleChange("maLDV", value)}
                   />
                   <IFInputText
                     title={"Giá tiền"}
                     size={5}
+                    value={formData.giaDichVu}
+                    valid={objValidInput.isValidGiaDV}
+                    onChange={(value) => handleChange("giaDichVu", value)}
                   />
                 </div>
-                {/* <div className="row py-2">
-                  
-                </div> */}
               </div>
             </div>
             <div className="modal-footer">
               <button
+                id="cancelBtn"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={handleCancel}
               >
-                Đóng
+                Hủy
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => { }}
+                onClick={handleUpdate}
               >
-                Lưu
+                Cập nhật
               </button>
             </div>
           </div>
@@ -711,12 +950,56 @@ export function ListFormDSDV({ columns, data, loading }) {
 
 export function ListFormDSLB({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const [formData, setFormData] = useState({});
+
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    console.log("row", row);
+    setFormData({
+      maBenh: row.MABENH,
+      maICD: row.MAICD,
+      tenBenh: row.TENBENH,
+    });
   };
-  const handleSave = () => {
-    console.log("SAVE");
+
+  const defaultObjValidInput = {
+    isValidMaICD: true,
+    isValidTenBenh: true,
+  };
+  console.log("formData", formData);
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.maICD) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMaICD: false });
+      toast.error("Chưa nhập mã bệnh ICD");
+      return;
+    }
+    if (!formData.tenBenh) {
+      setObjValidInput({ ...defaultObjValidInput, isValidTenBenh: false });
+      toast.error("Chưa nhập tên bệnh");
+      return;
+    }
+
+    const response = await axios.post("/benh/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllBenhAction());
+      const cancelBtn = document.getElementById("cancelBtn1");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
   return (
@@ -747,9 +1030,7 @@ export function ListFormDSLB({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -761,10 +1042,8 @@ export function ListFormDSLB({ columns, data, loading }) {
                     <FaEye />
                   </button>
 
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -773,12 +1052,18 @@ export function ListFormDSLB({ columns, data, loading }) {
         </tbody>
       </table>
 
-      <div className="modal fade " id="iddslb" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        className="modal fade "
+        id="iddslb"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Bệnh
+                Cập nhật thông tin bệnh
               </h1>
               <button
                 type="button"
@@ -794,30 +1079,35 @@ export function ListFormDSLB({ columns, data, loading }) {
                   <IFInputText
                     title={"Mã ICD"}
                     size={3}
-                    required={'true'}
+                    required={"true"}
+                    value={formData.maICD}
+                    onChange={(value) => handleChange("maICD", value)}
                   />
                   <IFInputText
                     title={"Tên bệnh"}
                     size={9}
-                    required={'true'}
+                    required={"true"}
+                    value={formData.tenBenh}
+                    onChange={(value) => handleChange("tenBenh", value)}
                   />
                 </div>
               </div>
             </div>
             <div className="modal-footer">
               <button
+                id="cancelBtn1"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Đóng
+                Hủy
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => { }}
+                onClick={handleUpdate}
               >
-                Lưu
+                Cập nhật
               </button>
             </div>
           </div>
@@ -829,12 +1119,48 @@ export function ListFormDSLB({ columns, data, loading }) {
 
 export function ListFormDVT({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const [formData, setFormData] = useState({});
+
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    console.log("row", row);
+    setFormData({
+      maDVT: row.MADVT,
+      tenDVT: row.TENDONVI,
+    });
   };
-  const handleSave = () => {
-    console.log("SAVE");
+
+  const defaultObjValidInput = {
+    isValidTenDVT: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.tenDVT) {
+      setObjValidInput({ ...defaultObjValidInput, isValidTenDVT: false });
+      toast.error("Chưa nhập tên đơn vị tính");
+      return;
+    }
+
+    const response = await axios.post("/dvt/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllDVTAction());
+      const cancelBtn = document.getElementById("cancelBtn2");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
   return (
@@ -865,9 +1191,7 @@ export function ListFormDVT({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -879,10 +1203,8 @@ export function ListFormDVT({ columns, data, loading }) {
                     <FaEye />
                   </button>
 
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -891,12 +1213,18 @@ export function ListFormDVT({ columns, data, loading }) {
         </tbody>
       </table>
 
-      <div className="modal fade " id="iddsdvt" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        className="modal fade "
+        id="iddsdvt"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Bệnh
+                Cập nhật đơn vị tính
               </h1>
               <button
                 type="button"
@@ -910,32 +1238,31 @@ export function ListFormDVT({ columns, data, loading }) {
               <div className="container-fluid">
                 <div className="row py-2">
                   <IFInputText
-                    title={"Mã đơn vị"}
-                    size={3}
-                    required={'true'}
-                  />
-                  <IFInputText
                     title={"Tên đơn vị"}
-                    size={9}
-                    required={'true'}
+                    size={12}
+                    required={"true"}
+                    value={formData.tenDVT}
+                    valid={objValidInput.isValidTenDVT}
+                    onChange={(value) => handleChange("tenDVT", value)}
                   />
                 </div>
               </div>
             </div>
             <div className="modal-footer">
               <button
+                id="cancelBtn2"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Đóng
+                Hủy
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => { }}
+                onClick={handleUpdate}
               >
-                Lưu
+                Cập nhật
               </button>
             </div>
           </div>
@@ -951,13 +1278,9 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
   };
-  const handleSave = () => {
-    console.log("SAVE");
-  };
+  const handleSave = () => {};
 
-  const handleThanhToan = () => {
-    console.log("Thanh toan");
-  };
+  const handleThanhToan = () => {};
 
   return (
     <>
@@ -987,9 +1310,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -1000,10 +1321,8 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
+                  <button className="btn btn-danger mx-1 rounded-circle">
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
@@ -1011,13 +1330,17 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-      
 
       {/* Modal KhamBenh */}
       <div
-        className="modal fade modal-xl" id="idkb" 
-        data-bs-backdrop="static" 
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        className="modal fade modal-xl"
+        id="idkb"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -1039,6 +1362,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
             </div>
             <div className="modal-footer">
               <button
+                id="cancelBtn"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
@@ -1056,7 +1380,6 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }
