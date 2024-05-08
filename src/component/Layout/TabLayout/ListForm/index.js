@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
+import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -593,6 +595,8 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    dispatch(fetchCTDTByIdAction(row.MAPK));
+    dispatch(fetchAllThuocAction());
   };
   const handleSave = () => {
     console.log("SAVE");

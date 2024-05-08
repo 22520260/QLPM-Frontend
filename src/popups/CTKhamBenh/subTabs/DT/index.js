@@ -17,9 +17,8 @@ import { toast } from "react-toastify";
 function DonThuoc() {
   const dispatch = useDispatch();
   const dsThuoc = useSelector((state) => state.fetchAllThuoc.dsThuoc) || [];
-  const selectedPK =
-    useSelector((state) => state.selectedRow.selectedRow) || {};
-  const existedCTDT = useSelector((state) => state.existedCTDT.data) || [];
+  const selectedPK = useSelector((state) => state.selectedRow.selectedRow) || {};
+  let existedCTDT = useSelector((state) => state.existedCTDT.data) || [];
 
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
@@ -41,17 +40,6 @@ function DonThuoc() {
     SOLANUONG: 0,
     SOLUONGUONG: 0,
   });
-
-  useEffect(() => {
-    dispatch(fetchAllThuocAction());
-    dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
-    if (existedCTDT) {
-      setMedicines(existedCTDT);
-    }
-  }, [existedCTDT]);
-  // chuyển tab thì chuyển data được rồi nhưng kê thuốc thì ko vào đơn
-  // có lẽ là do component render và tự set medicines thành existedCTDT rỗng
-  // gộp medicines và existedCTDT
 
   const checkThuocExistence = (TENTHUOC) => {
     const thuocExisted = dsThuoc.find((thuoc) => thuoc.TENTHUOC === TENTHUOC);
@@ -192,6 +180,8 @@ function DonThuoc() {
       GIABAN: 0,
       thanhTien: 0,
       soLuongTon: 0,
+      SOLANUONG: 0,
+      SOLUONGUONG: 0,
     };
     setRowData(newRowData);
   };
@@ -214,9 +204,7 @@ function DonThuoc() {
   };
 
   const insertCTDT = async (medicines, maDT) => {
-    // let isCompletes = new Array(medicines.length).fill(false);
-    // let i = 0;
-    medicines.forEach(async (medicine) => {
+    const flag = await medicines.map(async (medicine) => {
       try {
         const response = await axios.post(
           "http://localhost:3001/donthuoc/insert-ctdt",
@@ -226,19 +214,22 @@ function DonThuoc() {
         if (response.status === 200) {
           toast("Thêm chi tiết đơn thuốc thành công");
           dispatch(fetchAllThuocAction());
-          //isCompletes[i++] = true;
+          return true;
         }
       } catch (error) {
         console.log(error);
         toast.error("Thêm chi tiết đơn thuốc không thành công");
       }
     });
-    // for (const isComplete of isCompletes) {
-    //   if (isComplete === false) {
-    //     return false;
-    //   }
-    // }
-    // return true;
+
+    if (flag && flag.length !== 0) {
+      for (const isComplete of flag) {
+        if (isComplete === false) {
+          return false;
+        }
+      }
+      return true;
+    }
   };
 
   const handleAddDonThuoc = async () => {
@@ -253,13 +244,14 @@ function DonThuoc() {
         maDTinserted = response.data.MADT;
         toast("Thêm hóa đơn và đơn thuốc thành công");
         const isComplete = await insertCTDT(medicines, maDTinserted);
-        // if (isComplete === true) {
-        //   setMedicines([]);
-        //   setFormula("");
-        //   setUnit("");
-        //   setDay(0);
-        //   setNote("");
-        // }
+        if (isComplete === true) {
+          setMedicines([]);
+          dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
+          setFormula("");
+          setUnit("");
+          setDay(0);
+          setNote("");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -361,7 +353,14 @@ function DonThuoc() {
       <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
       <ListForm
         columns={columns}
-        data={medicines} // Truyền dữ liệu các loại thuốc vào ListForm
+        data={
+          existedCTDT.length === 0
+            ? medicines
+            : existedCTDT.map((item) => ({
+                ...item,
+                thanhTien: item.GIABAN * item.SOLUONGTHUOC,
+              }))
+        } // Truyền dữ liệu các loại thuốc vào ListForm
         loading={false}
         onDeleteService={handleDeleteMedicine}
       />
