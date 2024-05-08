@@ -51,6 +51,7 @@ function DonThuoc() {
   }, [existedCTDT]);
   // chuyển tab thì chuyển data được rồi nhưng kê thuốc thì ko vào đơn
   // có lẽ là do component render và tự set medicines thành existedCTDT rỗng
+  // gộp medicines và existedCTDT
 
   const checkThuocExistence = (TENTHUOC) => {
     const thuocExisted = dsThuoc.find((thuoc) => thuoc.TENTHUOC === TENTHUOC);
