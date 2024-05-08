@@ -37,7 +37,6 @@ function Thuoc() {
 
     useEffect(() => {
         dispatch(fetchDSDKAction());
-        console.log("call api DanhSachDangKy");
     }, []);
 
     useEffect(() => {

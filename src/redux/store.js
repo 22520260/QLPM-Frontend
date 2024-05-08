@@ -2,11 +2,12 @@ import { configureStore } from '@reduxjs/toolkit'
 import fetchAllBenhNhanReducer from './slice/getDataSlice/getAllBenhNhanSlice'
 import fetchAllBacSiReducer from './slice/getDataSlice/getAllBacSiSlice'
 import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
-import postAllDataDKKReducer from './slice/postDataSlice/postAllDataDKKSlice'
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
-
-
+import authReducer from './slice/other/authSlices'
+import { persistStore } from 'redux-persist';
+// import persistedAuthSlice from '../redux/slice/other/authSlices';
+import getAllUserInfoReducer from './slice/getDataSlice/getAllUserInfoSlice'
 
 export default configureStore({
   reducer: {
@@ -14,7 +15,11 @@ export default configureStore({
     fetchAllBacSi: fetchAllBacSiReducer,
     fetchAllDichVu: fetchAllDichVuReducer,
     fetchDSDK: getDSDKRecuder,
-    selectedRow: selectedRowReducer
+    selectedRow: selectedRowReducer,
+    auth: authReducer,
+    userInfo: getAllUserInfoReducer
   },
   devTools: true,
 })
+
+// export const persistor = persistStore(store);

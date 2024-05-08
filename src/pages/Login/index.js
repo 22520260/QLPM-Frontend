@@ -8,9 +8,11 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/userServices";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/slice/other/authSlices";
 
 function Login() {
-
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const defaultObjValidInput = {
@@ -37,12 +39,28 @@ function Login() {
     }
 
     const response = await loginUser(username, password);
+
     if (response && response.data && response.data.errcode === 0) {
+      const groupWithRoles = response.data.data.groupWithRoles;
+      const username = response.data.data.username;
+      const groupName = response.data.data.groupName;
+      const userInfo = response.data.data.userInfo;
+      const token = response.data.data.access_token; // token chứa username và groupWithRoles
+
       let data = {
         isAuthenticated: true,
-        token: "fake token",
+        token,
+        account: {
+          groupWithRoles,
+          groupName,
+          username,
+          userInfo
+        }
       };
-      sessionStorage.setItem("account", JSON.stringify(data));
+      // sessionStorage.setItem("account", JSON.stringify(data));
+      // localStorage.setItem('jwt', token)
+      dispatch(login(data));
+
       navigate('/')
     }
     if (response && response.data && response.data.errcode !== 0) {
@@ -50,13 +68,13 @@ function Login() {
     }
   };
 
-  useEffect(() => {
-    let session  = sessionStorage.getItem('account');
-    if(session) {
-      navigate('/')
-      window.location.reload();
-    }
-  })
+  // useEffect(() => {
+  //   let session  = sessionStorage.getItem('account');
+  //   if(session) {
+  //     navigate('/')
+  //     window.location.reload();
+  //   }
+  // })
 
   return (
     <div

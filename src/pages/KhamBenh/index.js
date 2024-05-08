@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../component/Layout/TabLayout/InputForm";
-import { ListFormDSDK} from "../../component/Layout/TabLayout/ListForm";
+import { ListFormKhamBenh} from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,6 @@ function DanhSachDangKy() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.fetchDSDK.data);
   const DSDK = data.data;
-  console.log('CHECK DSDK',DSDK)
   const isLoading = useSelector((state) => state.fetchDSDK.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -137,7 +136,7 @@ function DanhSachDangKy() {
             onChange={(value) => handleIFSearchChange(value)}
           />
         </div>
-        <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading}/>
+        <ListFormKhamBenh columns={columns} data={displayDSDK} loading={isLoading}/>
         <Pagination
           totalPages={totalPages}
           page={page}
