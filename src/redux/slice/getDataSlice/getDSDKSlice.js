@@ -18,7 +18,7 @@ const fetchDSDKSlice = createSlice({
       })
       .addCase(fetchDSDKAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.data = action.payload.data;
       })
       .addCase(fetchDSDKAction.rejected, (state) => {
         state.loading = false;
