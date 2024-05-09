@@ -17,9 +17,7 @@ function DSDV() {
   const dispatch = useDispatch();
   const services = useSelector((state) => state.services.data) || [];
   const loaiDichVu = useSelector((state) => state.loaiDichVu.data) || [];
-
-  // const services = data?.data;
-  const isLoading = useSelector((state) => state.services.isloading);
+  const isLoading = useSelector((state) => state.services?.isloading);
   const [limit, setLimit] = useState(5);
   const [displayServices, setDisplayServices] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -43,7 +41,6 @@ function DSDV() {
     if (services) {
       let filteredServices = [...services];
 
-      // Lọc theo từ khóa tìm kiếm
       if (searchKeyword) {
         filteredServices = filteredServices.filter((data) =>
           data.TENDV.toLowerCase().includes(searchKeyword.toLowerCase())

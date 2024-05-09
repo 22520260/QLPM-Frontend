@@ -11,6 +11,8 @@ import getAllLoaiDichVuReducer from './slice/getDataSlice/getAllLoaiDichVuSlice'
 import getAllBenhReducer from './slice/getDataSlice/getAllBenhSlice'
 import getAllDVTReducer from './slice/getDataSlice/getAllDVTSlice'
 import getThamSoReducer from './slice/getDataSlice/getThamSoSlice'
+import getAllRoleReducer from './slice/getDataSlice/getAllRoleSlice'
+import getRoleByIdReducer from './slice/getDataSlice/getRoleByIdSlice'
 
 
 export default configureStore({
@@ -26,7 +28,9 @@ export default configureStore({
     loaiDichVu: getAllLoaiDichVuReducer,
     benh: getAllBenhReducer,
     dvt: getAllDVTReducer,
-    thamso: getThamSoReducer
+    thamso: getThamSoReducer,
+    roles: getAllRoleReducer,
+    roleById: getRoleByIdReducer,
   },
   devTools: true,
 })

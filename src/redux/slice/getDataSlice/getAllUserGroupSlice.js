@@ -17,7 +17,7 @@ const fetchAllUserGroupSlice = createSlice({
       })
       .addCase(fetchAllUserGroupAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload;
+        state.data = action.payload.data;
       })
       .addCase(fetchAllUserGroupAction.rejected, (state) => {
         state.isLoading = false;

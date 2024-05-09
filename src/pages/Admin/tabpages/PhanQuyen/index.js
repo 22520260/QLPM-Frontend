@@ -1,126 +1,217 @@
 import React, { useState, useEffect } from "react";
 import {
-    IFSearch, IFInputText, IFNgay
+  IFInputText,
+  IFSelect,
+  IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSTK } from "../../../../component/Layout/TabLayout/ListForm";
-import Pagination from "../../../../component/Layout/TabLayout/Pagination";
-import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { ListFormPQ } from "../../../../component/Layout/TabLayout/ListForm";
+import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
+import { fetchAllRoleAction } from "../../../../redux/action/fetchDataAction/fetchAllRoleAction";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { compareDates, formatDate } from "../../../../utils/appUtils";
+import axios from "../../../../setup/axios";
 
 function PhanQuyen() {
-    const dispatch = useDispatch();
-    const data = useSelector((state) => state.fetchDSDK.data);
-    const DSDK = data.data;
-    const isLoading = useSelector((state) => state.fetchDSDK.loading);
-    const [limit, setLimit] = useState(5);
-    const [displayDSDK, setDisplayDSDK] = useState([]);
-    const [searchKeyword, setSearchKeyword] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
+  const dispatch = useDispatch();
+  const roles = useSelector((state) => state.roles?.data) || [];
+  const isLoading = useSelector((state) => state.roles?.isloading);
+  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  const roleById = useSelector((state) => state.roleById?.data) || [];
+  const selectedMAVAITRO =
+    roleById.length > 0 ? roleById.map((item) => item.MAVAITRO) : [];
+  const [displayRoles, setDisplayRoles] = useState([]);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [selectedVaiTro, setSelectedVaiTro] = useState(0);
 
-    const columns = [
-        { title: "Họ tên", key: "MAPK" },
-        { title: "Vai trò", key: "STT" },
-        { title: "Tên tài khoản", key: "TENBN" },
-        { title: "Giới tính", key: "TENBS" },
-        { title: "SĐT", key: "TIENTHUOC" },
-        { title: "Ngày sinh", key: "TRANGTHAITH" },
-    ];
+  const columns = [
+    { title: "Mã vai trò", key: "MAVAITRO" },
+    { title: "URL", key: "URL" },
+    { title: "Mô tả", key: "MOTA" },
+  ];
 
-    useEffect(() => {
-        dispatch(fetchDSDKAction());
+  useEffect(() => {
+    dispatch(fetchAllRoleAction());
+  }, []);
 
-    }, []);
+  useEffect(() => {
+      dispatch(fetchRoleByIdAction({ selectedVaiTro }));
+  }, [selectedVaiTro]);
 
-    useEffect(() => {
-        if (DSDK) {
-            let filteredDSDK = [...DSDK];
-            // Lọc theo ngày bắt đầu và ngày kết thúc
-            if (startDate && endDate) {
-                filteredDSDK = filteredDSDK.filter((data) => {
-                    const formatedNGAYKHAM = new Date(data.NGAYKHAM);
-                    return (
-                        compareDates(startDate, formatedNGAYKHAM) >= 0 &&
-                        compareDates(formatedNGAYKHAM, endDate) >= 0
-                    );
-                });
-            } else if (startDate) {
-                // Chỉ có ngày bắt đầu
-                filteredDSDK = filteredDSDK.filter((data) => {
-                    const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+  useEffect(() => {
+    if (roles) {
+      let filteredRoles = [...roles];
 
-                    return compareDates(startDate, formatedNGAYKHAM) >= 0;
-                });
-            } else if (endDate) {
-                // Chỉ có ngày kết thúc
-                filteredDSDK = filteredDSDK.filter((data) => {
-                    const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+      if (searchKeyword) {
+        filteredRoles = filteredRoles.filter((data) =>
+          data.MOTA.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+      }
 
-                    return compareDates(formatedNGAYKHAM, endDate) >= 0;
-                });
-            }
+      setDisplayRoles(filteredRoles);
+    }
+  }, [roles, searchKeyword]);
 
-            // Lọc theo từ khóa tìm kiếm
-            if (searchKeyword) {
-                filteredDSDK = filteredDSDK.filter((data) =>
-                    data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
-                );
-            }
+  const defaultFormData = {
+    url: "",
+    moTa: "",
+  };
 
-            const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
-            setTotalPages(calculatedTotalPages);
+  const [formData, setFormData] = useState(defaultFormData);
 
-            const startIdx = (page - 1) * limit;
-            const endIdx = Math.min(startIdx + limit, filteredDSDK.length);
-            const pageDSDK = filteredDSDK.slice(startIdx, endIdx);
+  const defaultObjValidInput = {
+    isValidURL: true,
+    isValidMota: true,
+  };
 
-            setDisplayDSDK(pageDSDK);
-        }
-    }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
-    const handleIFSearchChange = (value) => {
-        setSearchKeyword(value);
-    };
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.url) {
+      setObjValidInput({ ...defaultObjValidInput, isValidURL: false });
+      toast.error("Chưa nhập đường dẫn");
+      return;
+    }
+    if (!formData.moTa) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMota: false });
+      toast.error("Chưa nhập mô tả");
+      return;
+    }
 
-    const handlePageChange = usePaginationHandler(setPage, page, totalPages);
+    const response = await axios.post("/role/insert", formData);
 
-    return (
-        <div className="container-fluid">
-            <div className="row py-2 align-items-end">
-                <IFSearch
-                    title={"Tìm theo vai trò"}
-                    size={5}
-                    onChange={(value) => handleIFSearchChange(value)}
-                />
-                <div className="col col-md-7 d-flex justify-content-end">
-                    <button
-                        className="btn btn-primary"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#idtm"
-                    >
-                        Thêm mới
-                    </button>
-                </div>
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      setFormData(defaultFormData);
+      dispatch(fetchAllRoleAction());
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleCancel = () => {
+    setObjValidInput(defaultObjValidInput);
+    setFormData(defaultFormData);
+  };
+
+  const handleIFSearchChange = (value) => {
+    setSearchKeyword(value);
+  };
+
+  const handleDataFromChild = (data) => {
+    console.log('Data from child:', data);
+  };
+
+  return (
+    <div className="container-fluid">
+      <div className="row py-2 align-items-end">
+        <IFSelect
+          title={"Vai trò"}
+          size={4}
+          options={groupUsers}
+          value={selectedVaiTro}
+          keyObj={"MANHOM"}
+          showObj={"TENNHOM"}
+          onChange={(value) => setSelectedVaiTro(value)}
+        />
+        <IFSearch
+          title={"Tìm theo mô tả"}
+          size={4}
+          onChange={(value) => handleIFSearchChange(value)}
+        />
+        <div className="col col-md-4 d-flex justify-content-end">
+          <button
+            className="btn btn-primary"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#addDichVu"
+          >
+            Thêm mới
+          </button>
+        </div>
+      </div>
+
+      <div
+        className="modal fade modal-lg"
+        id="addDichVu"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thêm quyền mới
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
 
-
-            <ListFormDSTK columns={columns} data={displayDSDK} loading={isLoading} />
-            <Pagination
-                totalPages={totalPages}
-                page={page}
-                limit={limit}
-                siblings={1}
-                onPageChange={handlePageChange}
-            />
-
-
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"URL"}
+                    size={12}
+                    required={"true"}
+                    value={formData.url}
+                    valid={objValidInput.isValidURL}
+                    onChange={(value) => handleChange("url", value)}
+                  />
+                  <IFInputText
+                    title={"Mô tả"}
+                    size={12}
+                    value={formData.moTa}
+                    valid={objValidInput.isValidMota}
+                    onChange={(value) => handleChange("moTa", value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={handleCancel}
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleRegister}
+              >
+                Thêm mới
+              </button>
+            </div>
+          </div>
         </div>
-    );
+      </div>
+
+      <ListFormPQ
+        columns={columns}
+        data={displayRoles}
+        loading={isLoading}
+        selectedDefault={selectedMAVAITRO}
+        selectedVaiTro={selectedVaiTro}
+        sendDataToParent={handleDataFromChild}
+      />
+
+
+    </div>
+  );
 }
 
 export default PhanQuyen;

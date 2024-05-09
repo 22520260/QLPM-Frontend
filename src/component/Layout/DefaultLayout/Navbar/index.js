@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
 import NavIcon from "../../../NavIcon";
 import { FaAccessibleIcon } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 function Navbar() {
+  const user = useSelector((state) => state.auth.user); // user chứa token, isAuthenticated, account
+  let groupID = null;
+  if (user && user.account && user.account.groupID) {
+    groupID = user.account.groupID;
+  }
   return (
     <>
       <nav className="navbar bg-primary navbar-expand-md">
@@ -31,12 +37,12 @@ function Navbar() {
                 <li>
                   <Link className="dropdown-item" to="/khambenh">
                     Khám bệnh
-                  </Link>{" "}
+                  </Link>
                 </li>
                 <li>
                   <Link className="dropdown-item" to="/khambenh/canlamsang">
                     Cận lâm sàng
-                  </Link>{" "}
+                  </Link>
                 </li>
               </ul>
             </li>
@@ -70,9 +76,23 @@ function Navbar() {
                 role="button"
                 aria-expanded="false"
               >
-                Dashboard
+                Thống kê
               </Link>
             </li>
+            {groupID && groupID === 1 ? (
+              <li className="nav-item ">
+                <Link
+                  className="nav-link"
+                  to="/admin"
+                  role="button"
+                  aria-expanded="false"
+                >
+                  Quản trị
+                </Link>
+              </li>
+            ) : (
+              <></>
+            )}
           </ul>
           <NavIcon />
         </div>

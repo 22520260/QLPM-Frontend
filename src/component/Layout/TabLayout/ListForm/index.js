@@ -27,8 +27,11 @@ import { fetchAllAccountAction } from "../../../../redux/action/fetchDataAction/
 import axios from "../../../../setup/axios";
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhAction";
+import { fetchAllRoleAction } from "../../../../redux/action/fetchDataAction/fetchAllRoleAction";
 import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetchAllDVTAction";
+import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
 import { deFormatDate } from "../../../../utils/appUtils";
+
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {}
 
@@ -425,6 +428,7 @@ export function ListFormDSTK({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formDataTTCN, setFormDataTTCN] = useState({});
   const [formDataTTTK, setFormDataTTTK] = useState({});
+  const [formDelete, setFormDelete] = useState({});
   const groupUsers = useSelector((state) => state.groupUsers.data.data) || [];
 
   const handleRowClick = (selectedRow) => {
@@ -447,6 +451,10 @@ export function ListFormDSTK({ columns, data, loading }) {
       maTK: selectedRow.MATK,
       username: selectedRow.USERNAME,
       password: selectedRow.PASSWORD,
+    });
+    setFormDelete({
+      maTK: selectedRow.MATK,
+      username: selectedRow.USERNAME,
     });
   };
 
@@ -545,7 +553,21 @@ export function ListFormDSTK({ columns, data, loading }) {
     setFormDataTTTK({ ...formDataTTTK, [fieldName]: value });
   };
 
-  const handleCancel = () => {};
+  const handleDelete = async () => {
+    const response = await axios.post("/account/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllAccountAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete3");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
 
   return (
     <>
@@ -587,7 +609,12 @@ export function ListFormDSTK({ columns, data, loading }) {
                     <FaPencilRuler />
                   </button>
 
-                  <button className="btn btn-danger mx-1 rounded-circle">
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteAccount"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
                     <MdDeleteForever />
                   </button>
                 </td>
@@ -596,7 +623,7 @@ export function ListFormDSTK({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-
+      {/* Modal update */}
       <div
         className="modal fade modal-xl"
         id="updateModal"
@@ -745,9 +772,53 @@ export function ListFormDSTK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={handleCancel}
               >
                 Hủy
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteAccount"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa tài khoản
+              <span className="text-danger"> {formDelete.username} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete3"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
               </button>
             </div>
           </div>
@@ -760,6 +831,7 @@ export function ListFormDSTK({ columns, data, loading }) {
 export function ListFormDSDV({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const [formDelete, setFormDelete] = useState({});
   const loaiDichVu = useSelector((state) => state.loaiDichVu.data) || [];
   const handleRowClick = (row) => {
     setFormData({
@@ -767,6 +839,10 @@ export function ListFormDSDV({ columns, data, loading }) {
       maLDV: row.MALOAIDV,
       tenDichVu: row.TENDV,
       giaDichVu: row.GIADV,
+    });
+    setFormDelete({
+      maDV: row.MADV,
+      tenDichVu: row.TENDV,
     });
   };
 
@@ -816,7 +892,21 @@ export function ListFormDSDV({ columns, data, loading }) {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleCancel = () => {};
+  const handleDelete = async () => {
+    const response = await axios.post("/dichvu/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllDichVuAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
 
   return (
     <>
@@ -858,7 +948,12 @@ export function ListFormDSDV({ columns, data, loading }) {
                     <FaEye />
                   </button>
 
-                  <button className="btn btn-danger mx-1 rounded-circle">
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteDichVu"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
                     <MdDeleteForever />
                   </button>
                 </td>
@@ -867,7 +962,7 @@ export function ListFormDSDV({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-
+      {/* Modal update */}
       <div
         className="modal fade modal-lg"
         id="iddsdv"
@@ -929,7 +1024,6 @@ export function ListFormDSDV({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={handleCancel}
               >
                 Hủy
               </button>
@@ -944,6 +1038,51 @@ export function ListFormDSDV({ columns, data, loading }) {
           </div>
         </div>
       </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteDichVu"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa dịch vụ
+              <span className="text-danger"> {formDelete.tenDichVu} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
@@ -951,12 +1090,16 @@ export function ListFormDSDV({ columns, data, loading }) {
 export function ListFormDSLB({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const [formDelete, setFormDelete] = useState({});
 
   const handleRowClick = (row) => {
-    console.log("row", row);
     setFormData({
       maBenh: row.MABENH,
       maICD: row.MAICD,
+      tenBenh: row.TENBENH,
+    });
+    setFormDelete({
+      maBenh: row.MABENH,
       tenBenh: row.TENBENH,
     });
   };
@@ -1002,6 +1145,22 @@ export function ListFormDSLB({ columns, data, loading }) {
     setFormData({ ...formData, [fieldName]: value });
   };
 
+  const handleDelete = async () => {
+    const response = await axios.post("/benh/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllBenhAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete1");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
   return (
     <>
       {/* ListForm */}
@@ -1042,7 +1201,12 @@ export function ListFormDSLB({ columns, data, loading }) {
                     <FaEye />
                   </button>
 
-                  <button className="btn btn-danger mx-1 rounded-circle">
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteBenh"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
                     <MdDeleteForever />
                   </button>
                 </td>
@@ -1051,7 +1215,7 @@ export function ListFormDSLB({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-
+      {/* Modal update */}
       <div
         className="modal fade "
         id="iddslb"
@@ -1113,6 +1277,51 @@ export function ListFormDSLB({ columns, data, loading }) {
           </div>
         </div>
       </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteBenh"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa bệnh
+              <span className="text-danger"> {formDelete.tenBenh} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete1"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
@@ -1120,10 +1329,15 @@ export function ListFormDSLB({ columns, data, loading }) {
 export function ListFormDVT({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const [formDelete, setFormDelete] = useState({});
 
   const handleRowClick = (row) => {
     console.log("row", row);
     setFormData({
+      maDVT: row.MADVT,
+      tenDVT: row.TENDONVI,
+    });
+    setFormDelete({
       maDVT: row.MADVT,
       tenDVT: row.TENDONVI,
     });
@@ -1161,6 +1375,22 @@ export function ListFormDVT({ columns, data, loading }) {
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleDelete = async () => {
+    const response = await axios.post("/dvt/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllDVTAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete2");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
   };
 
   return (
@@ -1203,7 +1433,12 @@ export function ListFormDVT({ columns, data, loading }) {
                     <FaEye />
                   </button>
 
-                  <button className="btn btn-danger mx-1 rounded-circle">
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteDVT"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
                     <MdDeleteForever />
                   </button>
                 </td>
@@ -1212,7 +1447,7 @@ export function ListFormDVT({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-
+      {/* Modal update */}
       <div
         className="modal fade "
         id="iddsdvt"
@@ -1251,6 +1486,300 @@ export function ListFormDVT({ columns, data, loading }) {
             <div className="modal-footer">
               <button
                 id="cancelBtn2"
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleUpdate}
+              >
+                Cập nhật
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteDVT"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa đơn vị thuốc
+              <span className="text-danger"> {formDelete.tenDVT} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete2"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormPQ({
+  columns,
+  data,
+  loading,
+  selectedDefault,
+  selectedVaiTro,
+  sendDataToParent,
+}) {
+  const dispatch = useDispatch();
+  const [selectedRows, setSelectedRows] = useState([]);
+  console.log(">>>> selectedRows", selectedRows);
+  const [formData, setFormData] = useState({});
+  console.log("vaiTro", selectedVaiTro);
+  useEffect(() => {
+    setSelectedRows([...selectedDefault]);
+  }, [selectedDefault]);
+
+  const handleRowClick = (row) => {
+    setFormData({
+      url: row.URL,
+      moTa: row.MOTA,
+    });
+  };
+
+  const isChecked = (selected) => {
+    return selectedRows.includes(selected);
+  };
+
+  const defaultObjValidInput = {
+    isValidURL: true,
+    isValidMota: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.url) {
+      setObjValidInput({ ...defaultObjValidInput, isValidURL: false });
+      toast.error("Chưa nhập đường dẫn");
+      return;
+    }
+    if (!formData.moTa) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMota: false });
+      toast.error("Chưa nhập mô tả");
+      return;
+    }
+
+    const response = await axios.post("/role/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllRoleAction());
+      const cancelBtn = document.getElementById("cancelBtn3");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  // const handleSave = () => {
+  //   dispatch(selectRow(selectedRows));
+  // };
+
+  const handleCheckboxChange = (e, selected) => {
+    if (e.target.checked) {
+      setSelectedRows([...selectedRows, selected]);
+    } else {
+      setSelectedRows(selectedRows.filter((row) => row !== selected));
+    }
+  };
+
+  const buildDataToSave = () => {
+    const result = selectedRows.map((item) => {
+      let data = { MANHOM: +selectedVaiTro, MAVAITRO: +item };
+      return data;
+    });
+    return result ? result : [];
+  };
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (selectedVaiTro === 0 || selectedVaiTro === "0") {
+      toast.error("Chưa chọn vai trò");
+      return;
+    }
+    const data = buildDataToSave();
+    console.log("data", data);
+    const response = await axios.post("/role/assignRoleToGroup", data);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchRoleByIdAction({ selectedVaiTro }));
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+
+    sendDataToParent(selectedRows);
+  };
+
+  return (
+    <>
+      <div style={{ maxHeight: "50vh", overflowY: "auto" }}>
+        <table className="table table-striped table-hover overflow-auto">
+          <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
+            <tr>
+              <th style={{ width: "5%" }}>Chọn</th>
+              {columns.map((column, index) => (
+                <th key={index} scope="col">
+                  {column.title}
+                </th>
+              ))}
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={columns.length + 3}>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <strong>Loading...</strong>
+                    <div className="spinner-border ms-2" role="status"></div>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              data.map((row, rowIndex) => (
+                <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                  <td>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id={rowIndex}
+                        checked={isChecked(row.MAVAITRO)}
+                        onChange={(e) => handleCheckboxChange(e, row.MAVAITRO)}
+                      />
+                      <label className="form-check-label" htmlFor={rowIndex} />
+                    </div>
+                  </td>
+                  {columns.map((column, colIndex) => (
+                    <td key={colIndex}>{row[column.key] || ""}</td>
+                  ))}
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-primary rounded-circle"
+                      data-bs-toggle="modal"
+                      data-bs-target="#updateRole"
+                    >
+                      <FaEye />
+                    </button>
+                    <button className="btn btn-danger mx-1 rounded-circle">
+                      <MdDeleteForever />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="d-flex justify-content-center px-3 py-2">
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={(e) => handleSave(e)}
+        >
+          Lưu
+        </button>
+      </div>
+
+      <div
+        className="modal fade "
+        id="updateRole"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Cập nhật quyền
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"URL"}
+                    size={12}
+                    required={"true"}
+                    value={formData.url}
+                    valid={objValidInput.isValidURL}
+                    onChange={(value) => handleChange("url", value)}
+                  />
+                  <IFInputText
+                    title={"Mô tả"}
+                    size={12}
+                    value={formData.moTa}
+                    valid={objValidInput.isValidMota}
+                    onChange={(value) => handleChange("moTa", value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                id="cancelBtn3"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"

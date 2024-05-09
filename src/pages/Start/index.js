@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 
 function Start() {
   const user = useSelector((state) => state.auth.user); // user chứa token, isAuthenticated, account
-  let groupNameUser = null;
-  if (user && user.account && user.account.groupName) {
-    groupNameUser = user.account.groupName;
+  console.log('>>>>>>>>user<<<<<<<', user)
+  let groupID = null;
+  if (user && user.account && user.account.groupID) {
+    groupID = user.account.groupID;
   }
   return (
     <>
@@ -23,7 +24,7 @@ function Start() {
             img={"KhamBenh"}
           />
           <StartButton
-            title={"Dashboard"}
+            title={"Thống kê"}
             path={"/dashboard"}
             img={"DashBoard"}
           />
@@ -34,8 +35,8 @@ function Start() {
             path={"/khachhang"}
             img={"KhachHang"}
           />
-          {groupNameUser && groupNameUser === "Admin" ? (
-            <StartButton title={"Admin"} path={"/admin"} img={"KhachHang"} />
+          {groupID && groupID === 1 ? (
+            <StartButton title={"Quản trị"} path={"/admin"} img={"KhachHang"} />
           ) : (
             <></>
           )}

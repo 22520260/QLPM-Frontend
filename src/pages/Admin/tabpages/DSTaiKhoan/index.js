@@ -18,6 +18,24 @@ import { formatDate } from "../../../../utils/appUtils";
 
 function DSTaiKhoan() {
   const dispatch = useDispatch();
+  const groupUsers = useSelector((state) => state.groupUsers.data) || [];
+  const accounts = useSelector((state) => state.account.data) || [];
+  const isLoading = useSelector((state) => state.account.data.isLoading);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [displayAccounts, setDisplayAccounts] = useState([]);
+  const [roleKeyword, setRoleKeyword] = useState("");
+  const [nameKeyword, setNameKeyword] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const columns = [
+    { title: "Họ tên", key: "HOTEN" },
+    { title: "Vai trò", key: "TENNHOM" },
+    { title: "Tên tài khoản", key: "USERNAME" },
+    { title: "Giới tính", key: "GIOITINH" },
+    { title: "SĐT", key: "SDT" },
+    { title: "Ngày sinh", key: "NGAYSINH" },
+  ];
+
   const defaultFormData = {
     username: "",
     password: "",
@@ -41,28 +59,7 @@ function DSTaiKhoan() {
     isValidVaiTro: true,
     isValidCCCD: true,
   };
-
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
-
-  const groupUsers = useSelector((state) => state.groupUsers.data.data) || [];
-
-  const accounts = useSelector((state) => state.account.data) || [];
-  const isLoading = useSelector((state) => state.account.data.isLoading);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
-  const [displayAccounts, setDisplayAccounts] = useState([]);
-  const [roleKeyword, setRoleKeyword] = useState("");
-  const [nameKeyword, setNameKeyword] = useState("");
-  const [totalPages, setTotalPages] = useState(0);
-
-  const columns = [
-    { title: "Họ tên", key: "HOTEN" },
-    { title: "Vai trò", key: "TENNHOM" },
-    { title: "Tên tài khoản", key: "USERNAME" },
-    { title: "Giới tính", key: "GIOITINH" },
-    { title: "SĐT", key: "SDT" },
-    { title: "Ngày sinh", key: "NGAYSINH" },
-  ];
 
   useEffect(() => {
     dispatch(fetchAllAccountAction());
@@ -112,7 +109,9 @@ function DSTaiKhoan() {
   const handleIFNameChange = (value) => {
     setNameKeyword(value);
   };
+
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setObjValidInput(defaultObjValidInput);
@@ -188,7 +187,6 @@ function DSTaiKhoan() {
           </button>
         </div>
       </div>
-
       {/* Modal thêm mới BACSI & LETAN */}
       <div
         className="modal fade modal-xl"
@@ -328,7 +326,6 @@ function DSTaiKhoan() {
           </div>
         </div>
       </div>
-
       <ListFormDSTK
         columns={columns}
         data={displayAccounts}

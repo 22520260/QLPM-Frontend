@@ -5,7 +5,7 @@ export const fetchAllAccountAction = createAsyncThunk(
   'fetchAllAccount',
   async () => {
     try {
-      const response = await axios.get('/admin/getAllAccount');
+      const response = await axios.get('/account/getAllAccount');
       return response.data; 
     } catch (error) {
       return error.message;

@@ -4,7 +4,7 @@ import { tabsDataAdmin } from "./data";
 function Admin() {
   return (
     <>
-      <h1 className="container-fluid">Admin</h1>
+      <h1 className="container-fluid">Quản trị</h1>
       <Navtab tabsData={tabsDataAdmin} />
     </>
   );
