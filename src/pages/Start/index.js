@@ -36,7 +36,7 @@ function Start() {
             img={"KhachHang"}
           />
           {groupID && groupID === 1 ? (
-            <StartButton title={"Quản trị"} path={"/admin"} img={"KhachHang"} />
+            <StartButton title={"Quản trị"} path={"/admin"} img={"Admin"} />
           ) : (
             <></>
           )}

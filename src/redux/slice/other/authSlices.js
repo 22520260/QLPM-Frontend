@@ -27,9 +27,9 @@ const authSlice = createSlice({
       })
       .addCase(fetchUserAccountAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        const groupWithRoles = action.payload.data?.groupWithRoles;
+        const roles = action.payload.data?.roles;
         const username = action.payload.data?.username;
-        const token = action.payload.data?.access_token; // token chứa username và groupWithRoles
+        const token = action.payload.data?.access_token; // token chứa username và roles
         const groupName = action.payload.data?.groupName;
         const groupID = action.payload.data?.groupID;
         const userInfo = action.payload.data?.userInfo;
@@ -38,7 +38,7 @@ const authSlice = createSlice({
           isAuthenticated: true,
           token,
           account: {
-            groupWithRoles,
+            roles,
             username,
             groupName,
             groupID,
@@ -46,7 +46,7 @@ const authSlice = createSlice({
           }
         };
         state.user = data;
-
+        console.log('>>> user', state.user)
       })
       .addCase(fetchUserAccountAction.rejected, (state) => {
         state.isLoading = false;

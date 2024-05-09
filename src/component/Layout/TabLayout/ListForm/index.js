@@ -19,7 +19,7 @@ import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
+import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { MdDeleteForever } from "react-icons/md";
@@ -33,7 +33,6 @@ import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetc
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
 import { deFormatDate } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
-
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {}
@@ -174,7 +173,10 @@ export function ListFormDSDK({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTPK} maPK={selectedRow.MAPK}/>
+                <NavTabVertical
+                  tabsData={tabsDataCTPK}
+                  maPK={selectedRow.MAPK}
+                />
               </div>
             </div>
             <div className="modal-footer">
@@ -1435,7 +1437,6 @@ export function ListFormDVT({ columns, data, loading }) {
                   >
                     <FaEye />
                   </button>
-
                   <button
                     type="button"
                     data-bs-toggle="modal"
@@ -1565,9 +1566,9 @@ export function ListFormPQ({
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  console.log(">>>> selectedRows", selectedRows);
   const [formData, setFormData] = useState({});
-  console.log("vaiTro", selectedVaiTro);
+  const [formDelete, setFormDelete] = useState({});
+
   useEffect(() => {
     setSelectedRows([...selectedDefault]);
   }, [selectedDefault]);
@@ -1576,6 +1577,10 @@ export function ListFormPQ({
     setFormData({
       url: row.URL,
       moTa: row.MOTA,
+    });
+    setFormDelete({
+      maVaiTro: row.MAVAITRO,
+      url: row.URL,
     });
   };
 
@@ -1623,10 +1628,6 @@ export function ListFormPQ({
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  // const handleSave = () => {
-  //   dispatch(selectRow(selectedRows));
-  // };
-
   const handleCheckboxChange = (e, selected) => {
     if (e.target.checked) {
       setSelectedRows([...selectedRows, selected]);
@@ -1664,8 +1665,25 @@ export function ListFormPQ({
     sendDataToParent(selectedRows);
   };
 
+  const handleDelete = async () => {
+    const response = await axios.post("/role/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllRoleAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete4");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
   return (
     <>
+      {/* ListForm */}
       <div style={{ maxHeight: "50vh", overflowY: "auto" }}>
         <table className="table table-striped table-hover overflow-auto">
           <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
@@ -1717,7 +1735,12 @@ export function ListFormPQ({
                     >
                       <FaEye />
                     </button>
-                    <button className="btn btn-danger mx-1 rounded-circle">
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteRole"
+                      className="btn btn-danger mx-1 rounded-circle"
+                    >
                       <MdDeleteForever />
                     </button>
                   </td>
@@ -1727,7 +1750,7 @@ export function ListFormPQ({
           </tbody>
         </table>
       </div>
-
+      {/* Save button */}
       <div className="d-flex justify-content-center px-3 py-2">
         <button
           className="btn btn-primary"
@@ -1737,7 +1760,7 @@ export function ListFormPQ({
           Lưu
         </button>
       </div>
-
+      {/* Modal update */}
       <div
         className="modal fade "
         id="updateRole"
@@ -1795,6 +1818,51 @@ export function ListFormPQ({
                 onClick={handleUpdate}
               >
                 Cập nhật
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteRole"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa quyền
+              <span className="text-danger"> {formDelete.url} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete4"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
               </button>
             </div>
           </div>

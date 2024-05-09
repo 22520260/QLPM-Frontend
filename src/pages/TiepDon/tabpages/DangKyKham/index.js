@@ -19,12 +19,12 @@ import { MdError } from "react-icons/md";
 function DangKyKham() {
   const dispatch = useDispatch();
 
-  const services = useSelector((state) => state.services.data?.data) || [];
+  const services = useSelector((state) => state.services.data) || [];
 
   const patients =
     useSelector((state) => state.fetchAllBenhNhan.data?.data) || [];
 
-  const doctors = useSelector((state) => state.fetchAllBacSi.data?.data) || [];
+  const doctors = useSelector((state) => state.fetchAllBacSi.data) || [];
 
   const [showError, setShowError] = useState(false);
   const [oldPatientID, setOldPatientID] = useState(0);
@@ -240,6 +240,8 @@ function DangKyKham() {
               <IFSelect
                 title={"Giới tính"}
                 size={2}
+                keyObj={'gioiTinh'}
+                showObj={'gioiTinh'}
                 options={[
                   { gioiTinh: "Nam" },
                   { gioiTinh: "Nữ" },
@@ -247,7 +249,6 @@ function DangKyKham() {
                 ]}
                 onChange={(value) => handleChange("gioiTinh", value)}
                 selected={formData.gioiTinh}
-                keyObj={"gioiTinh"}
               />
               <IFInputText
                 title={"Địa chỉ"}
@@ -307,14 +308,10 @@ function DangKyKham() {
                 size={3}
                 options={doctors}
                 onChange={(value) => {
-                  const selected = doctors.find(
-                    (doctor) => doctor.HOTEN === value
-                  );
-                  if (selected) {
-                    handleChange("maBS", selected.MABS);
-                  }
+                  handleChange("maBS", value);
                 }}
-                keyObj={"HOTEN"}
+                keyObj={"MABS"}
+                showObj={"HOTEN"}
               />
               <IFInputText
                 title={"Lý do khám"}
