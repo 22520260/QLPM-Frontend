@@ -12,3 +12,15 @@ export const fetchDSDKAction = createAsyncThunk(
     }
   }
 );
+
+export const fetchPkByIdHdAction = createAsyncThunk(
+  'fetchPkByIdHdAction',
+  async (maHD, {meta}) => {
+    try {
+      const response = await axios.get(`/phieukham/dspk/${maHD}`);
+      return response.data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);

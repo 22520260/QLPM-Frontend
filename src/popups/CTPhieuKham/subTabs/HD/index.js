@@ -1,18 +1,54 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+
 function HoaDon() {
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors);
-  const handleChange = (page) => {
+  const dispatch = useDispatch();
+  const bills = useSelector((state) => state.fetchHoaDon.dshd);
+  const ctdt = useSelector((state) => state.existedCTDT.data);
+  const dsCLS = useSelector((state) => state.fetchCLS.dsClsById);
+  const dspkByIdHd = useSelector((state) => state.fetchDSDK.pkByIdHd);
+
+  const handleOnDelete = (page) => {
     console.log(page);
+  };
+  const handleRowClick = (row) => {
+    // dispatch(fetchPkByIdHdAction(row.MAHD));
   };
 
   const columns = [
-    { title: "Mã hóa đơn", key: "MABS" },
-    { title: "Loại", key: "HOTEN" },
-    { title: "Tổng tiền", key: "HOTEN" },
-    { title: "Trạng thái", key: "HOTEN" },
-    { title: "Thời gian thanh toán", key: "HOTEN" },
+    { title: "Mã hóa đơn", key: "MAHD" },
+    { title: "Loại", key: "TENLOAIHD" },
+    { title: "Tổng tiền", key: "THANHTIEN" },
+    { title: "Trạng thái", key: "TTTT" },
+    { title: "Thời gian thanh toán", key: "TDTT" },
+  ];
+
+  const columnsCTDT = [
+    { title: "STT", key: "" }, //STT
+    { title: "Tên thuốc", key: "TENTHUOC" },
+    { title: "Liều dùng", key: "GHICHU" },
+    { title: "Đơn vị thuốc", key: "TENDONVI" },
+    { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
+    { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
+    { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
+  ];
+
+  const columnsDSPK = [
+    { title: "Mã phiếu khám", key: "MAPK" },
+    { title: "Dịch vụ", key: "TENDV" },
+    { title: "Giá", key: "GIADV" },
+    { title: "Ngày khám", key: "NGAYKHAMMIN" },
+    { title: "Trạng thái", key: "TRANGTHAITH" },
+  ];
+
+  const columnsDSCLS = [
+    { title: "Mã phiếu CLS", key: "MAKQ" },
+    { title: "Dịch vụ", key: "TENDV" },
+    { title: "Giá", key: "GIADV" },
+    { title: "Thời gian thực hiện", key: "NGAYKHAMMIN" },
+    { title: "Trạng thái", key: "TRANGTHAITH" },
   ];
 
   return (
@@ -34,12 +70,13 @@ function HoaDon() {
               </tr>
             </thead>
             <tbody>
-              {doctors.map((row, rowIndex) =>
+              {bills.map((row, rowIndex) =>
                 rowIndex === 0 ? (
                   <tr
                     data-bs-toggle="collapse"
                     data-bs-target="#r0"
                     key={rowIndex}
+                    onClick={() => handleRowClick(row)}
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{row[column.key] || ""}</td>
@@ -54,11 +91,15 @@ function HoaDon() {
               >
                 <td colspan="5">
                   <div className="py-3 border border-primary">
-                    <ListForm columns={columns} data={doctors}></ListForm>
+                    <ListForm
+                      columns={columnsDSPK}
+                      data={dspkByIdHd}
+                      onDeleteService={handleOnDelete}
+                    ></ListForm>
                   </div>
                 </td>
               </tr>
-              {doctors.map((row, rowIndex) =>
+              {bills.map((row, rowIndex) =>
                 rowIndex === 1 ? (
                   <tr
                     data-bs-toggle="collapse"
@@ -71,18 +112,27 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              <tr
-                class="collapse accordion-collapse"
-                id="r1"
-                data-bs-parent=".table"
-              >
-                <td colspan="5">
-                  <div className="py-3 border border-primary">
-                    <ListForm columns={columns} data={doctors}></ListForm>
-                  </div>
-                </td>
-              </tr>
-              {doctors.map((row, rowIndex) =>
+              {dsCLS.length === 0 && ctdt.length === 0 ? null : (
+                <tr
+                  class="collapse accordion-collapse"
+                  id="r1"
+                  data-bs-parent=".table"
+                >
+                  <td colspan="5">
+                    <div className="py-3 border border-primary">
+                      <ListForm
+                        columns={
+                          dsCLS.length === 0 ? columnsCTDT : columnsDSCLS
+                        }
+                        data={dsCLS.length === 0 ? ctdt : dsCLS}
+                        onDeleteService={handleOnDelete}
+                      ></ListForm>
+                    </div>
+                  </td>
+                </tr>
+              )}
+
+              {bills.map((row, rowIndex) =>
                 rowIndex === 2 ? (
                   <tr
                     data-bs-toggle="collapse"
@@ -95,17 +145,24 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              <tr
-                class="collapse accordion-collapse"
-                id="r2"
-                data-bs-parent=".table"
-              >
-                <td colspan="5">
-                  <div className="py-3 border border-primary">
-                    <ListForm columns={columns} data={doctors}></ListForm>
-                  </div>
-                </td>
-              </tr>
+              {dsCLS.length === 0 ||
+              (dsCLS.length !== 0 && ctdt.length === 0) ? null : (
+                <tr
+                  class="collapse accordion-collapse"
+                  id="r2"
+                  data-bs-parent=".table"
+                >
+                  <td colspan="5">
+                    <div className="py-3 border border-primary">
+                      <ListForm
+                        columns={columnsCTDT}
+                        data={ctdt}
+                        onDeleteService={handleOnDelete}
+                      ></ListForm>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

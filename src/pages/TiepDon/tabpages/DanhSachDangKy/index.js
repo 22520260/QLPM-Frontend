@@ -29,8 +29,12 @@ function DanhSachDangKy() {
     { title: "STT", key: "STT" },
     { title: "Họ Tên", key: "TENBN" },
     { title: "Tên Bác sĩ", key: "TENBS" },
-    { title: "Tổng tiền", key: "TIENTHUOC" },
-    { title: "Trạng thái", key: "TRANGTHAITH" },
+    { title: "Dịch vụ", key: "TENDV" },
+    { title: "Ngày khám", key: "NGAYKHAMMIN" },
+    { title: "TTTH PK", key: "TRANGTHAITH" },
+    { title: "TTTT HDPK", key: "TTTTPK" },
+    { title: "TTTT HDCLS", key: "TTTTCLS" },
+    { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
   useEffect(() => {

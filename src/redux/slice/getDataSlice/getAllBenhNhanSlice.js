@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllBenhNhanAction } from '../../action/fetchDataAction/fetchAllBenhNhanAction';
+import { fetchAllBenhNhanAction, fetchBenhNhanByIdAction } from '../../action/fetchDataAction/fetchAllBenhNhanAction';
 
 const initialState = {
   patients: [],
   loading: false,
   error: null,
+  patientById: {},
 };
 
 const fetchAllBenhNhanSlice = createSlice({
@@ -24,6 +25,10 @@ const fetchAllBenhNhanSlice = createSlice({
       .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(fetchBenhNhanByIdAction.fulfilled, (state, action) => {
+        state.loading = false;
+        state.patientById = action.payload.data;
       });
   },
 });

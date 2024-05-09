@@ -12,7 +12,10 @@ import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
-
+import { fetchBenhNhanByIdAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
+import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
+import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -72,6 +75,11 @@ export function ListFormDSDK({ columns, data, loading }) {
   const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    dispatch(fetchCTDTByIdAction(row.MAPK));
+    dispatch(fetchBenhNhanByIdAction(row.MABN));
+    dispatch(fetchDSHDByIdAction(row.MAPK));
+    dispatch(fetchDsClsByIdAction(row.MAPK));
+    dispatch(fetchPkByIdHdAction(row.MAHDPK));
   };
   const handleSave = () => {
     console.log("SAVE");

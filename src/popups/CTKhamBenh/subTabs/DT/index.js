@@ -194,7 +194,6 @@ function DonThuoc() {
     { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
     { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
-    { title: "Thanh toán", key: "3" }, //Yes/no
   ];
 
   const handleDeleteMedicine = (index) => {
