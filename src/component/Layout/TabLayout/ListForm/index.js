@@ -10,7 +10,8 @@ import { IFNgayNgang, ListGroupItem, TextArea, IFInputText, IFNgay } from "../In
 import { useDispatch, useSelector } from "react-redux";
 import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
-import RichText from "../InputForm/RichText";
+import axios from "axios";
+import { ImageUpload } from "./ImageUpload";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {
@@ -787,8 +788,8 @@ export function ListFormCLS({ columns, data, loading }) {
               ></button>
             </div>
 
-            <div className="modal-body ">
-              <div className="container-fluid px-0">
+            <div className="modal-body py-0">
+              <div className="container-fluid p-0">
                 <table className="table">
                   <tr className="row">
                     <th className="border col col-md-1">Bệnh nhân</th>
@@ -820,7 +821,18 @@ export function ListFormCLS({ columns, data, loading }) {
                   </tr>
                 </table>
 
-                <RichText />
+                <div className="row">
+                  <div className="col col-md-6">
+                    <TextArea title={"Mô tả"} size={12} row={10} onChange={() => { }} />
+                    <div className="row p-2">
+                      <TextArea title={"Kết luận"} size={6} row={3} onChange={() => { }} />
+                      <TextArea title={"Đề nghị từ chuyên gia"} size={6} row={3} onChange={() => { }} />
+                    </div>
+                  </div>
+                  <div className="col col-md-6">
+                    <ImageUpload />
+                  </div>
+                </div>
 
 
               </div>
@@ -830,13 +842,14 @@ export function ListFormCLS({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                id="closeBtn"
               >
                 Đóng
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleSave}
+                onClick={handleSave}
               >
                 Lưu những thay đổi
               </button>
