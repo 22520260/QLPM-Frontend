@@ -11,14 +11,11 @@ import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 function DichVu() {
     const dispatch = useDispatch();
 
-    const services = useSelector((state) => state.fetchAllDichVu.services) || [];
-    console.log(">>> CHECK SERVICES", services)
+    const services = useSelector((state) => state.services.data.data) || [];
 
-    const patients = useSelector((state) => state.fetchAllBenhNhan.patients) || [];
-    console.log(">>> CHECK PATIENTS", patients)
+    const patients = useSelector((state) => state.fetchAllBenhNhan.data.data) || [];
 
-    const doctors = useSelector((state) => state.fetchAllBacSi.doctors) || [];
-    console.log(">>> CHECK DOCTORS", doctors)
+    const doctors = useSelector((state) => state.fetchAllBacSi.data.data) || [];
 
     const [showError, setShowError] = useState(false);
     const [oldPatientID, setOldPatientID] = useState(0);
@@ -28,7 +25,7 @@ function DichVu() {
 
     const [formData, setFormData] = useState({
         hoTen: "",
-        gioiTinh: "",
+        gioiTinh: 0,
         diaChi: "",
         ngaySinh: "",
         cccd: "",

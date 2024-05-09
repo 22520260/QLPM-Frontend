@@ -6,13 +6,12 @@ import {
 import { ListFormDSDK} from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { useDispatch, useSelector } from "react-redux";
 import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const patients = useSelector((state) => state.fetchAllBenhNhan.patients);
+  const patients = useSelector((state) => state.fetchAllBenhNhan.data.data);
   const isLoading = useSelector((state) => state.fetchAllBenhNhan.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);

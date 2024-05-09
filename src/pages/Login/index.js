@@ -41,18 +41,20 @@ function Login() {
     const response = await loginUser(username, password);
 
     if (response && response.data && response.data.errcode === 0) {
-      const groupWithRoles = response.data.data.groupWithRoles;
+      const roles = response.data.data.roles;
       const username = response.data.data.username;
       const groupName = response.data.data.groupName;
+      const groupID = response.data.data.groupID;
       const userInfo = response.data.data.userInfo;
-      const token = response.data.data.access_token; // token chứa username và groupWithRoles
+      const token = response.data.data.access_token; // token chứa username và roles
 
       let data = {
         isAuthenticated: true,
         token,
         account: {
-          groupWithRoles,
+          roles,
           groupName,
+          groupID,
           username,
           userInfo
         }

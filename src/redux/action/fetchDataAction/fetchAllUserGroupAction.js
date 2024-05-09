@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../setup/axios';
 
-export const fetchAllBacSiAction = createAsyncThunk(
-  'fetchAllBacSiAction',
+export const fetchAllUserGroupAction = createAsyncThunk(
+  'fetchAllUserGroupAction',
   async () => {
     try {
-      const response = await axios.get('/bacsi/getAll');
+      const response = await axios.get('/account/getAllUserGroup');
       return response.data; 
     } catch (error) {
       return error.message;

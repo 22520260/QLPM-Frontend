@@ -9,14 +9,21 @@ import getCTDTByIdRecuder from './slice/getDataSlice/getCTDTByIdSlice'
 import getCLSRecuder from './slice/getDataSlice/getCLSSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
 import authReducer from './slice/other/authSlices'
-// import persistedAuthSlice from '../redux/slice/other/authSlices';
-import getAllUserInfoReducer from './slice/getDataSlice/getAllUserInfoSlice'
+import getAllAccountReducer from './slice/getDataSlice/getAllAccountSlice'
+import getAllUserGroupReducer from './slice/getDataSlice/getAllUserGroupSlice'
+import getAllLoaiDichVuReducer from './slice/getDataSlice/getAllLoaiDichVuSlice'
+import getAllBenhReducer from './slice/getDataSlice/getAllBenhSlice'
+import getAllDVTReducer from './slice/getDataSlice/getAllDVTSlice'
+import getThamSoReducer from './slice/getDataSlice/getThamSoSlice'
+import getAllRoleReducer from './slice/getDataSlice/getAllRoleSlice'
+import getRoleByIdReducer from './slice/getDataSlice/getRoleByIdSlice'
+
 
 export default configureStore({
   reducer: {
     fetchAllBenhNhan: fetchAllBenhNhanReducer,
     fetchAllBacSi: fetchAllBacSiReducer,
-    fetchAllDichVu: fetchAllDichVuReducer,
+    services: fetchAllDichVuReducer,
     fetchAllThuoc: fetchAllThuocReducer,
     fetchDSDK: getDSDKRecuder,
     fetchHoaDon: fetchHoaDonReducer,
@@ -24,9 +31,14 @@ export default configureStore({
     existedCTDT: getCTDTByIdRecuder,
     selectedRow: selectedRowReducer,
     auth: authReducer,
-    userInfo: getAllUserInfoReducer
+    account: getAllAccountReducer,
+    groupUsers: getAllUserGroupReducer,
+    loaiDichVu: getAllLoaiDichVuReducer,
+    benh: getAllBenhReducer,
+    dvt: getAllDVTReducer,
+    thamso: getThamSoReducer,
+    roles: getAllRoleReducer,
+    roleById: getRoleByIdReducer,
   },
   devTools: true,
 })
-
-// export const persistor = persistStore(store);

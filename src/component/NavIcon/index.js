@@ -20,9 +20,6 @@ function NavIcon() {
       groupNameUser = user.account.groupName;
     }
   }
-  console.log("user.userInfo", userInfo);
-  console.log("userInfo.NGAYSINH", userInfo.NGAYSINH);
-  console.log("groupNameUser", groupNameUser);
 
   const handleLogout = async () => {
     let response = await logoutUser();

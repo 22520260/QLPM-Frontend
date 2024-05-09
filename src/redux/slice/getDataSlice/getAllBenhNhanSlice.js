@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllBenhNhanAction, fetchBenhNhanByIdAction } from '../../action/fetchDataAction/fetchAllBenhNhanAction';
 
 const initialState = {
-  patients: [],
+  data: [],
   loading: false,
   error: null,
   patientById: {},
@@ -16,11 +16,10 @@ const fetchAllBenhNhanSlice = createSlice({
     builder
       .addCase(fetchAllBenhNhanAction.pending, (state, action) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchAllBenhNhanAction.fulfilled, (state, action) => {
         state.loading = false;
-        state.patients = action.payload.data;
+        state.data = action.payload;
       })
       .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
         state.loading = false;
