@@ -311,6 +311,44 @@ export function IFSearchHT({
   );
 }
 
+export function IFSearchThuoc({ title, valid, size, options, name, required, onChange }) {
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  return (
+    <div className={`col-md-${size}`}>
+      <label
+        htmlFor="thuocInput"
+        className="form-label d-flex align-items-center"
+      >
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
+      </label>
+
+      <div className="input-group">
+        <input
+          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
+          list="thuocDatalist"
+          id="thuocInput"
+          onChange={handleInputChange}
+          required
+        />
+        <datalist id="thuocDatalist">
+          {Array.isArray(options) ? (
+            options.map((option, index) => (
+              <option key={index} value={option[name]} />
+            ))
+          ) : (
+            <option value="Loading..." />
+          )}
+        </datalist>
+      </div>
+    </div>
+  );
+}
+
 export function IFSearch({ title, size, onChange }) {
   const style = "col-md-" + size;
   const handleInputChange = (e) => {

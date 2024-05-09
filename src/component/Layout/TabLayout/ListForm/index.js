@@ -19,7 +19,8 @@ import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
+import { selectRow } from '../../../../redux/slice/other/selectedRowSlice'
+import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { MdDeleteForever } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -31,6 +32,8 @@ import { fetchAllRoleAction } from "../../../../redux/action/fetchDataAction/fet
 import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetchAllDVTAction";
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
 import { deFormatDate } from "../../../../utils/appUtils";
+import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {}
@@ -171,7 +174,7 @@ export function ListFormDSDK({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTPK} />
+                <NavTabVertical tabsData={tabsDataCTPK} maPK={selectedRow.MAPK}/>
               </div>
             </div>
             <div className="modal-footer">
@@ -1806,6 +1809,8 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    dispatch(fetchCTDTByIdAction(row.MAPK));
+    dispatch(fetchAllThuocAction());
   };
   const handleSave = () => {};
 
