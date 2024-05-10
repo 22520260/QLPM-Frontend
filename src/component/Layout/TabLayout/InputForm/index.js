@@ -6,7 +6,7 @@ import "./style.css";
 import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
 
 export function IFSelect({
-  def = 'Chọn',
+  def = "Chọn",
   title,
   size,
   options,
@@ -15,6 +15,7 @@ export function IFSelect({
   keyObj,
   showObj,
   required,
+  readOnly,
 }) {
   const style = "col-md-" + size;
 
@@ -25,8 +26,9 @@ export function IFSelect({
 
   return (
     <div className={style}>
-      <label htmlFor={title} className="form-label">
-        {title}
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
       </label>
       <select
         className="form-select"
@@ -35,6 +37,7 @@ export function IFSelect({
         onChange={handleSelectChange}
         required={required}
         value={value}
+        disabled={readOnly}
       >
         <option value={0}>{def}</option>
         {options.map((value, index) => (
@@ -79,7 +82,7 @@ export function IFInputText({
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
           value={value}
-          readOnly={readOnly}
+          disabled={readOnly}
           required={required}
         />
       </div>
@@ -170,7 +173,7 @@ export function TextArea({
   );
 }
 
-export function IFNgay({ title, size, defaultValue, value, onChange }) {
+export function IFNgay({ title, size, defaultValue, value, onChange, readOnly }) {
   const style = "col-md-" + size;
   const handleDateChange = (date) => {
     if (date) {
@@ -195,6 +198,7 @@ export function IFNgay({ title, size, defaultValue, value, onChange }) {
           onChange={handleDateChange}
           defaultValue={defaultValue}
           value={value}
+          disabled={readOnly}
         />
       </div>
     </div>
@@ -311,7 +315,15 @@ export function IFSearchHT({
   );
 }
 
-export function IFSearchThuoc({ title, valid, size, options, name, required, onChange }) {
+export function IFSearchThuoc({
+  title,
+  valid,
+  size,
+  options,
+  name,
+  required,
+  onChange,
+}) {
   const handleInputChange = (e) => {
     const value = e.target.value;
     onChange(value);
@@ -329,7 +341,9 @@ export function IFSearchThuoc({ title, valid, size, options, name, required, onC
 
       <div className="input-group">
         <input
-          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
           list="thuocDatalist"
           id="thuocInput"
           onChange={handleInputChange}

@@ -4,60 +4,59 @@ import {
   IFInputText,
   IFSelect,
 } from "../../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSDV } from "../../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDST } from "../../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../../utils/appUtils";
-import { fetchAllDichVuAction } from "../../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
-import { fetchAllLoaiDichVuAction } from "../../../../../redux/action/fetchDataAction/fetchAllLoaiDichVuAction";
+import { fetchAllThuocAction } from "../../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchAllDVTAction } from "../../../../../redux/action/fetchDataAction/fetchAllDVTAction";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../../../../setup/axios";
 
-function DSDV() {
+function DST() {
   const dispatch = useDispatch();
-  const services = useSelector((state) => state.services.data) || [];
-  console.log('services', services)
-  const loaiDichVu = useSelector((state) => state.loaiDichVu.data) || [];
-  const isLoading = useSelector((state) => state.services?.isloading);
+  const thuoc = useSelector((state) => state.thuoc?.data) || [];
+  console.log('thuoc', thuoc)
+  const dvt = useSelector((state) => state.dvt?.data) || [];
+  const isLoading = useSelector((state) => state.thuoc?.isloading);
   const [limit, setLimit] = useState(5);
-  const [displayServices, setDisplayServices] = useState([]);
+  const [displayThuoc, setDisplayThuoc] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã DV", key: "MADV" },
-    { title: "Mã loại DV", key: "MALOAIDV" },
-    { title: "Loại dịch vụ", key: "TENLOAIDV" },
-    { title: "Tên dịch vụ", key: "TENDV" },
-    { title: "Giá tiền", key: "GIADV" },
+    { title: "Mã thuốc", key: "MATHUOC" },
+    { title: "Đơn vị tính", key: "TENDONVI" },
+    { title: "Tên thuốc", key: "TENTHUOC" },
+    { title: "Thành phần", key: "THANHPHAN" },
   ];
 
   useEffect(() => {
-    dispatch(fetchAllDichVuAction());
-    dispatch(fetchAllLoaiDichVuAction());
+    dispatch(fetchAllThuocAction());
+    dispatch(fetchAllDVTAction());
   }, []);
 
   useEffect(() => {
-    if (services) {
-      let filteredServices = [...services];
+    if (thuoc) {
+      let filteredThuoc = [...thuoc];
 
       if (searchKeyword) {
-        filteredServices = filteredServices.filter((data) =>
-          data.TENDV.toLowerCase().includes(searchKeyword.toLowerCase())
+        filteredThuoc = filteredThuoc.filter((data) =>
+          data.TENTHUOC.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
 
-      const calculatedTotalPages = Math.ceil(filteredServices.length / limit);
+      const calculatedTotalPages = Math.ceil(filteredThuoc.length / limit);
       setTotalPages(calculatedTotalPages);
 
       const startIdx = (page - 1) * limit;
-      const endIdx = Math.min(startIdx + limit, filteredServices.length);
-      const pageServices = filteredServices.slice(startIdx, endIdx);
+      const endIdx = Math.min(startIdx + limit, filteredThuoc.length);
+      const pageThuoc = filteredThuoc.slice(startIdx, endIdx);
 
-      setDisplayServices(pageServices);
+      setDisplayThuoc(pageThuoc);
     }
-  }, [services, page, limit, searchKeyword]);
+  }, [thuoc, page, limit, searchKeyword]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
@@ -66,17 +65,17 @@ function DSDV() {
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
   const defaultFormData = {
-    maLDV: 0,
-    tenDichVu: "",
-    giaDichVu: "",
+    maDVT: 0,
+    tenThuoc: "",
+    thanhPhan: "",
   };
 
   const [formData, setFormData] = useState(defaultFormData);
 
   const defaultObjValidInput = {
-    isValidMaLDV: true,
-    isValidTenDV: true,
-    isValidGiaDV: true,
+    isValidMaDVT: true,
+    isValidTenThuoc: true,
+    isValidThanhPhan: true,
   };
 
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
@@ -84,28 +83,28 @@ function DSDV() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setObjValidInput(defaultObjValidInput);
-    if (!formData.tenDichVu) {
-      setObjValidInput({ ...defaultObjValidInput, isValidTenDV: false });
-      toast.error("Chưa nhập tên dịch vụ");
+    if (!formData.maDVT || +formData.maDVT === 0) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMaDVT: false });
+      toast.error("Chưa chọn đơn vị thuốc");
       return;
     }
-    if (!formData.maLDV || formData.maLDV === 0) {
-      setObjValidInput({ ...defaultObjValidInput, isValidMaLDV: false });
-      toast.error("Chưa chọn loại dịch vụ");
+    if (!formData.tenThuoc ) {
+      setObjValidInput({ ...defaultObjValidInput, isValidTenThuoc: false });
+      toast.error("Chưa nhập tên thuốc");
       return;
     }
-    if (!formData.giaDichVu) {
-      setObjValidInput({ ...defaultObjValidInput, isValidGiaDV: false });
-      toast.error("Chưa nhập giá dịch vụ");
+    if (!formData.thanhPhan) {
+      setObjValidInput({ ...defaultObjValidInput, isValidThanhPhan: false });
+      toast.error("Chưa nhập thành phần thuốc");
       return;
     }
 
-    const response = await axios.post("/dichvu/insert", formData);
+    const response = await axios.post("/thuoc/insert", formData);
 
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       setFormData(defaultFormData);
-      dispatch(fetchAllDichVuAction());
+      dispatch(fetchAllThuocAction());
     }
     if (response && response.data && response.data.errcode !== 0) {
       toast.error(response.data.message);
@@ -122,10 +121,10 @@ function DSDV() {
 
   return (
     <>
-      <h4>Danh sách các dịch vụ</h4>
+      <h4>Danh sách các thuốc</h4>
       <div className="row align-items-end">
         <IFSearch
-          title={"Tìm kiếm theo tên dịch vụ"}
+          title={"Tìm kiếm theo tên thuốc"}
           size={5}
           onChange={handleIFSearchChange}
         />
@@ -134,7 +133,7 @@ function DSDV() {
             className="btn btn-primary"
             type="button"
             data-bs-toggle="modal"
-            data-bs-target="#addDichVu"
+            data-bs-target="#addThuoc"
           >
             Thêm mới
           </button>
@@ -143,7 +142,7 @@ function DSDV() {
 
       <div
         className="modal fade modal-lg"
-        id="addDichVu"
+        id="addThuoc"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -152,7 +151,7 @@ function DSDV() {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thêm dịch vụ mới
+                Thêm thuốc mới
               </h1>
               <button
                 type="button"
@@ -166,32 +165,32 @@ function DSDV() {
               <div className="container-fluid">
                 <div className="row py-2">
                   <IFInputText
-                    title={"Tên dịch vụ"}
+                    title={"Tên thuốc"}
                     size={9}
                     required={"true"}
-                    value={formData.tenDichVu}
-                    valid={objValidInput.isValidTenDV}
-                    onChange={(value) => handleChange("tenDichVu", value)}
+                    value={formData.tenThuoc}
+                    valid={objValidInput.isValidTenThuoc}
+                    onChange={(value) => handleChange("tenThuoc", value)}
                   />
                 </div>
                 <div className="row py-2">
                   <IFSelect
                     id={"loaiDV"}
-                    title={"Loại dịch vụ"}
+                    title={"Đơn vị thuốc"}
                     size={7}
-                    options={loaiDichVu}
-                    keyObj={"MALOAIDV"}
-                    showObj={"TENLOAIDV"}
-                    value={formData.maLDV}
-                    valid={objValidInput.isValidMaLDV}
-                    onChange={(value) => handleChange("maLDV", value)}
+                    options={dvt}
+                    keyObj={"MADVT"}
+                    showObj={"TENDONVI"}
+                    value={formData.maDVT}
+                    valid={objValidInput.isValidMaDVT}
+                    onChange={(value) => handleChange("maDVT", value)}
                   />
                   <IFInputText
-                    title={"Giá tiền"}
+                    title={"Thành phần"}
                     size={5}
-                    value={formData.giaDichVu}
-                    valid={objValidInput.isValidGiaDV}
-                    onChange={(value) => handleChange("giaDichVu", value)}
+                    value={formData.thanhPhan}
+                    valid={objValidInput.isValidThanhPhan}
+                    onChange={(value) => handleChange("thanhPhan", value)}
                   />
                 </div>
               </div>
@@ -218,9 +217,9 @@ function DSDV() {
       </div>
 
       <div className="container-fluid py-3">
-        <ListFormDSDV
+        <ListFormDST
           columns={columns}
-          data={displayServices}
+          data={displayThuoc}
           loading={isLoading}
         />
         <Pagination
@@ -235,4 +234,4 @@ function DSDV() {
   );
 }
 
-export default DSDV;
+export default DST;

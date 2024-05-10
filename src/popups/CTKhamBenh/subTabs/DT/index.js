@@ -16,9 +16,9 @@ import { toast } from "react-toastify";
 
 function DonThuoc() {
   const dispatch = useDispatch();
-  const dsThuoc = useSelector((state) => state.fetchAllThuoc.dsThuoc) || [];
-  const selectedPK = useSelector((state) => state.selectedRow.selectedRow) || {};
-  let existedCTDT = useSelector((state) => state.existedCTDT.data) || [];
+  const dsThuoc = useSelector((state) => state.fetchAllThuoc?.dsThuoc) || [];
+  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
 
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");

@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../../../setup/axios";
 import { fetchThamSoAction } from "../../../../redux/action/fetchDataAction/fetchThamSoAction";
+import DST from "./DST";
 
 function QuyDinh() {
   const dispatch = useDispatch();
@@ -142,6 +143,9 @@ function QuyDinh() {
 
         <div className="row py-3 align-items-end border border-primary">
           <DSDV />
+        </div>
+        <div className="row py-3 align-items-end border border-primary">
+          <DST />
         </div>
 
         <div className="row">

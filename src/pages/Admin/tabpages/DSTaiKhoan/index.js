@@ -176,16 +176,7 @@ function DSTaiKhoan() {
           size={4}
           onChange={(value) => handleIFNameChange(value)}
         />
-        <div className="col col-md-5 d-flex justify-content-end">
-          <button
-            className="btn btn-primary"
-            type="button"
-            data-bs-toggle="modal"
-            data-bs-target="#themmoi"
-          >
-            Thêm mới
-          </button>
-        </div>
+
       </div>
       {/* Modal thêm mới BACSI & LETAN */}
       <div

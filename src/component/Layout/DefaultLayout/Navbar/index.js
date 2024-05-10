@@ -65,7 +65,7 @@ function Navbar() {
                 role="button"
                 aria-expanded="false"
               >
-                Thuốc
+                Lô thuốc
               </Link>
             </li>
 
