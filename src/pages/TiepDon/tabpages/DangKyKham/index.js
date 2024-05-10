@@ -96,9 +96,11 @@ function DangKyKham() {
       } else {
         setFormData({ ...formDataDefault, [fieldName]: value });
         setAge("");
+        setOldPatientID(0);
       }
     } else {
       setFormData({ ...formData, [fieldName]: value });
+      setOldPatientID(0);
 
       if (fieldName === "ngaySinh") {
         const age = calculateAge(value);
@@ -167,12 +169,13 @@ function DangKyKham() {
         });
         if (response1.status === 200) {
           maHDinserted = response1.data.MAHD;
-          alert("Thêm hóa đơn thành công!!!");
+          toast("Thêm hóa đơn thành công!!!");
         }
       } catch (error) {
         console.log(error);
-        alert("Thêm hóa đơn không thành công");
+        toast("Thêm hóa đơn không thành công");
       }
+      console.log(">> oldPatientID", oldPatientID);
       // nếu là bệnh nhân mới thì thêm hồ sơ bệnh nhân trước
       if (oldPatientID === 0) {
         let maBNinserted = "";
@@ -180,12 +183,12 @@ function DangKyKham() {
           const response2 = await axios.post("/benhnhan/insert", formData);
           if (response2.status === 200) {
             maBNinserted = response2.data.MABN;
-            alert("Thêm bệnh nhân thành công!!!");
+            toast("Thêm bệnh nhân thành công!!!");
             await insertPK(maBNinserted, maHDinserted);
           }
         } catch (error) {
           console.log(error);
-          alert("Thêm bệnh nhân không thành công");
+          toast("Thêm bệnh nhân không thành công");
         }
       } else {
         await insertPK(oldPatientID, maHDinserted);
@@ -240,8 +243,8 @@ function DangKyKham() {
               <IFSelect
                 title={"Giới tính"}
                 size={2}
-                keyObj={'gioiTinh'}
-                showObj={'gioiTinh'}
+                keyObj={"gioiTinh"}
+                showObj={"gioiTinh"}
                 options={[
                   { gioiTinh: "Nam" },
                   { gioiTinh: "Nữ" },
