@@ -5,12 +5,20 @@ const initialState = {
   dshd: [],
   status: "",
   loading: false,
+  selectedHD: {},
 };
 
 const fetchHoaDonSlice = createSlice({
   name: 'HoaDon',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    selectHD: (state, action) => {
+      state.selectedHD = action.payload; // Cập nhật thông tin hàng được chọn
+    },
+    clearSelectedHD: (state) => {
+      state.selectedHD = {}; // Xóa thông tin hàng được chọn
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchDSHDByIdAction.pending, (state) => {
@@ -28,5 +36,7 @@ const fetchHoaDonSlice = createSlice({
       });
   },
 });
+
+export const { selectHD, clearSelectedHD } = fetchHoaDonSlice.actions;
 
 export default fetchHoaDonSlice.reducer;

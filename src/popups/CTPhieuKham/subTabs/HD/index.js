@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
-import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { selectHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 
 function HoaDon() {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ function HoaDon() {
     console.log(page);
   };
   const handleRowClick = (row) => {
-    // dispatch(fetchPkByIdHdAction(row.MAHD));
+    dispatch(selectHD(row));
   };
 
   const columns = [
@@ -105,6 +105,7 @@ function HoaDon() {
                     data-bs-toggle="collapse"
                     data-bs-target="#r1"
                     key={rowIndex}
+                    onClick={() => handleRowClick(row)}
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{row[column.key] || ""}</td>
@@ -138,6 +139,7 @@ function HoaDon() {
                     data-bs-toggle="collapse"
                     data-bs-target="#r2"
                     key={rowIndex}
+                    onClick={() => handleRowClick(row)}
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{row[column.key] || ""}</td>

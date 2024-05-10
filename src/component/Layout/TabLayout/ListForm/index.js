@@ -37,6 +37,9 @@ import { fetchBenhNhanByIdAction } from "../../../../redux/action/fetchDataActio
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+
 import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 
@@ -94,6 +97,11 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
 export function ListFormDSDK({ columns, data, loading }) {
   const dispatch = useDispatch();
   const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const selectedHD = useSelector((state) => state.fetchHoaDon.selectedHD);
+  const leTan = useSelector((state) => state.auth.user) || {};
+
+  const [pttt, setPttt] = useState("Tiền mặt");
+
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
     dispatch(fetchCTDTByIdAction(row.MAPK));
@@ -101,10 +109,33 @@ export function ListFormDSDK({ columns, data, loading }) {
     dispatch(fetchDSHDByIdAction(row.MAPK));
     dispatch(fetchDsClsByIdAction(row.MAPK));
     dispatch(fetchPkByIdHdAction(row.MAHDPK));
+    dispatch(clearSelectedHD());
   };
   const handleSave = () => {};
+  const handleChangePttt = (value) => {
+    setPttt(value);
+  };
 
-  const handleThanhToan = () => {};
+  const handleThanhToan = async () => {
+    try {
+      const response = await axios.post("/hoadon/thanhtoan", {
+        ...selectedHD,
+        maLT: leTan.account.userInfo[0].MALT,
+        tttt: "Đã thanh toán",
+        tdtt: new Date(),
+        pttt: pttt,
+      });
+
+      if (response.status === 200) {
+        toast("Thanh toán hóa đơn thành công");
+        dispatch(fetchDSHDByIdAction(selectedRow.MAPK));
+        dispatch(fetchDSDKAction());
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Thanh toán không thành công");
+    }
+  };
 
   return (
     <>
@@ -233,7 +264,7 @@ export function ListFormDSDK({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="thanhtoanModalLabel">
-                Thanh toán
+                Thanh toán cho PK{selectedRow.MAPK}
               </h1>
               <button
                 type="button"
@@ -252,35 +283,47 @@ export function ListFormDSDK({ columns, data, loading }) {
                   <div className="col-3">
                     <ListGroupItem
                       title={"Khách hàng"}
-                      value={"Doan Danh Du"}
+                      value={selectedRow.TENBN}
                       disable={true}
                     />
                     <ListGroupItem
                       title={"Người bán"}
-                      value={"Le Thi Thanh Thao"}
+                      value={
+                        selectedHD.TTTT === "Chưa thanh toán"
+                          ? leTan.account.userInfo[0].HOTEN
+                          : selectedHD.TENLT
+                      }
                     />
-                    <IFNgayNgang title={"Ngày bán"} onChange={() => {}} />
+                    <IFNgay
+                      title={"Ngày bán"}
+                      size={12}
+                      onChange={() => {}}
+                      defaultValue={new Date()}
+                    />
                     <ListGroupItem
                       title={"Mã phiếu"}
-                      value={"qqq"}
+                      value={"PK" + selectedRow.MAPK}
                       disable={true}
                     />
                     <ListGroupItem
                       title={"Tổng tiền"}
-                      value={"4.370.000"}
+                      value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
                       disable={true}
                     />
-                    <ListGroupItem title={"Giảm giá"} value={"0"} />
+                    {/* <ListGroupItem title={"Giảm giá"} value={"0"} />
                     <ListGroupItem
                       title={"Thành tiền"}
-                      value={"4.370.000"}
+                      value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
                       disable={true}
-                    />
-                    <ListGroupItem
+                    /> */}
+                    <IFInputText
                       title={"Phương thức TT"}
-                      value={"Tiền mặt"}
+                      size={12}
+                      valid={true}
+                      onChange={(value) => handleChangePttt(value)}
+                      value={selectedHD.PTTT ? selectedHD.PTTT : pttt}
                     />
-                    <TextArea title={"Ghi chú"} value={""} />
+                    <TextArea title={"Ghi chú"} onChange={() => {}} />
                   </div>
                 </div>
               </div>
@@ -297,7 +340,7 @@ export function ListFormDSDK({ columns, data, loading }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleThanhToan}
+                onClick={() => handleThanhToan()}
               >
                 Thanh toán
               </button>

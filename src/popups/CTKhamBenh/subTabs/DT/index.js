@@ -12,6 +12,7 @@ import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
 
 function DonThuoc() {
@@ -248,6 +249,7 @@ function DonThuoc() {
         if (isComplete === true) {
           setMedicines([]);
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
+          dispatch(fetchDSDKAction());
           setFormula("");
           setUnit("");
           setDay(0);
