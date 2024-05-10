@@ -6,7 +6,7 @@ export const fetchCTDTByIdAction = createAsyncThunk(
   async (maPK, { meta }) => {
     try {
       // chỉnh lại các controller, sử dụng body request trong get
-      const response = await axios.get(`/donthuoc/ds-thuoc/${maPK}`);
+      const response = await axios.get(`/donthuoc/ds-thuoc/getById/${maPK}`);
       return response.data;
     } catch (error) {
       return error.message;

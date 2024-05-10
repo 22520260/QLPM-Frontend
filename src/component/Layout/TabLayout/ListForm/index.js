@@ -37,6 +37,8 @@ import { fetchBenhNhanByIdAction } from "../../../../redux/action/fetchDataActio
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import ThanhToan from "../../../../popups/ThanhToan";
+import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {}
@@ -132,8 +134,19 @@ export function ListFormDSDK({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.key] || ""}</td>
+                  <td key={colIndex}>
+                    {typeof row[column.key] !== "string" ||
+                    row[column.key] === ""
+                      ? row[column.key]
+                      : row[column.key].split("\n").map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                  </td>
                 ))}
+
                 <td>
                   <button
                     type="button"
@@ -233,8 +246,8 @@ export function ListFormDSDK({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row">
-                  <div className="col-9">
-                    <Navtab tabsData={tabsDataTT} />
+                  <div className="col col-9">
+                    <HoaDon />
                   </div>
                   <div className="col-3">
                     <ListGroupItem
@@ -1921,7 +1934,17 @@ export function ListFormKhamBenh({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.key] || ""}</td>
+                  <td key={colIndex}>
+                    {typeof row[column.key] !== "string" ||
+                    row[column.key] === ""
+                      ? row[column.key]
+                      : row[column.key].split("\n").map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                  </td>
                 ))}
                 <td>
                   <button

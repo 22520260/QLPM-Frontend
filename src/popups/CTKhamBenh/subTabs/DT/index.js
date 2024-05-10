@@ -17,8 +17,10 @@ import { toast } from "react-toastify";
 function DonThuoc() {
   const dispatch = useDispatch();
   const dsThuoc = useSelector((state) => state.fetchAllThuoc.dsThuoc) || [];
-  const selectedPK = useSelector((state) => state.selectedRow.selectedRow) || {};
+  const selectedPK =
+    useSelector((state) => state.selectedRow.selectedRow) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT.data) || [];
+  const leTan = useSelector((state) => state.auth.user) || {};
 
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
@@ -236,7 +238,7 @@ function DonThuoc() {
     try {
       const response = await axios.post(
         "http://localhost:3001/donthuoc/insert",
-        { maPK: selectedPK.MAPK, maLT: 999 },
+        { maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
         { withCredentials: true }
       );
       if (response.status === 200) {

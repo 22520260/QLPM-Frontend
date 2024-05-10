@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchDSDKAction, fetchPkByIdHdAction } from '../../action/fetchDataAction/fetchDSDKAction';
 
 const initialState = {
-  data: {},
+  data: [],
   loading: false,
   pkByIdHd: []
 };

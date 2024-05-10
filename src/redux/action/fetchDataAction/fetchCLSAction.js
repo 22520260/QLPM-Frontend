@@ -6,7 +6,7 @@ export const fetchDsClsByIdAction = createAsyncThunk(
   async (maPK, { meta }) => {
     try {
       // chỉnh lại các controller, sử dụng body request trong get
-      const response = await axios.get(`/cls/ds-cls/${maPK}`);
+      const response = await axios.get(`/cls/ds-cls/getById/${maPK}`);
       return response.data;
     } catch (error) {
       return error.message;

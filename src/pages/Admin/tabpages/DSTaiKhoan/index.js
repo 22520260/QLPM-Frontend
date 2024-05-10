@@ -79,7 +79,7 @@ function DSTaiKhoan() {
       // Lọc theo tên
       if (nameKeyword) {
         filteredAccounts = filteredAccounts.filter((data) =>
-          data.HOTEN.includes(nameKeyword)
+          data.HOTEN?.includes(nameKeyword)
         );
       }
 
