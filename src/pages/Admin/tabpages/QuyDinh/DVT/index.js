@@ -13,8 +13,8 @@ import axios from "../../../../../setup/axios";
 
 function DVT() {
   const dispatch = useDispatch();
-  const dvt = useSelector((state) => state.dvt.data) || [];
-  const isLoading = useSelector((state) => state.dvt.isLoading);
+  const dvt = useSelector((state) => state.dvt?.data) || [];
+  const isLoading = useSelector((state) => state.dvt?.isLoading);
   const [limit, setLimit] = useState(5);
   const [displayDVT, setDisplayDVT] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");

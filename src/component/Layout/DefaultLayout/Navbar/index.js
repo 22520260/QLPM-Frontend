@@ -4,7 +4,7 @@ import { FaAccessibleIcon } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
 function Navbar() {
-  const user = useSelector((state) => state.auth.user); // user chứa token, isAuthenticated, account
+  const user = useSelector((state) => state.auth?.user); // user chứa token, , account
   let groupID = null;
   if (user && user.account && user.account.groupID) {
     groupID = user.account.groupID;

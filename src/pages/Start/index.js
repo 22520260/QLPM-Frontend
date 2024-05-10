@@ -3,7 +3,7 @@ import StartButton from "../../component/StartButton";
 import { useSelector } from "react-redux";
 
 function Start() {
-  const user = useSelector((state) => state.auth.user); // user chứa token, isAuthenticated, account
+  const user = useSelector((state) => state.auth?.user); // user chứa token, isAuthenticated, account
   console.log('>>>>>>>>user<<<<<<<', user)
   let groupID = null;
   if (user && user.account && user.account.groupID) {

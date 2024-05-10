@@ -13,9 +13,9 @@ import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchDSDK.data);
+  const data = useSelector((state) => state.fetchDSDK?.data);
   const DSDK = data.data;
-  const isLoading = useSelector((state) => state.fetchDSDK.loading);
+  const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);

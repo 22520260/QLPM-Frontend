@@ -19,12 +19,12 @@ import { MdError } from "react-icons/md";
 function DangKyKham() {
   const dispatch = useDispatch();
 
-  const services = useSelector((state) => state.services.data) || [];
+  const services = useSelector((state) => state.services?.data) || [];
 
   const patients =
     useSelector((state) => state.fetchAllBenhNhan.data?.data) || [];
 
-  const doctors = useSelector((state) => state.fetchAllBacSi.data) || [];
+  const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
 
   const [showError, setShowError] = useState(false);
   const [oldPatientID, setOldPatientID] = useState(0);

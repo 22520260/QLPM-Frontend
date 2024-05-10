@@ -16,10 +16,10 @@ import { toast } from "react-toastify";
 
 function DonThuoc() {
   const dispatch = useDispatch();
-  const dsThuoc = useSelector((state) => state.fetchAllThuoc?.dsThuoc) || [];
+  const dsThuoc = useSelector((state) => state.thuocKeDon?.dsThuoc) || [];
   const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
-
+  console.log('dsThuoc', dsThuoc)
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
   const [note, setNote] = useState("");

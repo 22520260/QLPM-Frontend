@@ -18,9 +18,9 @@ import { formatDate } from "../../../../utils/appUtils";
 
 function DSTaiKhoan() {
   const dispatch = useDispatch();
-  const groupUsers = useSelector((state) => state.groupUsers.data) || [];
-  const accounts = useSelector((state) => state.account.data) || [];
-  const isLoading = useSelector((state) => state.account.data.isLoading);
+  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  const accounts = useSelector((state) => state.account?.data) || [];
+  const isLoading = useSelector((state) => state.account.data?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayAccounts, setDisplayAccounts] = useState([]);

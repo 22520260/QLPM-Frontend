@@ -6,7 +6,7 @@ import {
 import { useSelector } from "react-redux";
 
 function ThongTinKhachHang() {
-  const data = useSelector((state) => state.selectedRow.selectedRow);
+  const data = useSelector((state) => state.selectedRow?.selectedRow);
 
   const handleChange = (page) => {
     console.log(page);

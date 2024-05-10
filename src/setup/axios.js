@@ -15,16 +15,15 @@ instance.defaults.withCredentials = true;
 //Add a request interceptor
 instance.interceptors.request.use(
   (config) => {
-    // const bearerToken = `Bearer ${store.getState().auth.user?.token}`;
+    const bearerToken = `Bearer ${store.getState().auth.user?.token}`;
 
-    // return {
-    //   ...config,
-    //   headers: {
-    //     ...(bearerToken !== null && { Authorization: `${bearerToken}` }),
-    //     ...config.headers,
-    //   },
-    // };
-    return config;
+    return {
+      ...config,
+      headers: {
+        ...(bearerToken !== null && { Authorization: `${bearerToken}` }),
+        ...config.headers,
+      },
+    };
   },
   (error) => {
     return Promise.reject(error);

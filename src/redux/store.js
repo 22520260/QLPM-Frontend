@@ -17,6 +17,7 @@ import getRoleByIdReducer from './slice/getDataSlice/getRoleByIdSlice'
 import getAllThuocKeDonReducer from './slice/getDataSlice/getAllThuocKeDonSlice'
 import getAllThuocReducer from './slice/getDataSlice/getAllThuocSlice'
 import getAllLoThuocReducer from './slice/getDataSlice/getAllLoThuocSlice'
+import getCheckThuocReducer from './slice/getDataSlice/getCheckThuocSlice'
 
 
 export default configureStore({
@@ -39,6 +40,7 @@ export default configureStore({
     roleById: getRoleByIdReducer,
     thuocKeDon: getAllThuocKeDonReducer,
     loThuoc: getAllLoThuocReducer,
+    checkThuoc: getCheckThuocReducer,
   },
   devTools: true,
 })

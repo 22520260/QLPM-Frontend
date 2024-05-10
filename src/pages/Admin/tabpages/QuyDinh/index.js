@@ -11,8 +11,8 @@ import DST from "./DST";
 
 function QuyDinh() {
   const dispatch = useDispatch();
-  const thamso = useSelector((state) => state.thamso.data) || [];
-  const isLoading = useSelector((state) => state.thamso.isLoading);
+  const thamso = useSelector((state) => state.thamso?.data) || [];
+  const isLoading = useSelector((state) => state.thamso?.isLoading);
 
   console.log("thamso", thamso);
   useEffect(() => {

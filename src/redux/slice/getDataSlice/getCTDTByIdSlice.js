@@ -3,8 +3,7 @@ import { fetchCTDTByIdAction } from '../../action/fetchDataAction/fetchCTDTById'
 
 const initialState = {
   data: [],
-  status: "",
-  loading: false,
+  isLoading: false,
 };
 
 const fetchCTDTByIdSlice = createSlice({
@@ -14,17 +13,14 @@ const fetchCTDTByIdSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchCTDTByIdAction.pending, (state) => {
-        state.status = 'loading';
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchCTDTByIdAction.fulfilled, (state, action) => {
-        state.status = 'success';
-        state.loading = false;
+        state.isLoading = false;
         state.data = action.payload.data;
       })
       .addCase(fetchCTDTByIdAction.rejected, (state) => {
-        state.status = 'failed';
-        state.loading = false;
+        state.isLoading = false;
       });
   },
 });

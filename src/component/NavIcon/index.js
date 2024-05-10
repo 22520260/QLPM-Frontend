@@ -9,7 +9,7 @@ import { IFInputText, IFNgay } from "../Layout/TabLayout/InputForm";
 function NavIcon() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user); // user chứa token, isAuthenticated, account
+  const user = useSelector((state) => state.auth?.user); // user chứa token, isAuthenticated, account
   let userInfo = {};
   let groupNameUser = "";
   if (user && user.account) {

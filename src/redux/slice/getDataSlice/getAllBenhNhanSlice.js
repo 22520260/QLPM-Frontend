@@ -3,7 +3,7 @@ import { fetchAllBenhNhanAction } from '../../action/fetchDataAction/fetchAllBen
 
 const initialState = {
   data: [],
-  loading: false,
+  isLoading: false,
 };
 
 const fetchAllBenhNhanSlice = createSlice({
@@ -13,14 +13,14 @@ const fetchAllBenhNhanSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchAllBenhNhanAction.pending, (state, action) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchAllBenhNhanAction.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload;
+        state.isLoading = false;
+        state.data = action.payload.data;
       })
       .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
       });
   },
 });

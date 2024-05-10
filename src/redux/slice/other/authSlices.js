@@ -35,7 +35,7 @@ const authSlice = createSlice({
         const userInfo = action.payload.data?.userInfo;
 
         const data = {
-          isAuthenticated: true,
+          isAuthenticated: token ? true : false,
           token,
           account: {
             roles,
@@ -46,10 +46,11 @@ const authSlice = createSlice({
           }
         };
         state.user = data;
-        console.log('>>> user', state.user)
+        console.log('>>>Fulfilled user', state.user)
       })
       .addCase(fetchUserAccountAction.rejected, (state) => {
         state.isLoading = false;
+        console.log('>>>Failed user', state.user)
       });
   },
 });

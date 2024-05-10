@@ -34,6 +34,8 @@ import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fe
 import { deFormatDate } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
+import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
+
 
 
 // Listform and delete button
@@ -90,7 +92,7 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
 
 export function ListFormDSDK({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
   };
@@ -294,7 +296,7 @@ export function ListFormThuoc({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [formDelete, setFormDelete] = useState({});
-  const thuoc = useSelector((state) => state.thuoc.data);
+  const thuoc = useSelector((state) => state.thuoc?.data);
   console.log("thuoc", thuoc);
   const handleRowClick = (row) => {
     console.log("row", row);
@@ -376,6 +378,7 @@ export function ListFormThuoc({ columns, data, loading }) {
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       dispatch(fetchAllLoThuocAction());
+      dispatch(fetchCheckThuocAction());
       const cancelBtn = document.getElementById("cancelBtnDelete6");
       if (cancelBtn) {
         cancelBtn.click();
@@ -619,7 +622,7 @@ export function ListFormDSTK({ columns, data, loading }) {
   const [formDataTTCN, setFormDataTTCN] = useState({});
   const [formDataTTTK, setFormDataTTTK] = useState({});
   const [formDelete, setFormDelete] = useState({});
-  const groupUsers = useSelector((state) => state.groupUsers.data.data) || [];
+  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
 
   const handleRowClick = (selectedRow) => {
     setFormDataTTCN({
@@ -1022,7 +1025,7 @@ export function ListFormDSDV({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [formDelete, setFormDelete] = useState({});
-  const loaiDichVu = useSelector((state) => state.loaiDichVu.data) || [];
+  const loaiDichVu = useSelector((state) => state.loaiDichVu?.data) || [];
   const handleRowClick = (row) => {
     setFormData({
       maDV: row.MADV,
@@ -2320,7 +2323,7 @@ export function ListFormPQ({
 
 export function ListFormKhamBenh({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
     dispatch(fetchCTDTByIdAction(row.MAPK));

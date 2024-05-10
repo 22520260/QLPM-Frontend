@@ -3,7 +3,7 @@ import { fetchDSDKAction } from '../../action/fetchDataAction/fetchDSDKAction';
 
 const initialState = {
   data: {},
-  loading: false,
+  isLoading: false,
 };
 
 const fetchDSDKSlice = createSlice({
@@ -13,14 +13,14 @@ const fetchDSDKSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchDSDKAction.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchDSDKAction.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.data = action.payload;
       })
       .addCase(fetchDSDKAction.rejected, (state) => {
-        state.loading = false;
+        state.isLoading = false;
       });
   },
 });

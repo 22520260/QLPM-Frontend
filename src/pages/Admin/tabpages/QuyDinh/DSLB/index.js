@@ -14,8 +14,8 @@ import axios from '../../../../../setup/axios'
 
 function DSLB() {
   const dispatch = useDispatch();
-  const dsBenh = useSelector((state) => state.benh.data) || [];
-  const isLoading = useSelector((state) => state.benh.isLoading);
+  const dsBenh = useSelector((state) => state.benh?.data) || [];
+  const isLoading = useSelector((state) => state.benh?.isLoading);
   const [limit, setLimit] = useState(5);
   const [displayDSB, setDisplayDSB] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");

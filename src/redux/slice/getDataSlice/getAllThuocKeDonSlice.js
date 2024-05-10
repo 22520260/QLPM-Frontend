@@ -3,8 +3,7 @@ import { fetchAllThuocKeDonAction } from '../../action/fetchDataAction/fetchAllT
 
 const initialState = {
   dsThuoc: [],
-  loading: false,
-  error: null,
+  isLoading: false,
 };
 
 const fetchAllThuocKeDonSlice = createSlice({
@@ -14,16 +13,14 @@ const fetchAllThuocKeDonSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchAllThuocKeDonAction.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
+        state.isLoading = true;
       })
       .addCase(fetchAllThuocKeDonAction.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.dsThuoc = action.payload.data;
       })
       .addCase(fetchAllThuocKeDonAction.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.isLoading = false;
       });
   },
 });
