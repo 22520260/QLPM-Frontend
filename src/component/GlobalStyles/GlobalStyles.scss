@@ -69,3 +69,27 @@ body {
 // `;
 
 // export default GlobalStyle;
+
+.btn-primary {
+  background-color: var(--primary) !important;
+  border: none;
+}
+
+.btn-primary:hover, .nav-link.active {
+  background-color: var(--sub) !important;
+  border: none;
+  color: white !important;
+}
+
+.nav-link {
+  color: black;
+}
+
+.card:hover {
+  background-color: var(--sub);
+  color: white;
+  border: black;
+  border-style: none solid solid none;
+  border-width: 0.5rem 0.3rem !important;
+}
+
