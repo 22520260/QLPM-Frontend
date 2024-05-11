@@ -6,6 +6,7 @@ const initialState = {
   status: "",
   loading: false,
   selectedHD: {},
+  isShowHdRow: [false, false, false],
 };
 
 const fetchHoaDonSlice = createSlice({
@@ -17,6 +18,16 @@ const fetchHoaDonSlice = createSlice({
     },
     clearSelectedHD: (state) => {
       state.selectedHD = {}; // Xóa thông tin hàng được chọn
+    },
+    setIsShowHdRow: (state, action) => {
+      const currArr = state.isShowHdRow;
+      state.isShowHdRow = currArr.map((isShow, index) => {
+        return index === action.payload ? (!isShow) : false;
+      })
+      //state.isShowHdRow = [...currArr.slice(0, rowIndex), !currArr[rowIndex], ...currArr.slice(rowIndex + 1)];
+    },
+    clearIsShowHdRow: (state) => {
+      state.isShowHdRow = [false, false, false]; 
     },
   },
   extraReducers: builder => {
@@ -37,6 +48,6 @@ const fetchHoaDonSlice = createSlice({
   },
 });
 
-export const { selectHD, clearSelectedHD } = fetchHoaDonSlice.actions;
+export const { selectHD, clearSelectedHD, setIsShowHdRow, clearIsShowHdRow } = fetchHoaDonSlice.actions;
 
 export default fetchHoaDonSlice.reducer;
