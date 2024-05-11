@@ -56,7 +56,7 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -75,9 +75,9 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>
                     {column.render ? column.render(row) : row[column.key]}
                   </td>
@@ -108,13 +108,14 @@ export function ListFormDSDK({ columns, data, loading }) {
   const [pttt, setPttt] = useState("Tiền mặt");
 
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
-    dispatch(fetchCTDTByIdAction(row.MAPK));
+    console.log('row', row)
+    dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(fetchBenhNhanByIdAction(row.MABN));
-    dispatch(fetchDSHDByIdAction(row.MAPK));
-    dispatch(fetchDsClsByIdAction(row.MAPK));
+    dispatch(fetchDSHDByIdAction(row?.MAPK));
+    dispatch(fetchDsClsByIdAction(row?.MAPK));
     dispatch(fetchPkByIdHdAction(row.MAHDPK));
     dispatch(clearSelectedHD());
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
   };
   const handleSave = () => {};
   const handleChangePttt = (value) => {
@@ -133,7 +134,7 @@ export function ListFormDSDK({ columns, data, loading }) {
 
       if (response.status === 200) {
         toast("Thanh toán hóa đơn thành công");
-        dispatch(fetchDSHDByIdAction(selectedRow.MAPK));
+        dispatch(fetchDSHDByIdAction(selectedRow?.MAPK));
         dispatch(fetchDSDKAction());
       }
     } catch (error) {
@@ -148,7 +149,7 @@ export function ListFormDSDK({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -159,7 +160,7 @@ export function ListFormDSDK({ columns, data, loading }) {
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={columns.length + 3}>
+              <td colSpan={columns?.length + 3}>
                 <div className="d-flex align-items-center justify-content-between">
                   <strong>Loading...</strong>
                   <div className="spinner-border ms-2" role="status"></div>
@@ -167,14 +168,14 @@ export function ListFormDSDK({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>
                     {typeof row[column.key] !== "string" ||
                     row[column.key] === ""
                       ? row[column.key]
-                      : row[column.key].split("\n").map((line, index) => (
+                      : row[column.key].split("\n")?.map((line, index) => (
                           <React.Fragment key={index}>
                             {line}
                             <br />
@@ -219,7 +220,7 @@ export function ListFormDSDK({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MAPK}
+                Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
               <button
                 type="button"
@@ -233,7 +234,7 @@ export function ListFormDSDK({ columns, data, loading }) {
               <div className="container-fluid">
                 <NavTabVertical
                   tabsData={tabsDataCTPK}
-                  maPK={selectedRow.MAPK}
+                  maPK={selectedRow?.MAPK}
                 />
               </div>
             </div>
@@ -269,7 +270,7 @@ export function ListFormDSDK({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="thanhtoanModalLabel">
-                Thanh toán cho PK{selectedRow.MAPK}
+                Thanh toán cho PK{selectedRow?.MAPK}
               </h1>
               <button
                 type="button"
@@ -307,7 +308,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                     />
                     <ListGroupItem
                       title={"Mã phiếu"}
-                      value={"PK" + selectedRow.MAPK}
+                      value={"PK" + selectedRow?.MAPK}
                       disable={true}
                     />
                     <ListGroupItem
@@ -460,7 +461,7 @@ export function ListFormThuoc({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -479,9 +480,9 @@ export function ListFormThuoc({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>
                     {column.render ? column.render(row) : row[column.key]}
                   </td>
@@ -833,7 +834,7 @@ export function ListFormDSTK({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -852,9 +853,9 @@ export function ListFormDSTK({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
@@ -1172,7 +1173,7 @@ export function ListFormDSDV({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -1191,9 +1192,9 @@ export function ListFormDSDV({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
@@ -1432,7 +1433,7 @@ export function ListFormDST({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -1451,9 +1452,9 @@ export function ListFormDST({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
@@ -1685,7 +1686,7 @@ export function ListFormDSLB({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -1704,9 +1705,9 @@ export function ListFormDSLB({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
@@ -1917,7 +1918,7 @@ export function ListFormDVT({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -1936,9 +1937,9 @@ export function ListFormDVT({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
@@ -2151,7 +2152,7 @@ export function ListFormPQ({
   };
 
   const buildDataToSave = () => {
-    const result = selectedRows.map((item) => {
+    const result = selectedRows?.map((item) => {
       let data = { MANHOM: +selectedVaiTro, MAVAITRO: +item };
       return data;
     });
@@ -2203,7 +2204,7 @@ export function ListFormPQ({
           <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
             <tr>
               <th style={{ width: "5%" }}>Chọn</th>
-              {columns.map((column, index) => (
+              {columns?.map((column, index) => (
                 <th key={index} scope="col">
                   {column.title}
                 </th>
@@ -2222,7 +2223,7 @@ export function ListFormPQ({
                 </td>
               </tr>
             ) : (
-              data.map((row, rowIndex) => (
+              data?.map((row, rowIndex) => (
                 <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                   <td>
                     <div className="form-check">
@@ -2237,7 +2238,7 @@ export function ListFormPQ({
                       <label className="form-check-label" htmlFor={rowIndex} />
                     </div>
                   </td>
-                  {columns.map((column, colIndex) => (
+                  {columns?.map((column, colIndex) => (
                     <td key={colIndex}>{row[column.key] || ""}</td>
                   ))}
                   <td>
@@ -2390,8 +2391,9 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const dispatch = useDispatch();
   const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
   const handleRowClick = (row) => {
+    console.log('row',row)
+    dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
-    dispatch(fetchCTDTByIdAction(row.MAPK));
     dispatch(fetchAllThuocAction());
   };
   const handleSave = () => {};
@@ -2404,7 +2406,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -2423,14 +2425,14 @@ export function ListFormKhamBenh({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>
                     {typeof row[column.key] !== "string" ||
                     row[column.key] === ""
                       ? row[column.key]
-                      : row[column.key].split("\n").map((line, index) => (
+                      : row[column.key].split("\n")?.map((line, index) => (
                           <React.Fragment key={index}>
                             {line}
                             <br />
@@ -2471,7 +2473,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MAPK}
+                Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
               <button
                 type="button"
@@ -2526,7 +2528,7 @@ export function ListFormCLS({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns.map((column, index) => (
+            {columns?.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -2545,9 +2547,9 @@ export function ListFormCLS({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns.map((column, colIndex) => (
+                {columns?.map((column, colIndex) => (
                   <td key={colIndex}>
                     {row[column.key] || ""}
                   </td>
@@ -2583,7 +2585,7 @@ export function ListFormCLS({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MAPK}
+                Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
               <button
                 type="button"

@@ -19,6 +19,7 @@ function DonThuoc() {
   const dispatch = useDispatch();
   const dsThuoc = useSelector((state) => state.thuocKeDon?.dsThuoc) || [];
   const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const leTan = useSelector((state) => state.auth?.user) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
   console.log('dsThuoc', dsThuoc)
   const [formula, setFormula] = useState("");

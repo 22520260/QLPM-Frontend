@@ -113,7 +113,7 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              {dsCLS.length === 0 && ctdt.length === 0 ? null : (
+              {dsCLS?.length === 0 && ctdt?.length === 0 ? null : (
                 <tr
                   class="collapse accordion-collapse"
                   id="r1"
@@ -123,9 +123,9 @@ function HoaDon() {
                     <div className="py-3 border border-primary">
                       <ListForm
                         columns={
-                          dsCLS.length === 0 ? columnsCTDT : columnsDSCLS
+                          dsCLS?.length === 0 ? columnsCTDT : columnsDSCLS
                         }
-                        data={dsCLS.length === 0 ? ctdt : dsCLS}
+                        data={dsCLS?.length === 0 ? ctdt : dsCLS}
                         onDeleteService={handleOnDelete}
                       ></ListForm>
                     </div>
@@ -147,8 +147,8 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              {dsCLS.length === 0 ||
-              (dsCLS.length !== 0 && ctdt.length === 0) ? null : (
+              {dsCLS?.length === 0 ||
+              (dsCLS?.length !== 0 && ctdt?.length === 0) ? null : (
                 <tr
                   class="collapse accordion-collapse"
                   id="r2"
