@@ -208,8 +208,6 @@ function PhanQuyen() {
         selectedVaiTro={selectedVaiTro}
         sendDataToParent={handleDataFromChild}
       />
-
-
     </div>
   );
 }

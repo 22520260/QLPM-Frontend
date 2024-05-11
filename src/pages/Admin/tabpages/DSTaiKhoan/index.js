@@ -141,7 +141,7 @@ function DSTaiKhoan() {
       return;
     }
 
-    console.log('>>> formData', formData)
+    console.log(">>> formData", formData);
 
     const response = await axios.post("/account/insert", formData);
 
@@ -168,7 +168,7 @@ function DSTaiKhoan() {
       <div className="row py-2 align-items-end">
         <IFSearch
           title={"Tìm theo vai trò"}
-          size={3}
+          size={4}
           onChange={(value) => handleIFRoleChange(value)}
         />
         <IFSearch
@@ -176,12 +176,21 @@ function DSTaiKhoan() {
           size={4}
           onChange={(value) => handleIFNameChange(value)}
         />
-
+        <div className="col col-md-4 d-flex justify-content-end">
+          <button
+            className="btn btn-primary"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#addAccount"
+          >
+            Thêm mới
+          </button>
+        </div>
       </div>
       {/* Modal thêm mới BACSI & LETAN */}
       <div
         className="modal fade modal-xl"
-        id="themmoi"
+        id="addAccount"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
