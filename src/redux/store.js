@@ -2,8 +2,10 @@ import { configureStore } from '@reduxjs/toolkit'
 import fetchAllBenhNhanReducer from './slice/getDataSlice/getAllBenhNhanSlice'
 import fetchAllBacSiReducer from './slice/getDataSlice/getAllBacSiSlice'
 import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
+import fetchHoaDonReducer from './slice/getDataSlice/getHoaDonSlice' 
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
 import getCTDTByIdRecuder from './slice/getDataSlice/getCTDTByIdSlice'
+import getCLSRecuder from './slice/getDataSlice/getCLSSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
 import authReducer from './slice/other/authSlices'
 import getAllAccountReducer from './slice/getDataSlice/getAllAccountSlice'
@@ -27,6 +29,8 @@ export default configureStore({
     services: fetchAllDichVuReducer,
     thuoc: getAllThuocReducer,
     fetchDSDK: getDSDKRecuder,
+    fetchHoaDon: fetchHoaDonReducer,
+    fetchCLS: getCLSRecuder,
     existedCTDT: getCTDTByIdRecuder,
     selectedRow: selectedRowReducer,
     auth: authReducer,

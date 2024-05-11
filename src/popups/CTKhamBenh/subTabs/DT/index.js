@@ -12,6 +12,7 @@ import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
 
 function DonThuoc() {
@@ -194,7 +195,6 @@ function DonThuoc() {
     { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
     { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
-    { title: "Thanh toán", key: "3" }, //Yes/no
   ];
 
   const handleDeleteMedicine = (index) => {
@@ -237,7 +237,7 @@ function DonThuoc() {
     try {
       const response = await axios.post(
         "http://localhost:3001/donthuoc/insert",
-        { maPK: selectedPK.MAPK, maLT: 999 },
+        { maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
         { withCredentials: true }
       );
       if (response.status === 200) {
@@ -247,6 +247,7 @@ function DonThuoc() {
         if (isComplete === true) {
           setMedicines([]);
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
+          dispatch(fetchDSDKAction());
           setFormula("");
           setUnit("");
           setDay(0);

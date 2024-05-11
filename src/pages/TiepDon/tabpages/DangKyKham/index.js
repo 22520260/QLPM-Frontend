@@ -22,9 +22,9 @@ function DangKyKham() {
   const services = useSelector((state) => state.services?.data) || [];
 
   const patients =
-    useSelector((state) => state.fetchAllBenhNhan.data?.data) || [];
-
+    useSelector((state) => state.fetchAllBenhNhan?.data) || [];
   const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
+  const leTan = useSelector((state) => state.auth?.user) || {};
 
   const [showError, setShowError] = useState(false);
   const [oldPatientID, setOldPatientID] = useState(0);
@@ -163,7 +163,7 @@ function DangKyKham() {
       // thêm hóa đơn mới
       try {
         const response1 = await axios.post("/hoadon/insert", {
-          maLT: 1,
+          maLT: leTan.account.userInfo[0].MALT,
           maLHD: 1,
           tttt: "Chưa thanh toán",
         });

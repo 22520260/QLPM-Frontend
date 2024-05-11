@@ -6,10 +6,25 @@ import {
 import { useSelector } from "react-redux";
 
 function ThongTinKhachHang() {
-  const data = useSelector((state) => state.selectedRow?.selectedRow);
+  const selectedBN = useSelector((state) => state.fetchAllBenhNhan?.patientById);
 
   const handleChange = (page) => {
     console.log(page);
+  };
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+    return age > 0 ? age : 0;
   };
 
   return (
@@ -25,6 +40,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={3}
+            value={selectedBN.MABN}
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
@@ -32,7 +48,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={6}
-            value={data.TENBN}
+            value={selectedBN.HOTEN}
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
@@ -40,7 +56,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={3}
-            value={data.GIOITINH}
+            value={selectedBN.GIOITINH}
             onChange={(value) => handleChange(1)}
           />
         </div>
@@ -50,7 +66,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={3}
-            value={new Date(data.NGAYSINH)}
+            value={new Date(selectedBN.NGAYSINH)}
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
@@ -58,6 +74,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={2}
+            value={calculateAge(new Date(selectedBN.NGAYSINH))}
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
@@ -65,7 +82,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={4}
-            value={data.CCCD}
+            value={selectedBN.CCCD}
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
@@ -73,7 +90,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={3}
-            value={data.SDT}
+            value={selectedBN.SDT}
             onChange={(value) => handleChange(1)}
           />
         </div>
@@ -83,6 +100,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={7}
+            value={selectedBN.DIACHI}
             onChange={(value) => handleChange(1)}
           />
 
@@ -91,6 +109,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={5}
+            value={selectedBN.DIUNG}
             onChange={(value) => handleChange(1)}
           />
         </div>
@@ -101,6 +120,7 @@ function ThongTinKhachHang() {
             valid={true}
             readOnly={true}
             size={12}
+            value={selectedBN.TIENSUBENH}
             onChange={(value) => handleChange(1)}
           />
         </div>

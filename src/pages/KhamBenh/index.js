@@ -11,8 +11,7 @@ import { compareDates, usePaginationHandler } from "../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchDSDK?.data);
-  const DSDK = data.data;
+  const DSDK = useSelector((state) => state.fetchDSDK?.data);
   const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -24,12 +23,14 @@ function DanhSachDangKy() {
 
 
   const columns = [
-    { title: "Mã phiếu", key: "MAPK" },
+    { title: "Mã phiếu", key: "MAPKTG" },
     { title: "STT", key: "STT" },
-    { title: "Họ Tên", key: "TENBN" },
-    { title: "Tên Bác sĩ", key: "TENBS" },
-    { title: "Tổng tiền", key: "TIENTHUOC" },
-    { title: "Trạng thái", key: "TRANGTHAITH" },
+    { title: "Bệnh nhân", key: "INFOBN" },
+    { title: "Bác sĩ", key: "INFOBS" },
+    { title: "Dịch vụ", key: "TENDV" },
+    { title: "TTTH PK", key: "TRANGTHAITH" },
+    { title: "TTTT HDCLS", key: "TTTTCLS" },
+    { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
   useEffect(() => {
