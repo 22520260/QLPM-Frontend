@@ -116,7 +116,6 @@ function DanhSachDangKy() {
 
   return (
     <>
-      <h1>Khám Bệnh</h1>
       <div className="container-fluid">
         <h1>Khám Bệnh</h1>
         <div className="row py-2">

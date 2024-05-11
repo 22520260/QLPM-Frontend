@@ -99,7 +99,7 @@ function CanLamSang() {
 
   return (
     <>
-      <h1>CanLamSang</h1>
+      <h1>Cận lâm sàn</h1>
       <div className="container-fluid">
         <div className="row py-2">
           <IFNgay
