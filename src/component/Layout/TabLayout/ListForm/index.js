@@ -42,6 +42,7 @@ import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice" 
 
 import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
@@ -142,6 +143,9 @@ export function ListFormDSDK({ columns, data, loading }) {
       toast("Thanh toán không thành công");
     }
   };
+  const handleDongButton = () => {
+    dispatch(clearIsShowHdRow());
+  }
 
   return (
     <>
@@ -243,6 +247,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={()=>handleDongButton()}
               >
                 Đóng
               </button>
@@ -307,8 +312,8 @@ export function ListFormDSDK({ columns, data, loading }) {
                       defaultValue={new Date()}
                     />
                     <ListGroupItem
-                      title={"Mã phiếu"}
-                      value={"PK" + selectedRow?.MAPK}
+                      title={"Mã hóa đơn"}
+                      value={selectedHD.MAHD ? "HD" + selectedHD.MAHD : ""}
                       disable={true}
                     />
                     <ListGroupItem
@@ -340,6 +345,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={()=>handleDongButton()}
               >
                 Đóng
               </button>

@@ -2,19 +2,23 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { selectHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
+import { useState } from "react";
+import { setIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 
 function HoaDon() {
   const dispatch = useDispatch();
-  const bills = useSelector((state) => state.fetchHoaDon?.dshd);
-  const ctdt = useSelector((state) => state.existedCTDT?.data);
-  const dsCLS = useSelector((state) => state.fetchCLS?.dsClsById);
-  const dspkByIdHd = useSelector((state) => state.fetchDSDK?.pkByIdHd);
+  const bills = useSelector((state) => state.fetchHoaDon.dshd);
+  const ctdt = useSelector((state) => state.existedCTDT.data);
+  const dsCLS = useSelector((state) => state.fetchCLS.dsClsById);
+  const dspkByIdHd = useSelector((state) => state.fetchDSDK.pkByIdHd);
+  let isShowHdRows = useSelector((state) => state.fetchHoaDon.isShowHdRow);
 
   const handleOnDelete = (page) => {
     console.log(page);
   };
-  const handleRowClick = (row) => {
+  const handleRowClick = (row, rowIndex) => {
     dispatch(selectHD(row));
+    dispatch(setIsShowHdRow(rowIndex));
   };
 
   const columns = [
@@ -76,7 +80,7 @@ function HoaDon() {
                     data-bs-toggle="collapse"
                     data-bs-target="#r0"
                     key={rowIndex}
-                    onClick={() => handleRowClick(row)}
+                    onClick={() => handleRowClick(row, rowIndex)}
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{row[column.key] || ""}</td>
@@ -84,28 +88,31 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              <tr
-                class="collapse accordion-collapse"
-                id="r0"
-                data-bs-parent=".table"
-              >
-                <td colspan="5">
-                  <div className="py-3 border border-primary">
-                    <ListForm
-                      columns={columnsDSPK}
-                      data={dspkByIdHd}
-                      onDeleteService={handleOnDelete}
-                    ></ListForm>
-                  </div>
-                </td>
-              </tr>
+              {isShowHdRows && isShowHdRows[0] === true ? (
+                <tr
+                  // class="collapse accordion-collapse"
+                  // id="r0"
+                  data-bs-parent=".table"
+                >
+                  <td colspan="5">
+                    <div className="py-3 border border-primary">
+                      <ListForm
+                        columns={columnsDSPK}
+                        data={dspkByIdHd}
+                        onDeleteService={handleOnDelete}
+                      ></ListForm>
+                    </div>
+                  </td>
+                </tr>
+              ) : null}
+
               {bills.map((row, rowIndex) =>
                 rowIndex === 1 ? (
                   <tr
                     data-bs-toggle="collapse"
                     data-bs-target="#r1"
                     key={rowIndex}
-                    onClick={() => handleRowClick(row)}
+                    onClick={() => handleRowClick(row, rowIndex)}
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{row[column.key] || ""}</td>
@@ -113,25 +120,28 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              {dsCLS?.length === 0 && ctdt?.length === 0 ? null : (
-                <tr
-                  class="collapse accordion-collapse"
-                  id="r1"
-                  data-bs-parent=".table"
-                >
-                  <td colspan="5">
-                    <div className="py-3 border border-primary">
-                      <ListForm
-                        columns={
-                          dsCLS?.length === 0 ? columnsCTDT : columnsDSCLS
-                        }
-                        data={dsCLS?.length === 0 ? ctdt : dsCLS}
-                        onDeleteService={handleOnDelete}
-                      ></ListForm>
-                    </div>
-                  </td>
-                </tr>
-              )}
+              {
+                //dsCLS.length === 0 && ctdt.length === 0
+                isShowHdRows && isShowHdRows[1] === true ? (
+                  <tr
+                    // class="collapse accordion-collapse"
+                    // id="r1"
+                    data-bs-parent=".table"
+                  >
+                    <td colspan="5">
+                      <div className="py-3 border border-primary">
+                        <ListForm
+                          columns={
+                            dsCLS.length === 0 ? columnsCTDT : columnsDSCLS
+                          }
+                          data={dsCLS.length === 0 ? ctdt : dsCLS}
+                          onDeleteService={handleOnDelete}
+                        ></ListForm>
+                      </div>
+                    </td>
+                  </tr>
+                ) : null
+              }
 
               {bills.map((row, rowIndex) =>
                 rowIndex === 2 ? (
@@ -139,7 +149,7 @@ function HoaDon() {
                     data-bs-toggle="collapse"
                     data-bs-target="#r2"
                     key={rowIndex}
-                    onClick={() => handleRowClick(row)}
+                    onClick={() => handleRowClick(row, rowIndex)}
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex}>{row[column.key] || ""}</td>
@@ -147,24 +157,26 @@ function HoaDon() {
                   </tr>
                 ) : null
               )}
-              {dsCLS?.length === 0 ||
-              (dsCLS?.length !== 0 && ctdt?.length === 0) ? null : (
-                <tr
-                  class="collapse accordion-collapse"
-                  id="r2"
-                  data-bs-parent=".table"
-                >
-                  <td colspan="5">
-                    <div className="py-3 border border-primary">
-                      <ListForm
-                        columns={columnsCTDT}
-                        data={ctdt}
-                        onDeleteService={handleOnDelete}
-                      ></ListForm>
-                    </div>
-                  </td>
-                </tr>
-              )}
+              {
+                //dsCLS.length === 0 || (dsCLS.length !== 0 && ctdt.length === 0)
+                isShowHdRows && isShowHdRows[2] === true ? (
+                  <tr
+                    // class="collapse accordion-collapse"
+                    // id="r2"
+                    data-bs-parent=".table"
+                  >
+                    <td colspan="5">
+                      <div className="py-3 border border-primary">
+                        <ListForm
+                          columns={columnsCTDT}
+                          data={ctdt}
+                          onDeleteService={handleOnDelete}
+                        ></ListForm>
+                      </div>
+                    </td>
+                  </tr>
+                ) : null
+              }
             </tbody>
           </table>
         </div>
