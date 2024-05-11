@@ -10,7 +10,7 @@ import {
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
@@ -20,6 +20,8 @@ function DonThuoc() {
   const dsThuoc = useSelector((state) => state.thuocKeDon?.dsThuoc) || [];
   const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
+  const leTan = useSelector((state) => state.auth.user) || {};
+
   console.log('dsThuoc', dsThuoc)
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
@@ -213,7 +215,7 @@ function DonThuoc() {
         );
         if (response.status === 200) {
           toast("Thêm chi tiết đơn thuốc thành công");
-          dispatch(fetchAllThuocAction());
+          dispatch(fetchAllThuocKeDonAction());
           return true;
         }
       } catch (error) {

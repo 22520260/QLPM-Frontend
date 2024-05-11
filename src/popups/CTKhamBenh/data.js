@@ -7,7 +7,7 @@ import LichSuThuoc from "./subTabs/LST"
 
 export const tabsDataCTKB = [
     { title: 'Thông tin khám', content: 'ctpk-ttk', component: ThongTinKham },
-    { title: 'Dịch vụ', content: 'ctpk-dv', component: DichVu },
+    { title: 'Chỉ định CLS', content: 'ctpk-dv', component: DichVu },
     { title: 'Đơn thuốc', content: 'ctpk-dt', component: DonThuoc },
     { title: 'Lịch sử khám', content: 'ctpk-lsk', component: LichSuKham },
     { title: 'Lịch sử thuốc', content: 'ctpk-lst', component: LichSuThuoc },

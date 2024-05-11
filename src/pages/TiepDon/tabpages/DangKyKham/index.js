@@ -342,7 +342,7 @@ function DangKyKham() {
                 title={"Nhập dịch vụ"}
                 valid={objValidInput.isValidDichVu}
                 size={6}
-                options={services}
+                options={services.filter(service => service.MALOAIDV === 100 || service.MALOAIDV === 102)}
                 onChange={(e) => {
                   const value = e.target.value;
                   const selected = services.find(

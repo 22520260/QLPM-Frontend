@@ -33,6 +33,8 @@ import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetc
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
 import { deFormatDate } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
+
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
 import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
 import { ImageUpload } from "./ImageUpload";
@@ -2398,7 +2400,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
     dispatch(fetchCTDTByIdAction(row.MAPK));
-    dispatch(fetchAllThuocAction());
+    dispatch(fetchAllThuocKeDonAction());
   };
   const handleSave = () => {};
 
