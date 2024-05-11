@@ -43,7 +43,7 @@ function PhanQuyen() {
 
       if (searchKeyword) {
         filteredRoles = filteredRoles.filter((data) =>
-          data.MOTA.toLowerCase().includes(searchKeyword.toLowerCase())
+          data.URL.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
 
@@ -121,7 +121,7 @@ function PhanQuyen() {
           onChange={(value) => setSelectedVaiTro(value)}
         />
         <IFSearch
-          title={"Tìm theo mô tả"}
+          title={"Tìm theo URL"}
           size={4}
           onChange={(value) => handleIFSearchChange(value)}
         />
@@ -208,8 +208,6 @@ function PhanQuyen() {
         selectedVaiTro={selectedVaiTro}
         sendDataToParent={handleDataFromChild}
       />
-
-
     </div>
   );
 }

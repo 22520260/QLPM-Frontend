@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
+import {
+  IFNgay,
+  IFSearch,
+} from "../../component/Layout/TabLayout/InputForm";
 import { ListFormKhamBenh } from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
@@ -8,8 +11,8 @@ import { compareDates, usePaginationHandler } from "../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const DSDK = useSelector((state) => state.fetchDSDK.data);
-  const isLoading = useSelector((state) => state.fetchDSDK.loading);
+  const DSDK = useSelector((state) => state.fetchDSDK?.data);
+  const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
@@ -17,6 +20,7 @@ function DanhSachDangKy() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
+
 
   const columns = [
     { title: "Mã phiếu", key: "MAPKTG" },

@@ -3,7 +3,7 @@ import { fetchDSDKAction, fetchPkByIdHdAction } from '../../action/fetchDataActi
 
 const initialState = {
   data: [],
-  loading: false,
+  isLoading: false,
   pkByIdHd: []
 };
 
@@ -14,18 +14,17 @@ const fetchDSDKSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchDSDKAction.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchDSDKAction.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.data = action.payload.data;
       })
       .addCase(fetchDSDKAction.rejected, (state) => {
-        state.loading = false;
+        state.isLoading = false;
       })
       .addCase(fetchPkByIdHdAction.fulfilled, (state, action) => {
-        state.status = 'success';
-        state.loading = false;
+        state.isLoading = false;
         state.pkByIdHd = action.payload.data;
       });
   },

@@ -33,6 +33,9 @@ import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetc
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
 import { deFormatDate } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
+import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
+import { ImageUpload } from "./ImageUpload";
 import { fetchBenhNhanByIdAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
@@ -44,6 +47,8 @@ import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDon
 import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 
+
+// Listform and delete button
 export function ListForm({ columns, data, loading, onDeleteService }) {
   function handleRowClick(row) {}
 
@@ -97,9 +102,9 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
 
 export function ListFormDSDK({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
-  const selectedHD = useSelector((state) => state.fetchHoaDon.selectedHD);
-  const leTan = useSelector((state) => state.auth.user) || {};
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
+  const selectedHD = useSelector((state) => state.fetchHoaDon?.selectedHD);
+  const leTan = useSelector((state) => state.auth?.user) || {};
 
   const [pttt, setPttt] = useState("Tiền mặt");
 
@@ -359,14 +364,101 @@ export function ListFormDSDK({ columns, data, loading }) {
 }
 
 export function ListFormThuoc({ columns, data, loading }) {
-  const [selectedRow, setSelectedRow] = useState([]);
-
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({});
+  const [formDelete, setFormDelete] = useState({});
+  const thuoc = useSelector((state) => state.thuoc?.data);
+  console.log("thuoc", thuoc);
   const handleRowClick = (row) => {
-    setSelectedRow(row);
+    console.log("row", row);
+    setFormData({
+      maLoThuoc: row.MALOTHUOC,
+      maThuoc: row.MATHUOC,
+      nhaCC: row.NHACC,
+      soLuongNhap: row.SOLUONGNHAP,
+      soLuongTon: row.SOLUONGTON,
+      ngayNhap: deFormatDate(row.NGAYNHAP),
+      hanSD: deFormatDate(row.HANSD),
+      giaNhap: row.GIANHAP,
+      giaBan: row.GIABAN,
+    });
+    setFormDelete({
+      maLoThuoc: row.MALOTHUOC,
+    });
   };
-  const handleSave = () => {};
 
-  const handleThanhToan = () => {};
+  const defaultObjValidInput = {
+    isValidNhaCC: true,
+    isValidGiaNhap: true,
+    isValidGiaBan: true,
+    isValidNgayNhap: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  useEffect(() => {
+    dispatch(fetchAllThuocAction());
+  }, []);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.nhaCC) {
+      setObjValidInput({ ...defaultObjValidInput, isValidNhaCC: false });
+      toast.error("Chưa nhập nhà cung cấp");
+      return;
+    }
+    if (!formData.giaNhap) {
+      setObjValidInput({ ...defaultObjValidInput, isValidGiaNhap: false });
+      toast.error("Chưa nhập giá nhập");
+      return;
+    }
+    if (!formData.giaBan) {
+      setObjValidInput({ ...defaultObjValidInput, isValidGiaBan: false });
+      toast.error("Chưa nhập giá bán");
+      return;
+    }
+    if (!formData.ngayNhap) {
+      setObjValidInput({ ...defaultObjValidInput, isValidNgayNhap: false });
+      toast.error("Chưa nhập ngày nhập");
+      return;
+    }
+
+    const response = await axios.post("/lothuoc/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllLoThuocAction());
+      const cancelBtn = document.getElementById("cancelBtn6");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleDelete = async () => {
+    const response = await axios.post("/lothuoc/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllLoThuocAction());
+      dispatch(fetchCheckThuocAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete6");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
 
   return (
     <>
@@ -401,15 +493,21 @@ export function ListFormThuoc({ columns, data, loading }) {
                   </td>
                 ))}
                 <td>
-                  <button
+                <button
                     type="button"
-                    className="btn btn-primary rounded-circle mx-1"
+                    className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#idctlt"
+                    data-bs-target="#updateLoThuoc"
                   >
                     <FaPencilRuler />
                   </button>
-                  <button className="btn btn-danger mx-1 rounded-circle">
+
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteLoThuoc"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
                     <MdDeleteForever />
                   </button>
                 </td>
@@ -419,10 +517,10 @@ export function ListFormThuoc({ columns, data, loading }) {
         </tbody>
       </table>
 
-      {/* Modal ChiTietLoThuoc */}
+      {/* Modal update */}
       <div
         className="modal fade modal-xl"
-        id="idctlt"
+        id="updateLoThuoc"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -431,7 +529,7 @@ export function ListFormThuoc({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin lô thuốc {selectedRow[0]}
+                Thông tin lô thuốc
               </h1>
               <button
                 type="button"
@@ -444,41 +542,85 @@ export function ListFormThuoc({ columns, data, loading }) {
             <div className="modal-body ">
               <div className="container-fluid">
                 <div className="row py-2">
-                  <IFInputText title={"Số lô"} size={2} required={"true"} />
-                  <IFInputText title={"Tên thuốc"} size={7} required={"true"} />
+                  <IFInputText
+                    title={"Mã lô"}
+                    size={2}
+                    required={"true"}
+                    value={formData.maLoThuoc}
+                    readOnly={true}
+                    onChange={(value) => handleChange("nhaCC", value)}
+                  />
+                  <IFSelect
+                    title={"Tên thuốc"}
+                    size={2}
+                    options={thuoc}
+                    keyObj={"MATHUOC"}
+                    showObj={"TENTHUOC"}
+                    required={"true"}
+                    value={formData.maThuoc}
+                    readOnly={true}
+                    onChange={(value) => handleChange("maThuoc", value)}
+                  />
+                  <IFInputText
+                    title={"Nhà cung cấp"}
+                    size={4}
+                    required={"true"}
+                    value={formData.nhaCC}
+                    valid={objValidInput.isValidNhaCC}
+                    onChange={(value) => handleChange("nhaCC", value)}
+                  />
+                  <IFNgay
+                    title={"Ngày nhập"}
+                    size={2}
+                    value={formData.ngayNhap}
+                    onChange={(value) => handleChange("ngayNhap", value)}
+                  />
+                  <IFNgay
+                    title={"Hạn sử dụng"}
+                    size={2}
+                    value={formData.hanSD}
+                    readOnly={true}
+                    onChange={(value) => handleChange("hanSD", value)}
+                  />
+                </div>
+                <div className="row py-2">
                   <IFInputText
                     title={"Số lượng nhập"}
                     size={3}
-                    required={"true"}
-                  />
-                </div>
-                <div className="row py-2">
-                  <IFInputText title={"Hoạt chất"} size={7} />
-                  <IFInputText title={"Đơn vị"} size={2} />
-                  <IFInputText title={"Số lượng tồn"} size={3} />
-                </div>
-                <div className="row py-2">
-                  <IFNgay
-                    title={"Ngày nhập"}
-                    size={3}
-                    defaultValue={new Date()}
-                  />
-                  <IFNgay title={"Hạn sử dụng"} size={3} required={"true"} />
-                  <IFInputText
-                    title={"Giá nhập (VNĐ)"}
-                    size={3}
-                    required={"true"}
+                    value={formData.soLuongNhap}
+                    required={true}
+                    readOnly={true}
                   />
                   <IFInputText
-                    title={"Giá bán (VNĐ)"}
+                    title={"Số lượng tồn"}
                     size={3}
-                    required={"true"}
+                    value={formData.soLuongTon}
+                    required={true}
+                    readOnly={true}
+                    onChange={(value) => handleChange("soLuongNhap", value)}
+                  />
+                  <IFInputText
+                    title={"Giá nhập"}
+                    size={3}
+                    required={true}
+                    value={formData.giaNhap}
+                    valid={objValidInput.isValidGiaNhap}
+                    onChange={(value) => handleChange("giaNhap", value)}
+                  />
+                  <IFInputText
+                    title={"Giá bán"}
+                    size={3}
+                    required={true}
+                    value={formData.giaBan}
+                    valid={objValidInput.isValidGiaBan}
+                    onChange={(value) => handleChange("giaBan", value)}
                   />
                 </div>
               </div>
             </div>
             <div className="modal-footer">
               <button
+                id="cancelBtn6"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
@@ -488,9 +630,55 @@ export function ListFormThuoc({ columns, data, loading }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleSave}
+                onClick={handleUpdate}
               >
                 Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteLoThuoc"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa lô thuốc
+              <span className="text-danger"> {formDelete.maLoThuoc} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete6"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
               </button>
             </div>
           </div>
@@ -505,7 +693,7 @@ export function ListFormDSTK({ columns, data, loading }) {
   const [formDataTTCN, setFormDataTTCN] = useState({});
   const [formDataTTTK, setFormDataTTTK] = useState({});
   const [formDelete, setFormDelete] = useState({});
-  const groupUsers = useSelector((state) => state.groupUsers.data.data) || [];
+  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
 
   const handleRowClick = (selectedRow) => {
     setFormDataTTCN({
@@ -680,7 +868,7 @@ export function ListFormDSTK({ columns, data, loading }) {
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#updateModal"
+                    data-bs-target="#updateAccount"
                   >
                     <FaPencilRuler />
                   </button>
@@ -702,7 +890,7 @@ export function ListFormDSTK({ columns, data, loading }) {
       {/* Modal update */}
       <div
         className="modal fade modal-xl"
-        id="updateModal"
+        id="updateAccount"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -908,7 +1096,7 @@ export function ListFormDSDV({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
   const [formDelete, setFormDelete] = useState({});
-  const loaiDichVu = useSelector((state) => state.loaiDichVu.data) || [];
+  const loaiDichVu = useSelector((state) => state.loaiDichVu?.data) || [];
   const handleRowClick = (row) => {
     setFormData({
       maDV: row.MADV,
@@ -1019,7 +1207,7 @@ export function ListFormDSDV({ columns, data, loading }) {
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#iddsdv"
+                    data-bs-target="#updateDichVu"
                   >
                     <FaEye />
                   </button>
@@ -1041,7 +1229,7 @@ export function ListFormDSDV({ columns, data, loading }) {
       {/* Modal update */}
       <div
         className="modal fade modal-lg"
-        id="iddsdv"
+        id="updateDichVu"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -1142,6 +1330,266 @@ export function ListFormDSDV({ columns, data, loading }) {
             <div class="modal-footer">
               <button
                 id="cancelBtnDelete"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDST({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({});
+  const [formDelete, setFormDelete] = useState({});
+  const dvt = useSelector((state) => state.dvt?.data) || [];
+  const handleRowClick = (row) => {
+    console.log("row", row);
+    setFormData({
+      maThuoc: row.MATHUOC,
+      maDVT: row.MADVT,
+      tenThuoc: row.TENTHUOC,
+      thanhPhan: row.THANHPHAN,
+    });
+    setFormDelete({
+      maThuoc: row.MATHUOC,
+      tenThuoc: row.TENTHUOC,
+    });
+  };
+
+  const defaultObjValidInput = {
+    isValidMaDVT: true,
+    isValidTenThuoc: true,
+    isValidThanhPhan: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.maDVT || +formData.maDVT === 0) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMaDVT: false });
+      toast.error("Chưa chọn đơn vị thuốc");
+      return;
+    }
+    if (!formData.tenThuoc) {
+      setObjValidInput({ ...defaultObjValidInput, isValidTenThuoc: false });
+      toast.error("Chưa nhập tên thuốc");
+      return;
+    }
+    if (!formData.thanhPhan) {
+      setObjValidInput({ ...defaultObjValidInput, isValidThanhPhan: false });
+      toast.error("Chưa nhập thành phần thuốc");
+      return;
+    }
+
+    const response = await axios.post("/thuoc/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllThuocAction());
+      const cancelBtn = document.getElementById("cancelBtn5");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleDelete = async () => {
+    const response = await axios.post("/thuoc/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllThuocAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete5");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>{row[column.key] || ""}</td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateThuoc"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteThuoc"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
+                    <MdDeleteForever />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      {/* Modal update */}
+      <div
+        className="modal fade modal-lg"
+        id="updateThuoc"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin tài khoản
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Tên thuốc"}
+                    size={9}
+                    required={"true"}
+                    value={formData.tenThuoc}
+                    valid={objValidInput.isValidTenThuoc}
+                    onChange={(value) => handleChange("tenThuoc", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFSelect
+                    id={"loaiDV"}
+                    title={"Đơn vị thuốc"}
+                    size={7}
+                    options={dvt}
+                    keyObj={"MADVT"}
+                    showObj={"TENDONVI"}
+                    value={formData.maDVT}
+                    valid={objValidInput.isValidMaDVT}
+                    onChange={(value) => handleChange("maDVT", value)}
+                  />
+                  <IFInputText
+                    title={"Thành phần"}
+                    size={5}
+                    value={formData.thanhPhan}
+                    valid={objValidInput.isValidThanhPhan}
+                    onChange={(value) => handleChange("thanhPhan", value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                id="cancelBtn5"
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleUpdate}
+              >
+                Cập nhật
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteThuoc"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa thuốc
+              <span className="text-danger"> {formDelete.tenThuoc} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete5"
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
@@ -1272,7 +1720,7 @@ export function ListFormDSLB({ columns, data, loading }) {
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#iddslb"
+                    data-bs-target="#updateBenh"
                   >
                     <FaEye />
                   </button>
@@ -1294,7 +1742,7 @@ export function ListFormDSLB({ columns, data, loading }) {
       {/* Modal update */}
       <div
         className="modal fade "
-        id="iddslb"
+        id="updateBenh"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -1504,7 +1952,7 @@ export function ListFormDVT({ columns, data, loading }) {
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#iddsdvt"
+                    data-bs-target="#updateDVT"
                   >
                     <FaEye />
                   </button>
@@ -1525,7 +1973,7 @@ export function ListFormDVT({ columns, data, loading }) {
       {/* Modal update */}
       <div
         className="modal fade "
-        id="iddsdvt"
+        id="updateDVT"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -1646,6 +2094,7 @@ export function ListFormPQ({
 
   const handleRowClick = (row) => {
     setFormData({
+      maVaiTro: row.MAVAITRO,
       url: row.URL,
       moTa: row.MOTA,
     });
@@ -1945,7 +2394,7 @@ export function ListFormPQ({
 
 export function ListFormKhamBenh({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
   const handleRowClick = (row) => {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
     dispatch(fetchCTDTByIdAction(row.MAPK));
@@ -2063,6 +2512,163 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+export function ListFormCLS({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+  };
+  const handleSave = () => {
+    console.log("SAVE");
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {row[column.key] || ""}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#idcls"
+                  >
+                    <FaStethoscope />
+                  </button>
+                  <button
+                    className="btn btn-danger mx-1"
+                  >
+                    Xóa
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+
+      {/* Modal CLS */}
+      <div
+        className="modal fade modal-xl" id="idcls"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin phiếu khám {selectedRow.MAPK}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body py-0">
+              <div className="container-fluid p-0">
+                <table className="table">
+                  <tr className="row">
+                    <th className="border col col-md-1">Bệnh nhân</th>
+                    <td className="border col col-md-3">
+
+                    </td>
+                    <th className="border col col-md-1">Bác sĩ</th>
+                    <td className="border col col-md-3">
+                      BSCKI. Le Thi Thanh Thao
+                    </td>
+                    <th className="border col col-md-1">Ghi chú</th>
+                    <td className="border col col-md-3">
+
+                    </td>
+                  </tr>
+                  <tr className="row">
+                    <th className="border col col-md-1">Dịch vụ</th>
+                    <td className="border col col-md-3">
+                      Noi Soi Tai Mũi Hong
+                    </td>
+                    <th className="border col col-md-1">Thực hiện</th>
+                    <td className="border col col-md-3">
+                      BSCKI. Lê Thi Thanh Thao
+                    </td>
+                    <th className="border col col-md-1">Thời gian</th>
+                    <td className="border col col-md-3">
+
+                    </td>
+                  </tr>
+                </table>
+
+                <div className="row">
+                  <div className="col col-md-6">
+                    <TextArea title={"Mô tả"} size={12} row={10} onChange={() => { }} />
+                    <div className="row p-2">
+                      <TextArea title={"Kết luận"} size={6} row={3} onChange={() => { }} />
+                      <TextArea title={"Đề nghị từ chuyên gia"} size={6} row={3} onChange={() => { }} />
+                    </div>
+                  </div>
+                  <div className="col col-md-6">
+                    <ImageUpload />
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                id="closeBtn"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleSave}
+              >
+                Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 }

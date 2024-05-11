@@ -19,8 +19,8 @@ function App() {
     }
   }, []);
 
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const user = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state) => state.auth?.isLoading);
+  const user = useSelector((state) => state.auth?.user);
   console.log('user', user)
 
   return (

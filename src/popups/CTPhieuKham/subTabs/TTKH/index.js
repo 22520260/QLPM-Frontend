@@ -6,7 +6,7 @@ import {
 import { useSelector } from "react-redux";
 
 function ThongTinKhachHang() {
-  const selectedBN = useSelector((state) => state.fetchAllBenhNhan.patientById);
+  const selectedBN = useSelector((state) => state.fetchAllBenhNhan?.patientById);
 
   const handleChange = (page) => {
     console.log(page);

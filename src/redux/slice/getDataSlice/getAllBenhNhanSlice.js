@@ -3,8 +3,7 @@ import { fetchAllBenhNhanAction, fetchBenhNhanByIdAction } from '../../action/fe
 
 const initialState = {
   data: [],
-  loading: false,
-  error: null,
+  isLoading: false,
   patientById: {},
 };
 
@@ -15,18 +14,17 @@ const fetchAllBenhNhanSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchAllBenhNhanAction.pending, (state, action) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchAllBenhNhanAction.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.data = action.payload.data;
       })
       .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.isLoading = false;
       })
       .addCase(fetchBenhNhanByIdAction.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.patientById = action.payload.data;
       });
   },

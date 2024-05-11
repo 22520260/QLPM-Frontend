@@ -1,28 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllThuocAction } from '../../action/fetchDataAction/fetchAllThuocAction';
+import { fetchCheckThuocAction } from '../../action/fetchDataAction/fetchCheckThuocAction';
 
 const initialState = {
   data: [],
   isLoading: false,
 };
 
-const fetchAllThuocSlice = createSlice({
+const fetchCheckThuocSlice = createSlice({
   name: 'thuoc',
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchAllThuocAction.pending, (state) => {
+      .addCase(fetchCheckThuocAction.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchAllThuocAction.fulfilled, (state, action) => {
+      .addCase(fetchCheckThuocAction.fulfilled, (state, action) => {
         state.isLoading = false;
         state.data = action.payload.data;
       })
-      .addCase(fetchAllThuocAction.rejected, (state) => {
+      .addCase(fetchCheckThuocAction.rejected, (state) => {
         state.isLoading = false;
       });
   },
 });
 
-export default fetchAllThuocSlice.reducer;
+export default fetchCheckThuocSlice.reducer;

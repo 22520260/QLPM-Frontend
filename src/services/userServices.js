@@ -7,6 +7,14 @@ export const loginUser = (username, password) => {
   });
 };
 
+export const changeUserPassword = (username, oldPassword, newPassword) => {
+  return axios.post("/account/changePassword", {
+    username,
+    oldPassword,
+    newPassword
+  });
+};
+
 export const logoutUser = () => {
   return axios.post("/account/logout");
 };
