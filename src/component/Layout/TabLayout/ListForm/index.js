@@ -2666,3 +2666,264 @@ export function ListFormCLS({ columns, data, loading }) {
     </>
   );
 }
+
+
+
+
+export function ListFormdsBenhNhan({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
+  const selectedHD = useSelector((state) => state.fetchHoaDon?.selectedHD);
+  const leTan = useSelector((state) => state.auth?.user) || {};
+
+  const [pttt, setPttt] = useState("Tiền mặt");
+
+  const handleRowClick = (row) => {
+    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    dispatch(fetchCTDTByIdAction(row.MAPK));
+    dispatch(fetchBenhNhanByIdAction(row.MABN));
+    dispatch(fetchDSHDByIdAction(row.MAPK));
+    dispatch(fetchDsClsByIdAction(row.MAPK));
+    dispatch(fetchPkByIdHdAction(row.MAHDPK));
+    dispatch(clearSelectedHD());
+  };
+  const handleSave = () => {};
+  const handleChangePttt = (value) => {
+    setPttt(value);
+  };
+
+  const handleThanhToan = async () => {
+    try {
+      const response = await axios.post("/hoadon/thanhtoan", {
+        ...selectedHD,
+        maLT: leTan.account.userInfo[0].MALT,
+        tttt: "Đã thanh toán",
+        tdtt: new Date(),
+        pttt: pttt,
+      });
+
+      if (response.status === 200) {
+        toast("Thanh toán hóa đơn thành công");
+        dispatch(fetchDSHDByIdAction(selectedRow.MAPK));
+        dispatch(fetchDSDKAction());
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Thanh toán không thành công");
+    }
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {typeof row[column.key] !== "string" ||
+                    row[column.key] === ""
+                      ? row[column.key]
+                      : row[column.key].split("\n").map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                  </td>
+                ))}
+
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#idctpk"
+                  >
+                    <FaEye />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle mx-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#idtt"
+                  >
+                    <FaDollarSign />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {/* Modal ChiTietPhieuKham */}
+      <div
+        className="modal fade modal-xl"
+        id="idctpk"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin phiếu khám {selectedRow.MAPK}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <NavTabVertical
+                  tabsData={tabsDataCTPK}
+                  maPK={selectedRow.MAPK}
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSave}
+              >
+                Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Modal ThanhToan */}
+      <div
+        className="modal fade modal-xl"
+        id="idtt"
+        tabindex="-1"
+        aria-labelledby="thanhtoanModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="thanhtoanModalLabel">
+                Thanh toán cho PK{selectedRow.MAPK}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row">
+                  <div className="col col-9">
+                    <HoaDon />
+                  </div>
+                  <div className="col-3">
+                    <ListGroupItem
+                      title={"Khách hàng"}
+                      value={selectedRow.TENBN}
+                      disable={true}
+                    />
+                    <ListGroupItem
+                      title={"Người bán"}
+                      value={
+                        selectedHD.TTTT === "Chưa thanh toán"
+                          ? leTan.account.userInfo[0].HOTEN
+                          : selectedHD.TENLT
+                      }
+                    />
+                    <IFNgay
+                      title={"Ngày bán"}
+                      size={12}
+                      onChange={() => {}}
+                      defaultValue={new Date()}
+                    />
+                    <ListGroupItem
+                      title={"Mã phiếu"}
+                      value={"PK" + selectedRow.MAPK}
+                      disable={true}
+                    />
+                    <ListGroupItem
+                      title={"Tổng tiền"}
+                      value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
+                      disable={true}
+                    />
+                    {/* <ListGroupItem title={"Giảm giá"} value={"0"} />
+                    <ListGroupItem
+                      title={"Thành tiền"}
+                      value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
+                      disable={true}
+                    /> */}
+                    <IFInputText
+                      title={"Phương thức TT"}
+                      size={12}
+                      valid={true}
+                      onChange={(value) => handleChangePttt(value)}
+                      value={selectedHD.PTTT ? selectedHD.PTTT : pttt}
+                    />
+                    <TextArea title={"Ghi chú"} onChange={() => {}} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleThanhToan()}
+              >
+                Thanh toán
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
