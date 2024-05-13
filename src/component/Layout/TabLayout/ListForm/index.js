@@ -52,12 +52,13 @@ import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTT
 import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon } from "./StatusIcon";
+const { format } = require("date-fns");
 
 export function ListForm({ columns, data, loading }) {
   return (
     <>
       <table className="table table-striped table-hover">
-        <thead >
+        <thead>
           <tr>
             {columns?.map((column, index) => (
               <th key={index} scope="col">
@@ -214,17 +215,19 @@ export function ListFormDSDK({ columns, data, loading }) {
     dispatch(selectRow(row));
     dispatch(fetchTTKAction(row.MAPK));
     dispatch(fetchBenhByIdAction(row.MAPK));
-    };
+  };
+
   const handleSave = () => {};
+
   const handleChangePttt = (value) => {
     setPttt(value);
   };
 
-  const handleThanhToan = async () => {
+  const updateTrangThaiPK = async (varTrangThai) => {
     try {
       const response2 = await axios.post("/phieukham/update-trang-thai", {
         maPK: selectedRow.MAPK,
-        trangThai: "Đang thực hiện",
+        trangThai: varTrangThai,
       });
 
       if (response2.status === 200) {
@@ -234,7 +237,12 @@ export function ListFormDSDK({ columns, data, loading }) {
       console.log(error);
       toast("Cập nhật trạng thái phiếu khám thành công");
     }
+  }
 
+  const handleThanhToan = async () => {
+    if (selectedHD.MALOAIHD === 1) {
+      await updateTrangThaiPK("Đang thực hiện");
+    }
     try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
@@ -258,6 +266,11 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleDongButton = () => {
     dispatch(clearIsShowHdRow());
   };
+
+  const handleHuyPK = async () => {
+    await updateTrangThaiPK("Đã hủy");
+    dispatch(fetchDSDKAction());
+  }
 
   return (
     <>
@@ -324,6 +337,14 @@ export function ListFormDSDK({ columns, data, loading }) {
                     data-bs-target="#idtt"
                   >
                     <FaDollarSign />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger mx-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#huyPhieu"
+                  >
+                    Hủy
                   </button>
                 </td>
               </tr>
@@ -504,7 +525,9 @@ export function ListFormDSDK({ columns, data, loading }) {
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">Bạn có chắc chắc muốn thanh toán HD{selectedHD.MAHD}</div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn thanh toán HD{selectedHD.MAHD}
+            </div>
             <div class="modal-footer">
               <button
                 id="cancelBtnDelete4"
@@ -523,6 +546,51 @@ export function ListFormDSDK({ columns, data, loading }) {
                 data-bs-dismiss="modal"
                 data-bs-toggle="modal"
                 onClick={handleThanhToan}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*Bạn có chắc muốn hủy phiếu khám*/}
+      <div
+        class="modal fade"
+        id="huyPhieu"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắn muốn hủy PK{selectedRow.MAPK}
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete4"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                onClick={handleHuyPK}
               >
                 Đồng ý
               </button>
@@ -2734,7 +2802,17 @@ export function ListFormCLS({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>{row[column.key] || ""}</td>
+                  <td key={colIndex}>
+                    {typeof row[column.key] !== "string" ||
+                    row[column.key] === ""
+                      ? row[column.key]
+                      : row[column.key].split("\n")?.map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                  </td>
                 ))}
                 <td>
                   <button
@@ -2745,7 +2823,14 @@ export function ListFormCLS({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button className="btn btn-danger mx-1">Xóa</button>
+                  <button
+                    type="button"
+                    className="btn btn-danger mx-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#huyPhieu"
+                  >
+                    Hủy
+                  </button>
                 </td>
               </tr>
             ))
@@ -2767,7 +2852,7 @@ export function ListFormCLS({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MAPK}
+                Thông tin phiếu CLS{selectedRow.MAKQ}
               </h1>
               <button
                 type="button"
@@ -2782,25 +2867,29 @@ export function ListFormCLS({ columns, data, loading }) {
                 <table className="table">
                   <tr className="row">
                     <th className="border col col-md-1">Bệnh nhân</th>
-                    <td className="border col col-md-3"></td>
-                    <th className="border col col-md-1">Bác sĩ</th>
+                    <td className="border col col-md-3">{selectedRow.TENBN}</td>
+                    <th className="border col col-md-1">Bác sĩ chỉ định</th>
                     <td className="border col col-md-3">
-                      BSCKI. Le Thi Thanh Thao
+                      {selectedRow.INFOBSCD}
                     </td>
-                    <th className="border col col-md-1">Ghi chú</th>
-                    <td className="border col col-md-3"></td>
+                    <th className="border col col-md-1">Trạng thái</th>
+                    <td className="border col col-md-3">
+                      {selectedRow.TRANGTHAITH}
+                    </td>
                   </tr>
                   <tr className="row">
                     <th className="border col col-md-1">Dịch vụ</th>
+                    <td className="border col col-md-3">{selectedRow.TENDV}</td>
+                    <th className="border col col-md-1">Bác sĩ thực hiện</th>
                     <td className="border col col-md-3">
-                      Noi Soi Tai Mũi Hong
-                    </td>
-                    <th className="border col col-md-1">Thực hiện</th>
-                    <td className="border col col-md-3">
-                      BSCKI. Lê Thi Thanh Thao
+                      {selectedRow.INFOBSTH}
                     </td>
                     <th className="border col col-md-1">Thời gian</th>
-                    <td className="border col col-md-3"></td>
+                    <td className="border col col-md-3">
+                      {selectedRow.NGAYKHAM
+                        ? format(selectedRow.NGAYKHAM, "dd/MM/yyyy - HH:mm")
+                        : ""}
+                    </td>
                   </tr>
                 </table>
 
@@ -2848,6 +2937,51 @@ export function ListFormCLS({ columns, data, loading }) {
                 onClick={handleSave}
               >
                 Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*Bạn có chắc muốn hủy phiếu CLS*/}
+      <div
+        class="modal fade"
+        id="huyPhieu"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắn muốn hủy phiếu CLS{selectedRow.MAKQ}
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete4"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                onClick={() => {}}
+              >
+                Đồng ý
               </button>
             </div>
           </div>

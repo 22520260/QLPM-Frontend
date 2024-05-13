@@ -5,15 +5,14 @@ import {
 } from "../../../component/Layout/TabLayout/InputForm";
 import { ListFormCLS } from "../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../component/Layout/TabLayout/Pagination";
-import { fetchDSDKAction } from "../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { fetchAllClsAction } from "../../../redux/action/fetchDataAction/fetchCLSAction";
 import { useDispatch, useSelector } from "react-redux";
 import { compareDates, usePaginationHandler } from "../../../utils/appUtils";
 
 function CanLamSang() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchDSDK.data);
-  const DSDK = data.data;
-  const isLoading = useSelector((state) => state.fetchDSDK.loading);
+  const DSDK = useSelector((state) => state.fetchCLS.allCls);
+  const isLoading = useSelector((state) => state.fetchCLS.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
@@ -23,16 +22,18 @@ function CanLamSang() {
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã phiếu", key: "MAPK" },
+    { title: "Mã phiếu CLS", key: "MAKQPKTG" },
     { title: "STT", key: "STT" },
-    { title: "Họ Tên", key: "TENBN" },
-    { title: "Tên Bác sĩ", key: "TENBS" },
-    { title: "Tổng tiền", key: "TIENTHUOC" },
-    { title: "Trạng thái", key: "TRANGTHAITH" },
+    { title: "Bệnh nhân", key: "INFOBN" },
+    { title: "Dịch vụ", key: "TENDV" },
+    { title: "Bác sĩ thực hiện", key: "INFOBSTH" },
+    { title: "TTTH", key: "TRANGTHAITH" },
+    { title: "TTTT", key: "TTTT" },
+
   ];
 
   useEffect(() => {
-    dispatch(fetchDSDKAction());
+    dispatch(fetchAllClsAction());
 
   }, []);
 
