@@ -353,8 +353,8 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-primary"
                 data-bs-toggle="modal"
-                //data-bs-target="#deleteRole"
-                href="#deleteRole"
+                data-bs-dismiss="modal"
+                data-bs-target="#deleteRole"
                 //onClick={() => handleThanhToan()}
               >
                 Thanh toán
@@ -365,9 +365,8 @@ export function ListFormDSDK({ columns, data, loading }) {
       </div>
       {/*Bạn có chắc muốn thanh toán*/}
       <div
-        class="modal"
+        class="modal fade"
         id="deleteRole"
-        data-backdrop="static"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -385,19 +384,24 @@ export function ListFormDSDK({ columns, data, loading }) {
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">Bạn có chắc chắc muốn thanh toán hóa đơn</div>
+            <div class="modal-body">Bạn có chắc chắc muốn thanh toán HD{selectedHD.MAHD}</div>
             <div class="modal-footer">
               <button
                 id="cancelBtnDelete4"
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#idtt"
               >
                 Hủy
               </button>
               <button
                 type="button"
                 class="btn btn-primary"
+                data-bs-target="#idtt"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
                 onClick={handleThanhToan}
               >
                 Đồng ý

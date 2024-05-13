@@ -16,7 +16,7 @@ function DichVu() {
   const dispatch = useDispatch();
 
   const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
-  const existedDsCls = useSelector((state) => state.fetchCLS?.dsClsById) || {};
+  const existedDsCls = useSelector((state) => state.fetchCLS?.dsClsById) || [];
   const services = useSelector((state) => state.services?.data) || [];
   const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
   const leTan = useSelector((state) => state.auth?.user) || {};
@@ -100,6 +100,7 @@ function DichVu() {
           if (isComplete) {
             dispatch(fetchDsClsByIdAction(selectedPK.MAPK));
             dispatch(fetchDSDKAction());
+            setSelectedServices([]);
           }
         }
       } catch (error) {
