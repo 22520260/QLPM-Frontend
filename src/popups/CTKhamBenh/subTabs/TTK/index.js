@@ -38,12 +38,12 @@ function ThongTinKham() {
 
   const defaultFormData = {
     maPK: ttk?.MAPK,
-    trieuChung: ttk?.TRIEUCHUNGBENH,
-    tinhTrangCoThe: ttk?.TINHTRANGCOTHE,
-    ketLuan: ttk?.KETLUAN,
-    huyetAp: ttk?.HUYETAP,
-    chieuCao: ttk?.CHIEUCAO,
-    canNang: ttk?.CANNANG,
+    trieuChung: ttk?.TRIEUCHUNGBENH || null,
+    tinhTrangCoThe: ttk?.TINHTRANGCOTHE || null,
+    ketLuan: ttk?.KETLUAN || null,
+    huyetAp: ttk?.HUYETAP || null,
+    chieuCao: ttk?.CHIEUCAO || null,
+    canNang: ttk?.CANNANG || null,
     benh: benhById,
   };
   const [formData, setFormData] = useState('');
@@ -71,6 +71,7 @@ function ThongTinKham() {
 
   useEffect(() => {
     dispatch(fetchAllBenhAction());
+    setFormData('');
   }, []);
 
   useEffect(() => {
@@ -90,7 +91,6 @@ function ThongTinKham() {
   const handleAddBenh = (selected, e) => {
     if (selected) {
       const updatedBenh = [...selectedBenh, selected];
-      const selectedNoBenh = updatedBenh.map((item) => item.MABENH);
       setSelectedBenh(updatedBenh);
       setFormData({ ...formData, benh: updatedBenh });
     }

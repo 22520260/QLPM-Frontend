@@ -33,6 +33,8 @@ import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetc
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
 import { deFormatDate } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
+
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
 import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
 import { ImageUpload } from "./ImageUpload";
@@ -45,11 +47,9 @@ import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
-import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
 import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTTKAction";
 import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
-import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon } from "./StatusIcon";
 
@@ -93,7 +93,6 @@ export function ListForm({ columns, data, loading }) {
   );
 }
 
-// Listform and delete button
 export function ListFormDV({ columns, data, loading, handleDelete }) {
   function handleRowClick(row) {}
 
@@ -223,6 +222,20 @@ export function ListFormDSDK({ columns, data, loading }) {
 
   const handleThanhToan = async () => {
     try {
+      const response2 = await axios.post("/phieukham/update-trang-thai", {
+        maPK: selectedRow.MAPK,
+        trangThai: "Đang thực hiện",
+      });
+
+      if (response2.status === 200) {
+        toast("Cập nhật trạng thái phiếu khám thành công");
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Cập nhật trạng thái phiếu khám thành công");
+    }
+
+    try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
         maLT: leTan.account.userInfo[0].MALT,
@@ -241,6 +254,7 @@ export function ListFormDSDK({ columns, data, loading }) {
       toast("Thanh toán không thành công");
     }
   };
+
   const handleDongButton = () => {
     dispatch(clearIsShowHdRow());
   };
@@ -348,6 +362,23 @@ export function ListFormDSDK({ columns, data, loading }) {
                 />
               </div>
             </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={() => handleDongButton()}
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSave}
+              >
+                Lưu những thay đổi
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -441,9 +472,59 @@ export function ListFormDSDK({ columns, data, loading }) {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleThanhToan()}
+                data-bs-toggle="modal"
+                data-bs-dismiss="modal"
+                data-bs-target="#deleteRole"
+                //onClick={() => handleThanhToan()}
               >
                 Thanh toán
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*Bạn có chắc muốn thanh toán*/}
+      <div
+        class="modal fade"
+        id="deleteRole"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">Bạn có chắc chắc muốn thanh toán HD{selectedHD.MAHD}</div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete4"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#idtt"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-target="#idtt"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                onClick={handleThanhToan}
+              >
+                Đồng ý
               </button>
             </div>
           </div>
@@ -2631,7 +2712,7 @@ export function ListFormCLS({ columns, data, loading }) {
       <table className="table table-striped table-hover">
         <thead>
           <tr>
-            {columns?.map((column, index) => (
+            {columns.map((column, index) => (
               <th key={index} scope="col">
                 {column.title}
               </th>
@@ -2650,9 +2731,9 @@ export function ListFormCLS({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data?.map((row, rowIndex) => (
+            data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
-                {columns?.map((column, colIndex) => (
+                {columns.map((column, colIndex) => (
                   <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
@@ -2686,7 +2767,7 @@ export function ListFormCLS({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow?.MAPK}
+                Thông tin phiếu khám {selectedRow.MAPK}
               </h1>
               <button
                 type="button"
@@ -2731,25 +2812,7 @@ export function ListFormCLS({ columns, data, loading }) {
                       row={10}
                       onChange={() => {}}
                     />
-                    <TextArea
-                      title={"Mô tả"}
-                      size={12}
-                      row={10}
-                      onChange={() => {}}
-                    />
                     <div className="row p-2">
-                      <TextArea
-                        title={"Kết luận"}
-                        size={6}
-                        row={3}
-                        onChange={() => {}}
-                      />
-                      <TextArea
-                        title={"Đề nghị từ chuyên gia"}
-                        size={6}
-                        row={3}
-                        onChange={() => {}}
-                      />
                       <TextArea
                         title={"Kết luận"}
                         size={6}

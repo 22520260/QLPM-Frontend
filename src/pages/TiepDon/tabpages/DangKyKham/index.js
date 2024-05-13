@@ -138,10 +138,10 @@ function DangKyKham() {
       try {
         const response = await axios.post("/phieukham/insert-just-pk", bodyReq);
         if (response.status === 200) {
-          alert("Thêm phiếu khám thành công!!!");
+          toast("Thêm phiếu khám thành công!!!");
         }
       } catch (error) {
-        alert("Thêm phiếu khám không thành công");
+        toast("Thêm phiếu khám không thành công");
       }
     });
   };
@@ -342,7 +342,7 @@ function DangKyKham() {
                 title={"Nhập dịch vụ"}
                 valid={objValidInput.isValidDichVu}
                 size={6}
-                options={services}
+                options={services.filter(service => service.MALOAIDV === 100 || service.MALOAIDV === 102)}
                 onChange={(e) => {
                   const value = e.target.value;
                   const selected = services.find(

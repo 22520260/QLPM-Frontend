@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../../setup/axios";
 import {
   IFInputText,
   IFSearchThuoc,
@@ -21,6 +21,7 @@ function DonThuoc() {
   const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
   const leTan = useSelector((state) => state.auth?.user) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
+
   console.log('dsThuoc', dsThuoc)
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
@@ -208,9 +209,8 @@ function DonThuoc() {
     const flag = await medicines.map(async (medicine) => {
       try {
         const response = await axios.post(
-          "http://localhost:3001/donthuoc/insert-ctdt",
+          "/donthuoc/insert-ctdt",
           { ...medicine, maDT },
-          { withCredentials: true }
         );
         if (response.status === 200) {
           toast("Thêm chi tiết đơn thuốc thành công");
@@ -237,9 +237,8 @@ function DonThuoc() {
     let maDTinserted = "";
     try {
       const response = await axios.post(
-        "http://localhost:3001/donthuoc/insert",
-        //{ maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
-        { withCredentials: true }
+        "/donthuoc/insert",
+        { maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
       );
       if (response.status === 200) {
         maDTinserted = response.data.MADT;

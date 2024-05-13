@@ -263,7 +263,7 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
   );
 }
 
-export function IFSearchDV({ title, valid, size, options, onChange }) {
+export function IFSearchDV({ title, valid, size, options, onChange, value }) {
   const handleChange = (e) => {
     onChange(e);
   };
@@ -281,6 +281,7 @@ export function IFSearchDV({ title, valid, size, options, onChange }) {
           list="servicesDatalist"
           id="servicesDataList"
           type="text"
+          value={value}
           onChange={handleChange}
         />
         <datalist id="servicesDatalist">
