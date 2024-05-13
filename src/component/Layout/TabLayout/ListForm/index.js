@@ -36,7 +36,10 @@ import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fe
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
 import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
 import { ImageUpload } from "./ImageUpload";
-import { fetchBenhNhanByIdAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import {
+  fetchAllBenhNhanAction,
+  fetchBenhNhanByIdAction,
+} from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
@@ -2728,7 +2731,25 @@ export function ListFormCLS({ columns, data, loading }) {
                       row={10}
                       onChange={() => {}}
                     />
+                    <TextArea
+                      title={"Mô tả"}
+                      size={12}
+                      row={10}
+                      onChange={() => {}}
+                    />
                     <div className="row p-2">
+                      <TextArea
+                        title={"Kết luận"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
+                      <TextArea
+                        title={"Đề nghị từ chuyên gia"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
                       <TextArea
                         title={"Kết luận"}
                         size={6}
@@ -2764,6 +2785,309 @@ export function ListFormCLS({ columns, data, loading }) {
                 onClick={handleSave}
               >
                 Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDSBenhNhan({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({});
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+    return age > 0 ? age : 0;
+  };
+
+  const handleRowClick = (row) => {
+    setFormData({
+      maBN: row.MABN,
+      CCCD: row.CCCD,
+      tenBN: row.HOTEN,
+      gioiTinh: row.GIOITINH,
+      ngaySinh: deFormatDate(row.NGAYSINH),
+      soDienThoai: row.SDT,
+      diaChi: row.DIACHI,
+      tienSuBenh: row.TIENSUBENH,
+      diUng: row.DIUNG,
+    });
+  };
+  console.log(formData);
+
+  const defaultObjValidInput = {
+    isValidTenBN: true,
+    isValidCCCD: true,
+    isValidGioiTinh: true,
+    isValidNgaySinh: true,
+    isValidSoDienThoai: true,
+    isValidDiaChi: true,
+    isValidTienSuBenh: true,
+    isValidDiUng: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.tenBN) {
+      setObjValidInput({ ...objValidInput, isValidTenBN: false });
+      toast.error("Chưa nhập tên bệnh nhân");
+      return;
+    }
+    if (!formData.gioiTinh || formData.gioiTinh === 0) {
+      setObjValidInput({ ...objValidInput, isValidGioiTinh: false });
+      toast.error("Chưa chọn giới tính");
+      return;
+    }
+    if (!formData.ngaySinh || formData.ngaySinh === 0) {
+      setObjValidInput({ ...objValidInput, isValidNgaySinh: false });
+      toast.error("Chưa nhập ngày sinh");
+      return;
+    }
+    if (!formData.soDienThoai || formData.soDienThoai === 0) {
+      setObjValidInput({ ...objValidInput, isValidSoDienThoai: false });
+      toast.error("Chưa nhập số diện thoại");
+      return;
+    }
+    if (!formData.diaChi) {
+      setObjValidInput({ ...objValidInput, isValidDiaChi: false });
+      toast.error("Chưa nhập địa chỉ");
+      return;
+    }
+    if (!formData.tienSuBenh) {
+      setObjValidInput({ ...objValidInput, isValidTienSuBenh: false });
+      toast.error("Chưa nhập tiền sử bệnh");
+      return;
+    }
+    if (!formData.diUng) {
+      setObjValidInput({ ...objValidInput, isValidDiUng: false });
+      toast.error("Chưa nhập dị ứng");
+      return;
+    }
+
+    const response = await axios.post("/benhnhan/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllBenhNhanAction());
+      const cancelBtn = document.getElementById("cancelBtn7");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {typeof row[column.key] !== "string" ||
+                    row[column.key] === ""
+                      ? row[column.key]
+                      : row[column.key].split("\n").map((line, index) => (
+                          <React.Fragment key={index}>
+                            {line}
+                            <br />
+                          </React.Fragment>
+                        ))}
+                  </td>
+                ))}
+
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateBenhNhan"
+                  >
+                    <FaEye />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      {/* Modal update */}
+      <div
+        className="modal fade modal-lg"
+        id="updateBenhNhan"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thông tin khách hàng
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã KH"}
+                    readOnly={true}
+                    size={3}
+                    value={formData.maBN}
+                    valid={objValidInput.isValidGioiTinh}
+                  />
+                  <IFInputText
+                    title={"Tên khách hàng"}
+                    size={5}
+                    required={"true"}
+                    value={formData.tenBN}
+                    valid={objValidInput.isValidTenBN}
+                    onChange={(value) => handleChange("tenBN", value)}
+                  />
+                  <IFSelect
+                    title={"Giới tính"}
+                    size={2}
+                    required={"true"}
+                    keyObj={"gioiTinh"}
+                    showObj={"gioiTinh"}
+                    options={[
+                      { gioiTinh: "Nam" },
+                      { gioiTinh: "Nữ" },
+                      { gioiTinh: "Khác" },
+                    ]}
+                    value={formData.gioiTinh}
+                    valid={objValidInput.isValidGioiTinh}
+                    onChange={(value) => handleChange("gioiTinh", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFNgay
+                    title={"Ngày sinh"}
+                    size={3}
+                    required={"true"}
+                    value={formData.ngaySinh}
+                    valid={objValidInput.isValidNgaySinh}
+                    onChange={(value) => handleChange("ngaySinh", value)}
+                  />
+                  <IFInputText
+                    title={"Tuổi"}
+                    readOnly={true}
+                    size={2}
+                    value={calculateAge(formData.ngaySinh)}
+                    onChange={(value) => handleChange(1)}
+                  />
+                  <IFInputText
+                    title={"CCCD"}
+                    size={4}
+                    required={"true"}
+                    value={formData.CCCD}
+                    valid={objValidInput.isValidCCCD}
+                    onChange={(value) => handleChange("cccd", value)}
+                  />
+                  <IFInputText
+                    title={"Số điện thoại"}
+                    size={3}
+                    required={"true"}
+                    value={formData.soDienThoai}
+                    valid={objValidInput.isValidSoDienThoai}
+                    onChange={(value) => handleChange("soDienThoai", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Địa chỉ"}
+                    size={7}
+                    value={formData.diaChi}
+                    valid={objValidInput.isValidSoDienThoai}
+                    onChange={(value) => handleChange("diaChi", value)}
+                  />
+
+                  <IFInputText
+                    title={"Dị ứng"}
+                    size={5}
+                    value={formData.diUng}
+                    valid={objValidInput.isValidDiUng}
+                    onChange={(value) => handleChange("diUng", value)}
+                  />
+                </div>
+
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Tiền sử bệnh"}
+                    size={12}
+                    value={formData.tienSuBenh}
+                    valid={objValidInput.isValidTienSuBenh}
+                    onChange={(value) => handleChange("tienSuBenh", value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                id="cancelBtn7"
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleUpdate}
+              >
+                Cập nhật
               </button>
             </div>
           </div>

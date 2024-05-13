@@ -238,7 +238,7 @@ function DonThuoc() {
     try {
       const response = await axios.post(
         "http://localhost:3001/donthuoc/insert",
-        { maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
+        //{ maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
         { withCredentials: true }
       );
       if (response.status === 200) {
