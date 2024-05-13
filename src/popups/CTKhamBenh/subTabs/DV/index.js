@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { IFSearchDV } from "../../../../component/Layout/TabLayout/InputForm";
+import {
+  IFSearchDV,
+  IFSelect,
+} from "../../../../component/Layout/TabLayout/InputForm";
 import axios from "../../../../setup/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fetchAllBacSiAction";
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
-import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 
 function DichVu() {
   const dispatch = useDispatch();
 
+  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const existedDsCls = useSelector((state) => state.fetchCLS?.dsClsById) || {};
   const services = useSelector((state) => state.services?.data) || [];
+  const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
+  const leTan = useSelector((state) => state.auth?.user) || {};
 
-  const [showError, setShowError] = useState(false);
-
+  const [selectedBS, setSelectedBS] = useState(null);
+  const [selectedService, setSelectedService] = useState(null);
   const [selectedServices, setSelectedServices] = useState([]);
 
   const defaultObjValidInput = {
@@ -23,19 +31,56 @@ function DichVu() {
     isValidDichVu: true,
   };
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+  const [showError, setShowError] = useState(false);
 
   const columns = [
     { title: "Mã dịch vụ", key: "MADV" },
     { title: "Tên loại dịch vụ", key: "TENLOAIDV" },
     { title: "Tên dịch vụ", key: "TENDV" },
     { title: "Giá dịch vụ", key: "GIADV" },
+    { title: "Bác sĩ thực hiện", key: "HOTEN" },
   ];
 
   useEffect(() => {
     dispatch(fetchAllDichVuAction());
+    dispatch(fetchAllBacSiAction());
   }, []);
 
-  const insertPK = async (maBN, maHD) => {};
+  const handleChangeBS = (maBS) => {
+    const selectedDoctor = doctors.filter((doctor) => doctor.MABS == maBS);
+    setSelectedBS(selectedDoctor[0]);
+  };
+  const handleChangeService = (service) => {
+    setSelectedService(service);
+  };
+
+  const insertCLS = async (MAPK, MAHD) => {
+    const flag = await selectedServices.map(async (service) => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3001/cls/insert-just-cls",
+          { ...service, MAPK, MAHD },
+          { withCredentials: true }
+        );
+        if (response.status === 200) {
+          toast("Thêm chỉ định CLS thành công");
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Thêm chỉ định CLS không thành công");
+      }
+    });
+
+    if (flag && flag.length !== 0) {
+      for (const isComplete of flag) {
+        if (isComplete === false) {
+          return false;
+        }
+      }
+      return true;
+    }
+  };
 
   const handleFormSubmit = async () => {
     setObjValidInput(defaultObjValidInput);
@@ -44,13 +89,18 @@ function DichVu() {
       // thêm hóa đơn mới
       try {
         const response1 = await axios.post("/hoadon/insert", {
-          maLT: 1,
-          maLHD: 1,
+          maLT: leTan.account.userInfo[0].MALT,
+          maLHD: 2,
           tttt: "Chưa thanh toán",
         });
         if (response1.status === 200) {
           maHDinserted = response1.data.MAHD;
-          alert("Thêm hóa đơn thành công!!!");
+          toast("Thêm hóa đơn thành công!!!");
+          const isComplete = await insertCLS(selectedPK?.MAPK, maHDinserted);
+          if (isComplete) {
+            dispatch(fetchDsClsByIdAction(selectedPK.MAPK));
+            dispatch(fetchDSDKAction());
+          }
         }
       } catch (error) {
         console.log(error);
@@ -62,24 +112,28 @@ function DichVu() {
     }
   };
 
-  const handleAddService = (selected, e) => {
-    if (selected) {
-      const updatedServices = [...selectedServices, selected];
-      const selectedNoServices = updatedServices.map(
-        (selectedService) => selectedService.MADV
-      );
-      setSelectedServices(updatedServices);
+  const handleAddService = () => {
+    if (!selectedService) {
+      toast.error("Chưa chọn Dịch vụ");
     }
-    e.target.value = "";
+    if (!selectedBS) {
+      toast.error("Chưa chọn Bác sĩ");
+    }
+    if (selectedService && selectedBS) {
+      const updatedServices = [
+        ...selectedServices,
+        { ...selectedService, ...selectedBS },
+      ];
+      setSelectedServices(updatedServices);
+      setSelectedService(null);
+      setSelectedBS(null);
+    }
   };
 
   const handleDeleteService = (index) => {
     const updatedServices = [...selectedServices];
     updatedServices.splice(index, 1);
     setSelectedServices(updatedServices);
-    const selectedNoServices = updatedServices.map(
-      (selectedService) => selectedService.MADV
-    );
   };
   return (
     <div className="shadow rounded">
@@ -93,6 +147,7 @@ function DichVu() {
               valid={objValidInput.isValidDichVu}
               size={6}
               options={services.filter((service) => service.MALOAIDV === 101)}
+              value={selectedService ? selectedService.TENDV : ""}
               onChange={(e) => {
                 const value = e.target.value;
                 const selected = services.find(
@@ -107,19 +162,38 @@ function DichVu() {
                     setShowError(true);
                   } else {
                     setShowError(false);
-                    handleAddService(selected, e);
+                    handleChangeService(selected);
                   }
                 }
               }}
             />
+            <IFSelect
+              title={"Bác sĩ"}
+              size={3}
+              options={doctors}
+              value={selectedBS ? selectedBS.MABS : ""}
+              onChange={(value) => handleChangeBS(value)}
+              keyObj={"MABS"}
+              showObj={"HOTEN"}
+            />
+            <div className="col-md-3 d-flex align-items-end">
+              <button
+                className="btn btn-primary"
+                type="button"
+                onClick={handleAddService}
+              >
+                Thêm dịch vụ
+              </button>
+            </div>
             {showError && selectedServices.length > 0 && (
               <div className="text-danger">Dịch vụ này đã được chọn.</div>
             )}
           </div>
-          {selectedServices.length > 0 ? (
+
+          {selectedServices.length > 0 || existedDsCls.length > 0 ? (
             <ListForm
               columns={columns}
-              data={selectedServices}
+              data={existedDsCls.length>0 ? existedDsCls : selectedServices}
               onDeleteService={handleDeleteService}
             />
           ) : (

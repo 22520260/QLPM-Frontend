@@ -2401,6 +2401,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
     dispatch(fetchCTDTByIdAction(row.MAPK));
     dispatch(fetchAllThuocKeDonAction());
+    dispatch(fetchDsClsByIdAction(row.MAPK));
   };
   const handleSave = () => {};
 
