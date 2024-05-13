@@ -163,7 +163,7 @@ function DangKyKham() {
       // thêm hóa đơn mới
       try {
         const response1 = await axios.post("/hoadon/insert", {
-          maLT: leTan.account.userInfo[0].MALT,
+          maLT: leTan?.account?.userInfo[0]?.MALT,
           maLHD: 1,
           tttt: "Chưa thanh toán",
         });
