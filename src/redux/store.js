@@ -20,6 +20,8 @@ import getAllThuocKeDonReducer from './slice/getDataSlice/getAllThuocKeDonSlice'
 import getAllThuocReducer from './slice/getDataSlice/getAllThuocSlice'
 import getAllLoThuocReducer from './slice/getDataSlice/getAllLoThuocSlice'
 import getCheckThuocReducer from './slice/getDataSlice/getCheckThuocSlice'
+import getTTKReducer from './slice/getDataSlice/getTTKSlice'
+import getBenhByIdReducer from './slice/getDataSlice/getBenhByIdSlice'
 
 
 export default configureStore({
@@ -45,6 +47,8 @@ export default configureStore({
     thuocKeDon: getAllThuocKeDonReducer,
     loThuoc: getAllLoThuocReducer,
     checkThuoc: getCheckThuocReducer,
+    ttk: getTTKReducer,
+    benhById: getBenhByIdReducer
   },
   devTools: true,
 })

@@ -8,9 +8,9 @@ import {
   IFNgay,
   IFOptional,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
+import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
@@ -214,7 +214,7 @@ function DonThuoc() {
         );
         if (response.status === 200) {
           toast("Thêm chi tiết đơn thuốc thành công");
-          dispatch(fetchAllThuocAction());
+          dispatch(fetchAllThuocKeDonAction());
           return true;
         }
       } catch (error) {
@@ -353,7 +353,7 @@ function DonThuoc() {
       </div>
 
       <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
-      <ListForm
+      <ListFormDV
         columns={columns}
         data={
           existedCTDT.length === 0
@@ -362,9 +362,9 @@ function DonThuoc() {
                 ...item,
                 thanhTien: item.GIABAN * item.SOLUONGTHUOC,
               }))
-        } // Truyền dữ liệu các loại thuốc vào ListForm
+        } // Truyền dữ liệu các loại thuốc vào ListFormDV
         loading={false}
-        onDeleteService={handleDeleteMedicine}
+        handleDelete={handleDeleteMedicine}
       />
       <div className="d-flex justify-content-center px-3 py-2">
         <button

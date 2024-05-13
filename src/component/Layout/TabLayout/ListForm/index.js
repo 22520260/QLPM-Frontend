@@ -42,14 +42,56 @@ import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
-import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice" 
-
+import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
+import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
+import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTTKAction";
+import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
 import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
+import { StatusIcon } from "./StatusIcon";
 
+export function ListForm({ columns, data, loading }) {
+  return (
+    <>
+      <table className="table table-striped table-hover">
+        <thead >
+          <tr>
+            {columns?.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 2}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data?.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {columns?.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {column.render ? column.render(row) : row[column.key]}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </>
+  );
+}
 
 // Listform and delete button
-export function ListForm({ columns, data, loading, onDeleteService }) {
+export function ListFormDV({ columns, data, loading, handleDelete }) {
   function handleRowClick(row) {}
 
   return (
@@ -86,7 +128,58 @@ export function ListForm({ columns, data, loading, onDeleteService }) {
                 <td>
                   <button
                     className="btn btn-danger rounded-circle"
-                    onClick={() => onDeleteService(rowIndex)}
+                    onClick={() => handleDelete(rowIndex)}
+                  >
+                    <MdDeleteForever />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+export function ListFormDSB({ columns, data, loading, handleDelete }) {
+  function handleRowClick(row) {}
+
+  return (
+    <>
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns?.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Xóa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 2}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data?.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns?.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {column.render ? column.render(row) : row[column.key]}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    className="btn btn-danger rounded-circle"
+                    onClick={() => handleDelete(row)}
                   >
                     <MdDeleteForever />
                   </button>
@@ -109,15 +202,17 @@ export function ListFormDSDK({ columns, data, loading }) {
   const [pttt, setPttt] = useState("Tiền mặt");
 
   const handleRowClick = (row) => {
-    console.log('row', row)
+    console.log("row", row);
     dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(fetchBenhNhanByIdAction(row.MABN));
     dispatch(fetchDSHDByIdAction(row?.MAPK));
     dispatch(fetchDsClsByIdAction(row?.MAPK));
     dispatch(fetchPkByIdHdAction(row.MAHDPK));
     dispatch(clearSelectedHD());
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
-  };
+    dispatch(selectRow(row));
+    dispatch(fetchTTKAction(row.MAPK));
+    dispatch(fetchBenhByIdAction(row.MAPK));
+    };
   const handleSave = () => {};
   const handleChangePttt = (value) => {
     setPttt(value);
@@ -145,7 +240,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   };
   const handleDongButton = () => {
     dispatch(clearIsShowHdRow());
-  }
+  };
 
   return (
     <>
@@ -158,6 +253,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                 {column.title}
               </th>
             ))}
+            <th>Trạng thái</th>
             <th>Thao tác</th>
           </tr>
         </thead>
@@ -187,7 +283,14 @@ export function ListFormDSDK({ columns, data, loading }) {
                         ))}
                   </td>
                 ))}
-
+                <td>
+                  <StatusIcon
+                    trangThaiThucHien={row.TRANGTHAITH}
+                    trangThaiThanhToanPK={row.TTTTPK}
+                    trangThaiThanhToanCLS={row.TTTTCLS}
+                    trangThaiThanhToanDT={row.TTTTDTH}
+                  />
+                </td>
                 <td>
                   <button
                     type="button"
@@ -241,23 +344,6 @@ export function ListFormDSDK({ columns, data, loading }) {
                   maPK={selectedRow?.MAPK}
                 />
               </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-                onClick={()=>handleDongButton()}
-              >
-                Đóng
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => handleSave}
-              >
-                Lưu những thay đổi
-              </button>
             </div>
           </div>
         </div>
@@ -345,7 +431,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={()=>handleDongButton()}
+                onClick={() => handleDongButton()}
               >
                 Đóng
               </button>
@@ -494,7 +580,7 @@ export function ListFormThuoc({ columns, data, loading }) {
                   </td>
                 ))}
                 <td>
-                <button
+                  <button
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
@@ -2397,14 +2483,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const dispatch = useDispatch();
   const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
   const handleRowClick = (row) => {
-    console.log('row',row)
+    console.log("row", row);
     dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
-    dispatch(fetchAllThuocAction());
+    dispatch(fetchAllThuocKeDonAction());
+    dispatch(fetchTTKAction(row.MAPK));
+    dispatch(fetchBenhByIdAction(row.MAPK));
   };
-  const handleSave = () => {};
-
-  const handleThanhToan = () => {};
 
   return (
     <>
@@ -2417,6 +2502,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                 {column.title}
               </th>
             ))}
+            <th>Trạng thái</th>
             <th>Thao tác</th>
           </tr>
         </thead>
@@ -2446,6 +2532,14 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                         ))}
                   </td>
                 ))}
+                <td>
+                  <StatusIcon
+                    trangThaiThucHien={row.TRANGTHAITH}
+                    trangThaiThanhToanPK={row.TTTTPK}
+                    trangThaiThanhToanCLS={row.TTTTCLS}
+                    trangThaiThanhToanDT={row.TTTTDTH}
+                  />
+                </td>
                 <td>
                   <button
                     type="button"
@@ -2495,7 +2589,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
               </div>
             </div>
             <div className="modal-footer">
-              <button
+              {/* <button
                 id="cancelBtn"
                 type="button"
                 className="btn btn-secondary"
@@ -2509,7 +2603,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                 onClick={() => handleSave}
               >
                 Lưu những thay đổi
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -2556,9 +2650,7 @@ export function ListFormCLS({ columns, data, loading }) {
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns?.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -2569,11 +2661,7 @@ export function ListFormCLS({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
-                  </button>
+                  <button className="btn btn-danger mx-1">Xóa</button>
                 </td>
               </tr>
             ))
@@ -2581,12 +2669,16 @@ export function ListFormCLS({ columns, data, loading }) {
         </tbody>
       </table>
 
-
       {/* Modal CLS */}
       <div
-        className="modal fade modal-xl" id="idcls"
+        className="modal fade modal-xl"
+        id="idcls"
         data-bs-backdrop="static"
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -2606,17 +2698,13 @@ export function ListFormCLS({ columns, data, loading }) {
                 <table className="table">
                   <tr className="row">
                     <th className="border col col-md-1">Bệnh nhân</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                     <th className="border col col-md-1">Bác sĩ</th>
                     <td className="border col col-md-3">
                       BSCKI. Le Thi Thanh Thao
                     </td>
                     <th className="border col col-md-1">Ghi chú</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                   </tr>
                   <tr className="row">
                     <th className="border col col-md-1">Dịch vụ</th>
@@ -2628,26 +2716,37 @@ export function ListFormCLS({ columns, data, loading }) {
                       BSCKI. Lê Thi Thanh Thao
                     </td>
                     <th className="border col col-md-1">Thời gian</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                   </tr>
                 </table>
 
                 <div className="row">
                   <div className="col col-md-6">
-                    <TextArea title={"Mô tả"} size={12} row={10} onChange={() => { }} />
+                    <TextArea
+                      title={"Mô tả"}
+                      size={12}
+                      row={10}
+                      onChange={() => {}}
+                    />
                     <div className="row p-2">
-                      <TextArea title={"Kết luận"} size={6} row={3} onChange={() => { }} />
-                      <TextArea title={"Đề nghị từ chuyên gia"} size={6} row={3} onChange={() => { }} />
+                      <TextArea
+                        title={"Kết luận"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
+                      <TextArea
+                        title={"Đề nghị từ chuyên gia"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
                     </div>
                   </div>
                   <div className="col col-md-6">
                     <ImageUpload />
                   </div>
                 </div>
-
-
               </div>
             </div>
             <div className="modal-footer">
@@ -2670,7 +2769,6 @@ export function ListFormCLS({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }

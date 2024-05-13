@@ -12,14 +12,14 @@ const fetchAllThuocKeDonSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(fetchAllThuocKeDonAction.pending, (state, action) => {
+      .addCase(fetchAllThuocKeDonAction.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(fetchAllThuocKeDonAction.fulfilled, (state, action) => {
         state.isLoading = false;
         state.dsThuoc = action.payload.data;
       })
-      .addCase(fetchAllThuocKeDonAction.rejected, (state, action) => {
+      .addCase(fetchAllThuocKeDonAction.rejected, (state) => {
         state.isLoading = false;
       });
   },
