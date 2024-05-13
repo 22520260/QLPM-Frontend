@@ -44,11 +44,10 @@ import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
-import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice" 
+import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 
 import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
-
 
 // Listform and delete button
 export function ListForm({ columns, data, loading, onDeleteService }) {
@@ -146,7 +145,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   };
   const handleDongButton = () => {
     dispatch(clearIsShowHdRow());
-  }
+  };
 
   return (
     <>
@@ -248,7 +247,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={()=>handleDongButton()}
+                onClick={() => handleDongButton()}
               >
                 Đóng
               </button>
@@ -346,16 +345,62 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={()=>handleDongButton()}
+                onClick={() => handleDongButton()}
               >
                 Đóng
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleThanhToan()}
+                data-bs-toggle="modal"
+                //data-bs-target="#deleteRole"
+                href="#deleteRole"
+                //onClick={() => handleThanhToan()}
               >
                 Thanh toán
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*Bạn có chắc muốn thanh toán*/}
+      <div
+        class="modal"
+        id="deleteRole"
+        data-backdrop="static"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">Bạn có chắc chắc muốn thanh toán hóa đơn</div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete4"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleThanhToan}
+              >
+                Đồng ý
               </button>
             </div>
           </div>
@@ -495,7 +540,7 @@ export function ListFormThuoc({ columns, data, loading }) {
                   </td>
                 ))}
                 <td>
-                <button
+                  <button
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
@@ -2557,9 +2602,7 @@ export function ListFormCLS({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -2570,11 +2613,7 @@ export function ListFormCLS({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
-                  </button>
+                  <button className="btn btn-danger mx-1">Xóa</button>
                 </td>
               </tr>
             ))
@@ -2582,12 +2621,16 @@ export function ListFormCLS({ columns, data, loading }) {
         </tbody>
       </table>
 
-
       {/* Modal CLS */}
       <div
-        className="modal fade modal-xl" id="idcls"
+        className="modal fade modal-xl"
+        id="idcls"
         data-bs-backdrop="static"
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -2607,17 +2650,13 @@ export function ListFormCLS({ columns, data, loading }) {
                 <table className="table">
                   <tr className="row">
                     <th className="border col col-md-1">Bệnh nhân</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                     <th className="border col col-md-1">Bác sĩ</th>
                     <td className="border col col-md-3">
                       BSCKI. Le Thi Thanh Thao
                     </td>
                     <th className="border col col-md-1">Ghi chú</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                   </tr>
                   <tr className="row">
                     <th className="border col col-md-1">Dịch vụ</th>
@@ -2629,26 +2668,37 @@ export function ListFormCLS({ columns, data, loading }) {
                       BSCKI. Lê Thi Thanh Thao
                     </td>
                     <th className="border col col-md-1">Thời gian</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                   </tr>
                 </table>
 
                 <div className="row">
                   <div className="col col-md-6">
-                    <TextArea title={"Mô tả"} size={12} row={10} onChange={() => { }} />
+                    <TextArea
+                      title={"Mô tả"}
+                      size={12}
+                      row={10}
+                      onChange={() => {}}
+                    />
                     <div className="row p-2">
-                      <TextArea title={"Kết luận"} size={6} row={3} onChange={() => { }} />
-                      <TextArea title={"Đề nghị từ chuyên gia"} size={6} row={3} onChange={() => { }} />
+                      <TextArea
+                        title={"Kết luận"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
+                      <TextArea
+                        title={"Đề nghị từ chuyên gia"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
                     </div>
                   </div>
                   <div className="col col-md-6">
                     <ImageUpload />
                   </div>
                 </div>
-
-
               </div>
             </div>
             <div className="modal-footer">
@@ -2671,7 +2721,6 @@ export function ListFormCLS({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }
