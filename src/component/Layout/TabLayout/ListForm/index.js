@@ -36,7 +36,10 @@ import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fe
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
 import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
 import { ImageUpload } from "./ImageUpload";
-import { fetchBenhNhanByIdAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import {
+  fetchAllBenhNhanAction,
+  fetchBenhNhanByIdAction,
+} from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
@@ -45,7 +48,7 @@ import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchD
 
 import ThanhToan from "../../../../popups/ThanhToan";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
-
+import { isValid } from "date-fns";
 
 // Listform and delete button
 export function ListForm({ columns, data, loading, onDeleteService }) {
@@ -487,7 +490,7 @@ export function ListFormThuoc({ columns, data, loading }) {
                   </td>
                 ))}
                 <td>
-                <button
+                  <button
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
@@ -2548,9 +2551,7 @@ export function ListFormCLS({ columns, data, loading }) {
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex}>
-                    {row[column.key] || ""}
-                  </td>
+                  <td key={colIndex}>{row[column.key] || ""}</td>
                 ))}
                 <td>
                   <button
@@ -2561,11 +2562,7 @@ export function ListFormCLS({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
-                    className="btn btn-danger mx-1"
-                  >
-                    Xóa
-                  </button>
+                  <button className="btn btn-danger mx-1">Xóa</button>
                 </td>
               </tr>
             ))
@@ -2573,12 +2570,16 @@ export function ListFormCLS({ columns, data, loading }) {
         </tbody>
       </table>
 
-
       {/* Modal CLS */}
       <div
-        className="modal fade modal-xl" id="idcls"
+        className="modal fade modal-xl"
+        id="idcls"
         data-bs-backdrop="static"
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-scrollable">
           <div className="modal-content">
             <div className="modal-header">
@@ -2598,17 +2599,13 @@ export function ListFormCLS({ columns, data, loading }) {
                 <table className="table">
                   <tr className="row">
                     <th className="border col col-md-1">Bệnh nhân</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                     <th className="border col col-md-1">Bác sĩ</th>
                     <td className="border col col-md-3">
                       BSCKI. Le Thi Thanh Thao
                     </td>
                     <th className="border col col-md-1">Ghi chú</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                   </tr>
                   <tr className="row">
                     <th className="border col col-md-1">Dịch vụ</th>
@@ -2620,26 +2617,37 @@ export function ListFormCLS({ columns, data, loading }) {
                       BSCKI. Lê Thi Thanh Thao
                     </td>
                     <th className="border col col-md-1">Thời gian</th>
-                    <td className="border col col-md-3">
-
-                    </td>
+                    <td className="border col col-md-3"></td>
                   </tr>
                 </table>
 
                 <div className="row">
                   <div className="col col-md-6">
-                    <TextArea title={"Mô tả"} size={12} row={10} onChange={() => { }} />
+                    <TextArea
+                      title={"Mô tả"}
+                      size={12}
+                      row={10}
+                      onChange={() => {}}
+                    />
                     <div className="row p-2">
-                      <TextArea title={"Kết luận"} size={6} row={3} onChange={() => { }} />
-                      <TextArea title={"Đề nghị từ chuyên gia"} size={6} row={3} onChange={() => { }} />
+                      <TextArea
+                        title={"Kết luận"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
+                      <TextArea
+                        title={"Đề nghị từ chuyên gia"}
+                        size={6}
+                        row={3}
+                        onChange={() => {}}
+                      />
                     </div>
                   </div>
                   <div className="col col-md-6">
                     <ImageUpload />
                   </div>
                 </div>
-
-
               </div>
             </div>
             <div className="modal-footer">
@@ -2662,55 +2670,113 @@ export function ListFormCLS({ columns, data, loading }) {
           </div>
         </div>
       </div>
-
     </>
   );
 }
 
-
-
-
-export function ListFormdsBenhNhan({ columns, data, loading }) {
+export function ListFormDSBenhNhan({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
-  const selectedHD = useSelector((state) => state.fetchHoaDon?.selectedHD);
-  const leTan = useSelector((state) => state.auth?.user) || {};
+  const [formData, setFormData] = useState({});
 
-  const [pttt, setPttt] = useState("Tiền mặt");
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+    return age > 0 ? age : 0;
+  };
 
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
-    dispatch(fetchCTDTByIdAction(row.MAPK));
-    dispatch(fetchBenhNhanByIdAction(row.MABN));
-    dispatch(fetchDSHDByIdAction(row.MAPK));
-    dispatch(fetchDsClsByIdAction(row.MAPK));
-    dispatch(fetchPkByIdHdAction(row.MAHDPK));
-    dispatch(clearSelectedHD());
+    setFormData({
+      maBN: row.MABN,
+      CCCD: row.CCCD,
+      tenBN: row.HOTEN,
+      gioiTinh: row.GIOITINH,
+      ngaySinh: deFormatDate(row.NGAYSINH),
+      soDienThoai: row.SDT,
+      diaChi: row.DIACHI,
+      tienSuBenh: row.TIENSUBENH,
+      diUng: row.DIUNG,
+    });
   };
-  const handleSave = () => {};
-  const handleChangePttt = (value) => {
-    setPttt(value);
+  console.log(formData);
+
+  const defaultObjValidInput = {
+    isValidTenBN: true,
+    isValidCCCD: true,
+    isValidGioiTinh: true,
+    isValidNgaySinh: true,
+    isValidSoDienThoai: true,
+    isValidDiaChi: true,
+    isValidTienSuBenh: true,
+    isValidDiUng: true,
   };
 
-  const handleThanhToan = async () => {
-    try {
-      const response = await axios.post("/hoadon/thanhtoan", {
-        ...selectedHD,
-        maLT: leTan.account.userInfo[0].MALT,
-        tttt: "Đã thanh toán",
-        tdtt: new Date(),
-        pttt: pttt,
-      });
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
-      if (response.status === 200) {
-        toast("Thanh toán hóa đơn thành công");
-        dispatch(fetchDSHDByIdAction(selectedRow.MAPK));
-        dispatch(fetchDSDKAction());
-      }
-    } catch (error) {
-      console.log(error);
-      toast("Thanh toán không thành công");
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.tenBN) {
+      setObjValidInput({ ...objValidInput, isValidTenBN: false });
+      toast.error("Chưa nhập tên bệnh nhân");
+      return;
     }
+    if (!formData.gioiTinh || formData.gioiTinh === 0) {
+      setObjValidInput({ ...objValidInput, isValidGioiTinh: false });
+      toast.error("Chưa chọn giới tính");
+      return;
+    }
+    if (!formData.ngaySinh || formData.ngaySinh === 0) {
+      setObjValidInput({ ...objValidInput, isValidNgaySinh: false });
+      toast.error("Chưa nhập ngày sinh");
+      return;
+    }
+    if (!formData.soDienThoai || formData.soDienThoai === 0) {
+      setObjValidInput({ ...objValidInput, isValidSoDienThoai: false });
+      toast.error("Chưa nhập số diện thoại");
+      return;
+    }
+    if (!formData.diaChi) {
+      setObjValidInput({ ...objValidInput, isValidDiaChi: false });
+      toast.error("Chưa nhập địa chỉ");
+      return;
+    }
+    if (!formData.tienSuBenh) {
+      setObjValidInput({ ...objValidInput, isValidTienSuBenh: false });
+      toast.error("Chưa nhập tiền sử bệnh");
+      return;
+    }
+    if (!formData.diUng) {
+      setObjValidInput({ ...objValidInput, isValidDiUng: false });
+      toast.error("Chưa nhập dị ứng");
+      return;
+    }
+
+    const response = await axios.post("/benhnhan/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllBenhNhanAction());
+      const cancelBtn = document.getElementById("cancelBtn7");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
   return (
@@ -2759,17 +2825,9 @@ export function ListFormdsBenhNhan({ columns, data, loading }) {
                     type="button"
                     className="btn btn-primary rounded-circle"
                     data-bs-toggle="modal"
-                    data-bs-target="#idctpk"
+                    data-bs-target="#updateBenhNhan"
                   >
                     <FaEye />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-primary rounded-circle mx-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#idtt"
-                  >
-                    <FaDollarSign />
                   </button>
                 </td>
               </tr>
@@ -2777,11 +2835,10 @@ export function ListFormdsBenhNhan({ columns, data, loading }) {
           )}
         </tbody>
       </table>
-
-      {/* Modal ChiTietPhieuKham */}
+      {/* Modal update */}
       <div
-        className="modal fade modal-xl"
-        id="idctpk"
+        className="modal fade modal-lg"
+        id="updateBenhNhan"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -2790,7 +2847,7 @@ export function ListFormdsBenhNhan({ columns, data, loading }) {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu khám {selectedRow.MAPK}
+                Thông tin khách hàng
               </h1>
               <button
                 type="button"
@@ -2802,123 +2859,115 @@ export function ListFormdsBenhNhan({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical
-                  tabsData={tabsDataCTPK}
-                  maPK={selectedRow.MAPK}
-                />
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Đóng
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => handleSave}
-              >
-                Lưu những thay đổi
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Mã KH"}
+                    readOnly={true}
+                    size={3}
+                    value={formData.maBN}
+                    valid={objValidInput.isValidGioiTinh}
+                  />
+                  <IFInputText
+                    title={"Tên khách hàng"}
+                    size={5}
+                    required={"true"}
+                    value={formData.tenBN}
+                    valid={objValidInput.isValidTenBN}
+                    onChange={(value) => handleChange("tenBN", value)}
+                  />
+                  <IFSelect
+                    title={"Giới tính"}
+                    size={2}
+                    required={"true"}
+                    keyObj={"gioiTinh"}
+                    showObj={"gioiTinh"}
+                    options={[
+                      { gioiTinh: "Nam" },
+                      { gioiTinh: "Nữ" },
+                      { gioiTinh: "Khác" },
+                    ]}
+                    value={formData.gioiTinh}
+                    valid={objValidInput.isValidGioiTinh}
+                    onChange={(value) => handleChange("gioiTinh", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFNgay
+                    title={"Ngày sinh"}
+                    size={3}
+                    required={"true"}
+                    value={formData.ngaySinh}
+                    valid={objValidInput.isValidNgaySinh}
+                    onChange={(value) => handleChange("ngaySinh", value)}
+                  />
+                  <IFInputText
+                    title={"Tuổi"}
+                    readOnly={true}
+                    size={2}
+                    value={calculateAge(formData.ngaySinh)}
+                    onChange={(value) => handleChange(1)}
+                  />
+                  <IFInputText
+                    title={"CCCD"}
+                    size={4}
+                    required={"true"}
+                    value={formData.CCCD}
+                    valid={objValidInput.isValidCCCD}
+                    onChange={(value) => handleChange("cccd", value)}
+                  />
+                  <IFInputText
+                    title={"Số điện thoại"}
+                    size={3}
+                    required={"true"}
+                    value={formData.soDienThoai}
+                    valid={objValidInput.isValidSoDienThoai}
+                    onChange={(value) => handleChange("soDienThoai", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Địa chỉ"}
+                    size={7}
+                    value={formData.diaChi}
+                    valid={objValidInput.isValidSoDienThoai}
+                    onChange={(value) => handleChange("diaChi", value)}
+                  />
 
-      {/* Modal ThanhToan */}
-      <div
-        className="modal fade modal-xl"
-        id="idtt"
-        tabindex="-1"
-        aria-labelledby="thanhtoanModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="thanhtoanModalLabel">
-                Thanh toán cho PK{selectedRow.MAPK}
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
+                  <IFInputText
+                    title={"Dị ứng"}
+                    size={5}
+                    value={formData.diUng}
+                    valid={objValidInput.isValidDiUng}
+                    onChange={(value) => handleChange("diUng", value)}
+                  />
+                </div>
 
-            <div className="modal-body ">
-              <div className="container-fluid">
-                <div className="row">
-                  <div className="col col-9">
-                    <HoaDon />
-                  </div>
-                  <div className="col-3">
-                    <ListGroupItem
-                      title={"Khách hàng"}
-                      value={selectedRow.TENBN}
-                      disable={true}
-                    />
-                    <ListGroupItem
-                      title={"Người bán"}
-                      value={
-                        selectedHD.TTTT === "Chưa thanh toán"
-                          ? leTan.account.userInfo[0].HOTEN
-                          : selectedHD.TENLT
-                      }
-                    />
-                    <IFNgay
-                      title={"Ngày bán"}
-                      size={12}
-                      onChange={() => {}}
-                      defaultValue={new Date()}
-                    />
-                    <ListGroupItem
-                      title={"Mã phiếu"}
-                      value={"PK" + selectedRow.MAPK}
-                      disable={true}
-                    />
-                    <ListGroupItem
-                      title={"Tổng tiền"}
-                      value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
-                      disable={true}
-                    />
-                    {/* <ListGroupItem title={"Giảm giá"} value={"0"} />
-                    <ListGroupItem
-                      title={"Thành tiền"}
-                      value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
-                      disable={true}
-                    /> */}
-                    <IFInputText
-                      title={"Phương thức TT"}
-                      size={12}
-                      valid={true}
-                      onChange={(value) => handleChangePttt(value)}
-                      value={selectedHD.PTTT ? selectedHD.PTTT : pttt}
-                    />
-                    <TextArea title={"Ghi chú"} onChange={() => {}} />
-                  </div>
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Tiền sử bệnh"}
+                    size={12}
+                    value={formData.tienSuBenh}
+                    valid={objValidInput.isValidTienSuBenh}
+                    onChange={(value) => handleChange("tienSuBenh", value)}
+                  />
                 </div>
               </div>
             </div>
-
             <div className="modal-footer">
               <button
+                id="cancelBtn7"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Đóng
+                Hủy
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={() => handleThanhToan()}
+                onClick={handleUpdate}
               >
-                Thanh toán
+                Cập nhật
               </button>
             </div>
           </div>
