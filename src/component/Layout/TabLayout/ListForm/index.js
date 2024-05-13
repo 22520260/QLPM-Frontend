@@ -125,6 +125,20 @@ export function ListFormDSDK({ columns, data, loading }) {
 
   const handleThanhToan = async () => {
     try {
+      const response2 = await axios.post("/phieukham/update-trang-thai", {
+        maPK: selectedRow.MAPK,
+        trangThai: "Đang thực hiện",
+      });
+
+      if (response2.status === 200) {
+        toast("Cập nhật trạng thái phiếu khám thành công");
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Cập nhật trạng thái phiếu khám thành công");
+    }
+
+    try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
         maLT: leTan.account.userInfo[0].MALT,
@@ -143,6 +157,7 @@ export function ListFormDSDK({ columns, data, loading }) {
       toast("Thanh toán không thành công");
     }
   };
+
   const handleDongButton = () => {
     dispatch(clearIsShowHdRow());
   };
