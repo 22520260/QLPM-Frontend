@@ -29,10 +29,9 @@ function DanhSachDangKy() {
     { title: "Bệnh nhân", key: "INFOBN" },
     { title: "Bác sĩ", key: "INFOBS" },
     { title: "Dịch vụ", key: "TENDV" },
-    { title: "TTTH PK", key: "TRANGTHAITH" },
-    { title: "TTTT HDPK", key: "TTTTPK" },
-    { title: "TTTT HDCLS", key: "TTTTCLS" },
-    { title: "TTTT HDTH", key: "TTTTDTH" },
+    // { title: "TTTT HDPK", key: "TTTTPK" },
+    // { title: "TTTT HDCLS", key: "TTTTCLS" },
+    // { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
   useEffect(() => {

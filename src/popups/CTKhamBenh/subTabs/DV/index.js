@@ -10,7 +10,7 @@ import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
-import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 
 function DichVu() {
   const dispatch = useDispatch();
@@ -58,9 +58,8 @@ function DichVu() {
     const flag = await selectedServices.map(async (service) => {
       try {
         const response = await axios.post(
-          "http://localhost:3001/cls/insert-just-cls",
+          "/cls/insert-just-cls",
           { ...service, MAPK, MAHD },
-          { withCredentials: true }
         );
         if (response.status === 200) {
           toast("Thêm chỉ định CLS thành công");
@@ -192,10 +191,10 @@ function DichVu() {
           </div>
 
           {selectedServices.length > 0 || existedDsCls.length > 0 ? (
-            <ListForm
+            <ListFormDV
               columns={columns}
               data={existedDsCls.length>0 ? existedDsCls : selectedServices}
-              onDeleteService={handleDeleteService}
+              handleDelete={handleDeleteService}
             />
           ) : (
             <div className="d-flex justify-content-center text-danger">

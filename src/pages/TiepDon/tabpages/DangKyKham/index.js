@@ -13,7 +13,7 @@ import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fe
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { toast } from "react-toastify";
-import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 import { MdError } from "react-icons/md";
 
 function DangKyKham() {
@@ -371,10 +371,10 @@ function DangKyKham() {
               )}
             </div>
             {selectedServices.length > 0 ? (
-              <ListForm
+              <ListFormDV
                 columns={columns}
                 data={selectedServices}
-                onDeleteService={handleDeleteService}
+                handleDelete={handleDeleteService}
               />
             ) : (
               <div className="d-flex justify-content-center text-danger">

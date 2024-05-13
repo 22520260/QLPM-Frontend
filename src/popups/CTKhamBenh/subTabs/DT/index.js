@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../../setup/axios";
 import {
   IFInputText,
   IFSearchThuoc,
@@ -8,7 +8,7 @@ import {
   IFNgay,
   IFOptional,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
@@ -19,8 +19,8 @@ function DonThuoc() {
   const dispatch = useDispatch();
   const dsThuoc = useSelector((state) => state.thuocKeDon?.dsThuoc) || [];
   const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const leTan = useSelector((state) => state.auth?.user) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
-  const leTan = useSelector((state) => state.auth.user) || {};
 
   console.log('dsThuoc', dsThuoc)
   const [formula, setFormula] = useState("");
@@ -209,9 +209,8 @@ function DonThuoc() {
     const flag = await medicines.map(async (medicine) => {
       try {
         const response = await axios.post(
-          "http://localhost:3001/donthuoc/insert-ctdt",
+          "/donthuoc/insert-ctdt",
           { ...medicine, maDT },
-          { withCredentials: true }
         );
         if (response.status === 200) {
           toast("Thêm chi tiết đơn thuốc thành công");
@@ -238,9 +237,8 @@ function DonThuoc() {
     let maDTinserted = "";
     try {
       const response = await axios.post(
-        "http://localhost:3001/donthuoc/insert",
+        "/donthuoc/insert",
         { maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
-        { withCredentials: true }
       );
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
@@ -354,7 +352,7 @@ function DonThuoc() {
       </div>
 
       <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
-      <ListForm
+      <ListFormDV
         columns={columns}
         data={
           existedCTDT.length === 0
@@ -363,9 +361,9 @@ function DonThuoc() {
                 ...item,
                 thanhTien: item.GIABAN * item.SOLUONGTHUOC,
               }))
-        } // Truyền dữ liệu các loại thuốc vào ListForm
+        } // Truyền dữ liệu các loại thuốc vào ListFormDV
         loading={false}
-        onDeleteService={handleDeleteMedicine}
+        handleDelete={handleDeleteMedicine}
       />
       <div className="d-flex justify-content-center px-3 py-2">
         <button

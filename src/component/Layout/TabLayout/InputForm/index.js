@@ -4,6 +4,7 @@ import { useState } from "react";
 import "rsuite/DatePicker/styles/index.css";
 import "./style.css";
 import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
+import { StatusIcon } from "../ListForm/StatusIcon";
 
 export function IFSelect({
   def = "Chọn",
@@ -84,6 +85,34 @@ export function IFInputText({
           value={value}
           disabled={readOnly}
           required={required}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function IFTrangThai({
+  title,
+  size,
+  trangThaiThucHien,
+  trangThaiThanhToanPK,
+  trangThaiThanhToanCLS,
+  trangThaiThanhToanDT
+}) {
+  const style = "col-md-" + size;
+
+  return (
+    <div className={style}>
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+      </label>
+
+      <div className="input-group">
+        < StatusIcon
+            trangThaiThucHien={trangThaiThucHien}
+            trangThaiThanhToanPK={trangThaiThanhToanPK}
+            trangThaiThanhToanCLS={trangThaiThanhToanCLS}
+            trangThaiThanhToanDT={trangThaiThanhToanDT}
         />
       </div>
     </div>
@@ -198,7 +227,7 @@ export function IFNgay({ title, size, defaultValue, value, onChange, readOnly })
           onChange={handleDateChange}
           defaultValue={defaultValue}
           value={value}
-          disabled={readOnly}
+          readOnly={readOnly}
         />
       </div>
     </div>
@@ -268,6 +297,41 @@ export function IFSearchDV({ title, valid, size, options, onChange, value }) {
     </div>
   );
 }
+
+export function IFSearchBenh({ title, valid, size, options, onChange }) {
+  const handleChange = (e) => {
+    onChange(e);
+  };
+
+  return (
+    <div className={`col-md-${size}`}>
+      <label htmlFor="benhDataList" className="form-label">
+        {title}
+      </label>
+      <div className="input-group">
+        <input
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
+          list="benhDatalist"
+          id="benhDataList"
+          type="text"
+          onChange={handleChange}
+        />
+        <datalist id="benhDatalist">
+          {Array.isArray(options) ? (
+            options.map((option, index) => (
+              <option key={index} value={option.TENBENH} />
+            ))
+          ) : (
+            <option value="Loading..." />
+          )}
+        </datalist>
+      </div>
+    </div>
+  );
+}
+
 
 export function IFSearchHT({
   title,

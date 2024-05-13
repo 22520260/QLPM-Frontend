@@ -28,9 +28,9 @@ function DanhSachDangKy() {
     { title: "Bệnh nhân", key: "INFOBN" },
     { title: "Bác sĩ", key: "INFOBS" },
     { title: "Dịch vụ", key: "TENDV" },
-    { title: "TTTH PK", key: "TRANGTHAITH" },
-    { title: "TTTT HDCLS", key: "TTTTCLS" },
-    { title: "TTTT HDTH", key: "TTTTDTH" },
+    // { title: "TTTH PK", key: "TRANGTHAITH" },
+    // { title: "TTTT HDCLS", key: "TTTTCLS" },
+    // { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
   useEffect(() => {
@@ -71,24 +71,6 @@ function DanhSachDangKy() {
           data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
-
-      // const formattedDSDK = filteredDSDK.map(data => {
-      //   const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
-      //   const formattedNgaySinh = formatDate(NGAYSINH);
-
-      //   return {
-      //     MABN,
-      //     MATK,
-      //     CCCD,
-      //     HOTEN,
-      //     formattedNgaySinh,
-      //     GIOITINH,
-      //     SDT,
-      //     DIACHI,
-      //     TIENSUBENH,
-      //     DIUNG
-      //   };
-      // });
 
       const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
       setTotalPages(calculatedTotalPages);

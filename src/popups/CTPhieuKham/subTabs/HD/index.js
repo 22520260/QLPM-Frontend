@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 import { selectHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
-import { useState } from "react";
 import { setIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 
 function HoaDon() {
@@ -96,11 +95,11 @@ function HoaDon() {
                 >
                   <td colspan="5">
                     <div className="py-3 border border-primary">
-                      <ListForm
+                      <ListFormDV
                         columns={columnsDSPK}
                         data={dspkByIdHd}
-                        onDeleteService={handleOnDelete}
-                      ></ListForm>
+                        handleDelete={handleOnDelete}
+                      ></ListFormDV>
                     </div>
                   </td>
                 </tr>
@@ -130,13 +129,13 @@ function HoaDon() {
                   >
                     <td colspan="5">
                       <div className="py-3 border border-primary">
-                        <ListForm
+                        <ListFormDV
                           columns={
                             dsCLS.length === 0 ? columnsCTDT : columnsDSCLS
                           }
                           data={dsCLS.length === 0 ? ctdt : dsCLS}
-                          onDeleteService={handleOnDelete}
-                        ></ListForm>
+                          handleDelete={handleOnDelete}
+                        ></ListFormDV>
                       </div>
                     </td>
                   </tr>
@@ -167,11 +166,11 @@ function HoaDon() {
                   >
                     <td colspan="5">
                       <div className="py-3 border border-primary">
-                        <ListForm
+                        <ListFormDV
                           columns={columnsCTDT}
                           data={ctdt}
-                          onDeleteService={handleOnDelete}
-                        ></ListForm>
+                          handleDelete={handleOnDelete}
+                        ></ListFormDV>
                       </div>
                     </td>
                   </tr>
