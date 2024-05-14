@@ -64,7 +64,7 @@ function LichSuKham() {
         <div className="shadow rounded">
           <ul className="nav nav-pills list-group-horizontal-scroll position-relative overflow-auto">
             {lichSuKham?.map((phieuKham, index) => (
-              <li className="nav-item" key={index}>
+              <li className="nav-item mr-3 shadow rounded" key={index}>
                 <a
                   className={`nav-link ${activeTab === index ? "active" : ""}`}
                   onClick={() => handleTabClick(phieuKham, index)}
@@ -72,15 +72,13 @@ function LichSuKham() {
                   {"PK" +
                     phieuKham.MAPK +
                     " - " +
-                    phieuKham.NGAYKHAMMIN +
-                    " - " +
-                    phieuKham.TENDV}
+                    phieuKham.NGAYKHAMMIN}
                 </a>
               </li>
             ))}
           </ul>
 
-          <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
+          <div className="px-3 py-2 my-1 bg-primary rounded-top">Thông tin khám</div>
           <div className="container-fluid mb-2 py-2">
             <div className="row py-2">
               <IFInputText
