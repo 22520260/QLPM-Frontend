@@ -19,7 +19,10 @@ import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { useDispatch, useSelector } from "react-redux";
-import { clearSelectedRow, selectRow } from "../../../../redux/slice/other/selectedRowSlice";
+import {
+  clearSelectedRow,
+  selectRow,
+} from "../../../../redux/slice/other/selectedRowSlice";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { MdDeleteForever } from "react-icons/md";
@@ -34,7 +37,6 @@ import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fe
 import { deFormatDate } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
 import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
-
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
 import { fetchCheckThuocAction } from "../../../../redux/action/fetchDataAction/fetchCheckThuocAction";
 import { ImageUpload } from "./ImageUpload";
@@ -44,7 +46,10 @@ import {
 } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
-import { fetchPkByIdHdAction, fetchLSKByIdBnAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import {
+  fetchPkByIdHdAction,
+  fetchLSKByIdBnAction,
+} from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
@@ -216,8 +221,6 @@ export function ListFormDSDK({ columns, data, loading }) {
     dispatch(fetchBenhByIdAction(row.MAPK));
   };
 
-  const handleSave = () => {};
-
   const handleChangePttt = (value) => {
     setPttt(value);
   };
@@ -236,9 +239,7 @@ export function ListFormDSDK({ columns, data, loading }) {
       console.log(error);
       toast.error("Cập nhật trạng thái phiếu khám không thành công");
     }
-      toast("Cập nhật trạng thái phiếu khám thành công");
-    }
-  }
+  };
 
   const handleThanhToan = async () => {
     // if (selectedHD.MALOAIHD === 1) {
@@ -271,7 +272,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleHuyPK = async () => {
     await updateTrangThaiPK("Đã hủy");
     dispatch(fetchDSDKAction());
-  }
+  };
 
   return (
     <>
@@ -341,11 +342,11 @@ export function ListFormDSDK({ columns, data, loading }) {
                   </button>
                   <button
                     type="button"
-                    className="btn btn-danger mx-1"
+                    className="btn btn-danger rounded-circle"
                     data-bs-toggle="modal"
                     data-bs-target="#huyPhieu"
                   >
-                    Hủy
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>

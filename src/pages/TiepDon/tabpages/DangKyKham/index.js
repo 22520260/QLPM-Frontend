@@ -136,10 +136,10 @@ function DangKyKham() {
       try {
         const response = await axios.post("/phieukham/insert-just-pk", bodyReq);
         if (response.status === 200) {
-          toast("Thêm phiếu khám thành công!!!");
+          toast.success("Thêm phiếu khám thành công!!!");
         }
       } catch (error) {
-        toast("Thêm phiếu khám không thành công");
+        toast.error("Thêm phiếu khám không thành công");
       }
     });
   };
