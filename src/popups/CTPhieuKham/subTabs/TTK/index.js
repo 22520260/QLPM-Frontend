@@ -12,19 +12,48 @@ function ThongTinKham() {
   const ttk = ttkArray ? ttkArray[0] : {};
   const [selectedBenh, setSelectedBenh] = useState([]);
   const benhById = useSelector((state) => state.benhById?.data) || [];
+  
+  const defaultFormData = {
+    maPK: ttk?.MAPK,
+    trieuChung: ttk?.TRIEUCHUNGBENH || null,
+    tinhTrangCoThe: ttk?.TINHTRANGCOTHE || null,
+    ketLuan: ttk?.KETLUAN || null,
+    huyetAp: ttk?.HUYETAP || null,
+    chieuCao: ttk?.CHIEUCAO || null,
+    canNang: ttk?.CANNANG || null,
+    benh: benhById,
+  };
+  const [formData, setFormData] = useState('');
 
   useEffect(() => {
     setSelectedBenh(benhById);
   }, [benhById]);
+
+  useEffect(() => {
+    setFormData(defaultFormData)
+  }, [ttk]);
 
   const columns = [
     { title: "Mã bệnh", key: "MABENH" },
     { title: "Mã ICD bệnh", key: "MAICD" },
     { title: "Tên bệnh", key: "TENBENH" },
   ];
+  const [resetKey, setResetKey] = useState(Date.now);
+
+  const handleCancel = () => {
+    setFormData({
+      trieuChung: null,
+      tinhTrangCoThe: null,
+      ketLuan: null,
+      huyetAp: null,
+      chieuCao: null,
+      canNang: null,
+    });
+    setResetKey(Date.now());
+  }
 
   return (
-    <div className="shadow rounded">
+    <div className="shadow rounded" key={resetKey}>
       <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
       <div className="container-fluid mb-2 py-2">
         <div className="row py-2">
@@ -58,13 +87,13 @@ function ThongTinKham() {
           <IFInputText
             title={"Phòng khám"}
             size={3}
-            value={ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")"}
+            value={ttk?.TENPHONG ? (ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")") : (null)}
             readOnly={true}
           />
           <IFInputText
             title={"Bác sĩ khám"}
             size={4}
-            value={"BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN}
+            value={ttk?.HOTEN ? ("BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN) : (null)}
             readOnly={true}
           />
         </div>
@@ -86,19 +115,19 @@ function ThongTinKham() {
           <TextArea
             title={"Bệnh sử"}
             size={4}
-            value={ttk?.TRIEUCHUNGBENH}
+            value={formData.trieuChung}
             readOnly={true}
           />
           <TextArea
             title={"Khám lâm sàn"}
             size={4}
-            value={ttk?.TINHTRANGCOTHE}
+            value={formData.tinhTrangCoThe}
             readOnly={true}
           />
           <TextArea
             title={"Lời dặn"}
             size={4}
-            value={ttk?.KETLUAN}
+            value={formData.ketLuan}
             readOnly={true}
           />
         </div>
@@ -120,21 +149,32 @@ function ThongTinKham() {
           <IFInputText
             title={"Huyết áp"}
             size={4}
-            value={ttk?.HUYETAP}
+            value={formData.huyetAp}
             readOnly={true}
           />
           <IFInputText
             title={"Chiều cao"}
             size={4}
-            value={ttk?.CHIEUCAO}
+            value={formData.chieuCao}
             readOnly={true}
           />
           <IFInputText
             title={"Cân nặng"}
             size={4}
-            value={ttk?.CANNANG}
+            value={formData.canNang}
             readOnly={true}
           />
+        </div>
+
+        <div className="row py-2 d-flex justify-content-between">
+          <button
+            type="button"
+            className="btn btn-secondary ms-auto mx-4 col-auto"
+            onClick={handleCancel}
+            data-bs-dismiss="modal"
+          >
+            Đóng
+          </button>
         </div>
       </div>
     </div>

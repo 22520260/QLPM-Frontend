@@ -15,7 +15,8 @@ import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 function DichVu() {
   const dispatch = useDispatch();
 
-  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const selectedPK =
+    useSelector((state) => state.selectedRow?.selectedRow) || {};
   const existedDsCls = useSelector((state) => state.fetchCLS?.dsClsById) || [];
   const services = useSelector((state) => state.services?.data) || [];
   const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
@@ -57,10 +58,11 @@ function DichVu() {
   const insertCLS = async (MAPK, MAHD) => {
     const flag = await selectedServices.map(async (service) => {
       try {
-        const response = await axios.post(
-          "/cls/insert-just-cls",
-          { ...service, MAPK, MAHD },
-        );
+        const response = await axios.post("/cls/insert-just-cls", {
+          ...service,
+          MAPK,
+          MAHD,
+        });
         if (response.status === 200) {
           toast("Thêm chỉ định CLS thành công");
           return true;
@@ -135,8 +137,14 @@ function DichVu() {
     updatedServices.splice(index, 1);
     setSelectedServices(updatedServices);
   };
+  const [resetKey, setResetKey] = useState(Date.now);
+
+  const handleCancel = () => {
+    setResetKey(Date.now());
+  };
+
   return (
-    <div className="shadow rounded">
+    <div className="shadow rounded" key={resetKey}>
       {/* Thông tin */}
       <div className="px-3 py-2 bg-primary rounded-top">Chọn dịch vụ</div>
       <div className="container-fluid mb-2 py-2">
@@ -193,7 +201,7 @@ function DichVu() {
           {selectedServices.length > 0 || existedDsCls.length > 0 ? (
             <ListFormDV
               columns={columns}
-              data={existedDsCls.length>0 ? existedDsCls : selectedServices}
+              data={existedDsCls.length > 0 ? existedDsCls : selectedServices}
               handleDelete={handleDeleteService}
             />
           ) : (
@@ -206,11 +214,19 @@ function DichVu() {
 
       <div className="d-flex justify-content-center px-3 py-2">
         <button
-          className="btn btn-primary"
+          className="btn btn-primary ms-auto mx-4 col-auto"
           type="button"
           onClick={handleFormSubmit}
         >
           Chỉ định
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary me-4 col-auto"
+          onClick={handleCancel}
+          data-bs-dismiss="modal"
+        >
+          Đóng
         </button>
       </div>
     </div>

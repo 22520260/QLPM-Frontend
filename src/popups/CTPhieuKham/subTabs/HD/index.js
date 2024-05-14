@@ -1,6 +1,6 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { selectHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { setIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 
@@ -54,131 +54,149 @@ function HoaDon() {
     { title: "Trạng thái", key: "TRANGTHAITH" },
   ];
 
+  const [resetKey, setResetKey] = useState(Date.now);
+
+  const handleCancel = () => {
+    setResetKey(Date.now());
+  };
+
   return (
-    <div className="shadow rounded">
+    <div className="shadow rounded" key={resetKey}>
       {/* Thông tin */}
-      <div className="px-3 py-2 d-flex justify-content-center bg-primary rounded-top">
-        Dịch vụ - Đơn thuốc
-      </div>
-      <div class="container rounded py-2">
-        <div class="table-responsive">
-          <table class="table accordion">
-            <thead>
-              <tr>
-                {columns.map((column, index) => (
-                  <th key={index} scope="col">
-                    {column.title}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {bills.map((row, rowIndex) =>
-                rowIndex === 0 ? (
-                  <tr
-                    data-bs-toggle="collapse"
-                    data-bs-target="#r0"
-                    key={rowIndex}
-                    onClick={() => handleRowClick(row, rowIndex)}
-                  >
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex}>{row[column.key] || ""}</td>
-                    ))}
-                  </tr>
-                ) : null
-              )}
-              {isShowHdRows && isShowHdRows[0] === true ? (
-                <tr
-                  // class="collapse accordion-collapse"
-                  // id="r0"
-                  data-bs-parent=".table"
-                >
-                  <td colspan="5">
-                    <div className="py-3 border border-primary">
-                      <ListFormDV
-                        columns={columnsDSPK}
-                        data={dspkByIdHd}
-                        handleDelete={handleOnDelete}
-                      ></ListFormDV>
-                    </div>
-                  </td>
-                </tr>
-              ) : null}
-
-              {bills.map((row, rowIndex) =>
-                rowIndex === 1 ? (
-                  <tr
-                    data-bs-toggle="collapse"
-                    data-bs-target="#r1"
-                    key={rowIndex}
-                    onClick={() => handleRowClick(row, rowIndex)}
-                  >
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex}>{row[column.key] || ""}</td>
-                    ))}
-                  </tr>
-                ) : null
-              )}
-              {
-                //dsCLS.length === 0 && ctdt.length === 0
-                isShowHdRows && isShowHdRows[1] === true ? (
-                  <tr
-                    // class="collapse accordion-collapse"
-                    // id="r1"
-                    data-bs-parent=".table"
-                  >
-                    <td colspan="5">
-                      <div className="py-3 border border-primary">
-                        <ListFormDV
-                          columns={
-                            dsCLS.length === 0 ? columnsCTDT : columnsDSCLS
-                          }
-                          data={dsCLS.length === 0 ? ctdt : dsCLS}
-                          handleDelete={handleOnDelete}
-                        ></ListFormDV>
-                      </div>
-                    </td>
-                  </tr>
-                ) : null
-              }
-
-              {bills.map((row, rowIndex) =>
-                rowIndex === 2 ? (
-                  <tr
-                    data-bs-toggle="collapse"
-                    data-bs-target="#r2"
-                    key={rowIndex}
-                    onClick={() => handleRowClick(row, rowIndex)}
-                  >
-                    {columns.map((column, colIndex) => (
-                      <td key={colIndex}>{row[column.key] || ""}</td>
-                    ))}
-                  </tr>
-                ) : null
-              )}
-              {
-                //dsCLS.length === 0 || (dsCLS.length !== 0 && ctdt.length === 0)
-                isShowHdRows && isShowHdRows[2] === true ? (
-                  <tr
-                    // class="collapse accordion-collapse"
-                    // id="r2"
-                    data-bs-parent=".table"
-                  >
-                    <td colspan="5">
-                      <div className="py-3 border border-primary">
-                        <ListFormDV
-                          columns={columnsCTDT}
-                          data={ctdt}
-                          handleDelete={handleOnDelete}
-                        ></ListFormDV>
-                      </div>
-                    </td>
-                  </tr>
-                ) : null
-              }
-            </tbody>
-          </table>
+      <div>
+        <div className="px-3 py-2 d-flex justify-content-center bg-primary rounded-top">
+          Dịch vụ - Đơn thuốc
         </div>
+        <div class="container rounded py-2">
+          <div class="table-responsive">
+            <table class="table accordion">
+              <thead>
+                <tr>
+                  {columns.map((column, index) => (
+                    <th key={index} scope="col">
+                      {column.title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {bills.map((row, rowIndex) =>
+                  rowIndex === 0 ? (
+                    <tr
+                      data-bs-toggle="collapse"
+                      data-bs-target="#r0"
+                      key={rowIndex}
+                      onClick={() => handleRowClick(row, rowIndex)}
+                    >
+                      {columns.map((column, colIndex) => (
+                        <td key={colIndex}>{row[column.key] || ""}</td>
+                      ))}
+                    </tr>
+                  ) : null
+                )}
+                {isShowHdRows && isShowHdRows[0] === true ? (
+                  <tr
+                    // class="collapse accordion-collapse"
+                    // id="r0"
+                    data-bs-parent=".table"
+                  >
+                    <td colspan="5">
+                      <div className="py-3 border border-primary">
+                        <ListForm
+                          columns={columnsDSPK}
+                          data={dspkByIdHd}
+                          handleDelete={handleOnDelete}
+                        ></ListForm>
+                      </div>
+                    </td>
+                  </tr>
+                ) : null}
+
+                {bills.map((row, rowIndex) =>
+                  rowIndex === 1 ? (
+                    <tr
+                      data-bs-toggle="collapse"
+                      data-bs-target="#r1"
+                      key={rowIndex}
+                      onClick={() => handleRowClick(row, rowIndex)}
+                    >
+                      {columns.map((column, colIndex) => (
+                        <td key={colIndex}>{row[column.key] || ""}</td>
+                      ))}
+                    </tr>
+                  ) : null
+                )}
+                {
+                  //dsCLS.length === 0 && ctdt.length === 0
+                  isShowHdRows && isShowHdRows[1] === true ? (
+                    <tr
+                      // class="collapse accordion-collapse"
+                      // id="r1"
+                      data-bs-parent=".table"
+                    >
+                      <td colspan="5">
+                        <div className="py-3 border border-primary">
+                          <ListForm
+                            columns={
+                              dsCLS.length === 0 ? columnsCTDT : columnsDSCLS
+                            }
+                            data={dsCLS.length === 0 ? ctdt : dsCLS}
+                            handleDelete={handleOnDelete}
+                          ></ListForm>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null
+                }
+
+                {bills.map((row, rowIndex) =>
+                  rowIndex === 2 ? (
+                    <tr
+                      data-bs-toggle="collapse"
+                      data-bs-target="#r2"
+                      key={rowIndex}
+                      onClick={() => handleRowClick(row, rowIndex)}
+                    >
+                      {columns.map((column, colIndex) => (
+                        <td key={colIndex}>{row[column.key] || ""}</td>
+                      ))}
+                    </tr>
+                  ) : null
+                )}
+                {
+                  //dsCLS.length === 0 || (dsCLS.length !== 0 && ctdt.length === 0)
+                  isShowHdRows && isShowHdRows[2] === true ? (
+                    <tr
+                      // class="collapse accordion-collapse"
+                      // id="r2"
+                      data-bs-parent=".table"
+                    >
+                      <td colspan="5">
+                        <div className="py-3 border border-primary">
+                          <ListForm
+                            columns={columnsCTDT}
+                            data={ctdt}
+                            handleDelete={handleOnDelete}
+                          ></ListForm>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div className="row py-2 d-flex justify-content-between">
+        <button
+          type="button"
+          className="btn btn-secondary ms-auto mx-4 col-auto"
+          onClick={handleCancel}
+          data-bs-dismiss="modal"
+        >
+          Đóng
+        </button>
       </div>
     </div>
   );

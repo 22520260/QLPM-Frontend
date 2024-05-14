@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import {
   IFInputText,
   IFNgay,
@@ -27,8 +27,14 @@ function ThongTinKhachHang() {
     return age > 0 ? age : 0;
   };
 
+  const [resetKey, setResetKey] = useState(Date.now);
+
+  const handleCancel = () => {
+    setResetKey(Date.now());
+  }
+
   return (
-    <div className="shadow rounded">
+    <div className="shadow rounded" key={resetKey}>
       {/* Thông tin */}
       <div className="px-3 py-2 bg-primary rounded-top">
         Thông tin khách hàng
@@ -123,6 +129,16 @@ function ThongTinKhachHang() {
             value={selectedBN.TIENSUBENH}
             onChange={(value) => handleChange(1)}
           />
+        </div>
+        <div className="row py-2 d-flex justify-content-between">
+          <button
+            type="button"
+            className="btn btn-secondary ms-auto mx-4 col-auto"
+            onClick={handleCancel}
+            data-bs-dismiss="modal"
+          >
+            Đóng
+          </button>
         </div>
       </div>
     </div>

@@ -17,6 +17,7 @@ import {
   TTK,
   StatusIcon,
 } from "../../../../component/Layout/TabLayout/ListForm/StatusIcon";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 
 function ThongTinKham() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function ThongTinKham() {
   const [selectedBenh, setSelectedBenh] = useState([]);
   const benh = useSelector((state) => state.benh?.data) || [];
   const benhById = useSelector((state) => state.benhById?.data) || [];
+  const [resetKey, setResetKey] = useState(Date.now);
   console.log('benhById', benhById)
 
   console.log("benh", benh);
@@ -35,6 +37,8 @@ function ThongTinKham() {
 
   console.log("selectedPK", selectedPK);
   console.log("ttk", ttk);
+
+  console.log(Math.floor(Math.random() * 11) + 100);
 
   const defaultFormData = {
     maPK: ttk?.MAPK,
@@ -57,7 +61,7 @@ function ThongTinKham() {
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       setFormData(defaultFormData);
-      // dispatch(fetchTTKAction());
+      dispatch(fetchDSDKAction());
       // cancelBtn.disabled = false;
     }
     if (response && response.data && response.data.errcode !== 0) {
@@ -71,7 +75,6 @@ function ThongTinKham() {
 
   useEffect(() => {
     dispatch(fetchAllBenhAction());
-    setFormData('');
   }, []);
 
   useEffect(() => {
@@ -103,8 +106,20 @@ function ThongTinKham() {
     setFormData({ ...formData, benh: updatedBenh });
   };
 
+  const handleCancel = () => {
+    setFormData({
+      trieuChung: null,
+      tinhTrangCoThe: null,
+      ketLuan: null,
+      huyetAp: null,
+      chieuCao: null,
+      canNang: null,
+    });
+    setResetKey(Date.now());
+  }
+
   return (
-    <div className="shadow rounded">
+    <div className="shadow rounded" key={resetKey}>
       <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
       <div className="container-fluid mb-2 py-2">
         <div className="row py-2">
@@ -138,13 +153,13 @@ function ThongTinKham() {
           <IFInputText
             title={"Phòng khám"}
             size={3}
-            value={ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")"}
+            value={ttk?.TENPHONG ? (ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")") : (null)}
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
             title={"Bác sĩ khám"}
             size={4}
-            value={"BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN}
+            value={ttk?.HOTEN ? ("BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN) : (null)}
             readOnly={true}
           />
         </div>
@@ -257,14 +272,14 @@ function ThongTinKham() {
           >
             Lưu thông tin
           </button>
-          {/* <button
-            id="cancelBtn"
+          <button
             type="button"
-            className="btn btn-danger mx-4 col-auto"
+            className="btn btn-secondary me-4 col-auto"
             onClick={handleCancel}
+            data-bs-dismiss="modal"
           >
-            Hủy
-          </button> */}
+            Đóng
+          </button>
         </div>
       </div>
     </div>

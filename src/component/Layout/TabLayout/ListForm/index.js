@@ -19,7 +19,7 @@ import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
 import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { useDispatch, useSelector } from "react-redux";
-import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
+import { clearSelectedRow, selectRow } from "../../../../redux/slice/other/selectedRowSlice";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { MdDeleteForever } from "react-icons/md";
@@ -204,7 +204,6 @@ export function ListFormDSDK({ columns, data, loading }) {
   const [pttt, setPttt] = useState("Tiền mặt");
 
   const handleRowClick = (row) => {
-    console.log("row", row);
     dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(fetchBenhNhanByIdAction(row.MABN));
     dispatch(fetchDSHDByIdAction(row?.MAPK));
@@ -215,8 +214,8 @@ export function ListFormDSDK({ columns, data, loading }) {
     dispatch(fetchTTKAction(row.MAPK));
     dispatch(fetchBenhByIdAction(row.MAPK));
     };
-  const handleSave = () => {};
-  const handleChangePttt = (value) => {
+
+    const handleChangePttt = (value) => {
     setPttt(value);
   };
 
@@ -228,11 +227,11 @@ export function ListFormDSDK({ columns, data, loading }) {
       });
 
       if (response2.status === 200) {
-        toast("Cập nhật trạng thái phiếu khám thành công");
+        toast.success("Cập nhật trạng thái phiếu khám thành công");
       }
     } catch (error) {
       console.log(error);
-      toast("Cập nhật trạng thái phiếu khám thành công");
+      toast.error("Cập nhật trạng thái phiếu khám không thành công");
     }
 
     try {
@@ -245,13 +244,13 @@ export function ListFormDSDK({ columns, data, loading }) {
       });
 
       if (response.status === 200) {
-        toast("Thanh toán hóa đơn thành công");
+        toast.success("Thanh toán hóa đơn thành công");
         dispatch(fetchDSHDByIdAction(selectedRow?.MAPK));
         dispatch(fetchDSDKAction());
       }
     } catch (error) {
       console.log(error);
-      toast("Thanh toán không thành công");
+      toast.error("Thanh toán không thành công");
     }
   };
 
@@ -346,12 +345,6 @@ export function ListFormDSDK({ columns, data, loading }) {
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
             </div>
 
             <div className="modal-body ">
@@ -361,23 +354,6 @@ export function ListFormDSDK({ columns, data, loading }) {
                   maPK={selectedRow?.MAPK}
                 />
               </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-                onClick={() => handleDongButton()}
-              >
-                Đóng
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => handleSave}
-              >
-                Lưu những thay đổi
-              </button>
             </div>
           </div>
         </div>
@@ -2573,6 +2549,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
     dispatch(fetchAllThuocKeDonAction());
     dispatch(fetchTTKAction(row.MAPK));
     dispatch(fetchBenhByIdAction(row.MAPK));
+    dispatch(fetchDsClsByIdAction(row.MAPK));
   };
 
   return (
@@ -2659,12 +2636,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
-              <button
+              {/* <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              ></button>
+                onClick={handleCancel}
+              ></button> */}
             </div>
 
             <div className="modal-body ">
@@ -2672,12 +2650,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                 <NavTabVertical tabsData={tabsDataCTKB} />
               </div>
             </div>
-            <div className="modal-footer">
-              {/* <button
+            {/* <div className="modal-footer">
+              <button
                 id="cancelBtn"
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={handleCancel}
               >
                 Đóng
               </button>
@@ -2687,8 +2666,8 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                 onClick={() => handleSave}
               >
                 Lưu những thay đổi
-              </button> */}
-            </div>
+              </button>
+            </div> */}
           </div>
         </div>
       </div>
