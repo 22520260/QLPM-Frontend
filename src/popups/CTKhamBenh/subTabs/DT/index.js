@@ -214,7 +214,7 @@ function DonThuoc() {
           maDT,
         });
         if (response.status === 200) {
-          toast("Thêm chi tiết đơn thuốc thành công");
+          toast.success("Thêm chi tiết đơn thuốc thành công");
           dispatch(fetchAllThuocKeDonAction());
           return true;
         }
@@ -243,7 +243,7 @@ function DonThuoc() {
       });
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
-        toast("Thêm hóa đơn và đơn thuốc thành công");
+        toast.success("Thêm hóa đơn và đơn thuốc thành công");
         const isComplete = await insertCTDT(medicines, maDTinserted);
         if (isComplete === true) {
           setMedicines([]);

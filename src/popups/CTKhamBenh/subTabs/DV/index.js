@@ -64,7 +64,7 @@ function DichVu() {
           MAHD,
         });
         if (response.status === 200) {
-          toast("Thêm chỉ định CLS thành công");
+          toast.success("Thêm chỉ định CLS thành công");
           return true;
         }
       } catch (error) {
@@ -96,7 +96,7 @@ function DichVu() {
         });
         if (response1.status === 200) {
           maHDinserted = response1.data.MAHD;
-          toast("Thêm hóa đơn thành công!!!");
+          toast.success("Thêm hóa đơn thành công!!!");
           const isComplete = await insertCLS(selectedPK?.MAPK, maHDinserted);
           if (isComplete) {
             dispatch(fetchDsClsByIdAction(selectedPK.MAPK));

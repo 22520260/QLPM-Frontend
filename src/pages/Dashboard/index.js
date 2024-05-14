@@ -5,17 +5,16 @@ import ChatLuongandDoanhThu from "./ChatLuongandDoanhThu";
 function Dashboard() {
 
     return (
-        <>
-            <h1 className="container-fluid">Dashboard</h1>
+        <div className="container-fluid">
+            <h1>Dashboard</h1>
             <ChatLuongandDoanhThu />
-
             <div>
                 <DichVu />
             </div>
             <div>
                 <LoaiBenh />
             </div>
-        </>
+        </div>
     );
 }
 

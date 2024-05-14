@@ -1,6 +1,8 @@
 import { ScatterPlot } from '@mui/x-charts/ScatterChart';
 import { ResponsiveChartContainer, ChartsGrid, ChartsXAxis, ChartsYAxis, ChartsTooltip, ChartsLegend } from '@mui/x-charts';
 import { useState, useEffect } from 'react';
+import { fetchThongKeChatLuongAction } from '../../../redux/action/fetchDataAction/fetchThongKeChatLuongAction';
+import { useDispatch, useSelector } from "react-redux";
 
 const data = [
     { id: 'data-0', x1: 33, x2: 19.2, year: '2024' },
@@ -259,11 +261,18 @@ const data = [
 
 
 export default function ChatLuong({ year }) {
+    const dispatch = useDispatch();
     const [filterData, setFilterData] = useState([])
+    const data = useSelector((state) => state.tkChatLuong?.data) || [];
+    console.log("data", data);
+
+    useEffect(() => {
+        dispatch(fetchThongKeChatLuongAction());
+      }, []);
 
     useEffect(() => {
         if (year) {
-            const yearData = data.filter(item => item.year === year);
+            const yearData = data.filter(item => item.YEAR === year);
             setFilterData(yearData);
         }
     }, [year]);
@@ -288,7 +297,7 @@ export default function ChatLuong({ year }) {
                     {
                         type: 'scatter',
                         label: "Khách hàng",
-                        data: filterData.map((v) => ({ x: v.x1, y: v.x2, id: v.id })),
+                        data: filterData.map((v) => ({ x: v.X2, y: v.X1, id: v.ID })),
                         markerSize: 5,
                         color: 'tomato'
                     },

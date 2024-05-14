@@ -169,11 +169,11 @@ function DangKyKham() {
         });
         if (response1.status === 200) {
           maHDinserted = response1.data.MAHD;
-          toast("Thêm hóa đơn thành công!!!");
+          toast.success("Thêm hóa đơn thành công!!!");
         }
       } catch (error) {
         console.log(error);
-        toast("Thêm hóa đơn không thành công");
+        toast.error("Thêm hóa đơn không thành công");
       }
       console.log(">> oldPatientID", oldPatientID);
       // nếu là bệnh nhân mới thì thêm hồ sơ bệnh nhân trước
@@ -183,12 +183,12 @@ function DangKyKham() {
           const response2 = await axios.post("/benhnhan/insert", formData);
           if (response2.status === 200) {
             maBNinserted = response2.data.MABN;
-            toast("Thêm bệnh nhân thành công!!!");
+            toast.success("Thêm bệnh nhân thành công!!!");
             await insertPK(maBNinserted, maHDinserted);
           }
         } catch (error) {
           console.log(error);
-          toast("Thêm bệnh nhân không thành công");
+          toast.error("Thêm bệnh nhân không thành công");
         }
       } else {
         await insertPK(oldPatientID, maHDinserted);

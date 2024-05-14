@@ -18,6 +18,7 @@ function ChatLuongandDoanhThu() {
                 onChange={(value) => setYear(value === "Chọn" ? defaultYear : value)}
                 selected={year}
                 keyObj='year'
+                showObj={'year'}
             />
             <div className="row">
                 <div className="col col-md-6">
