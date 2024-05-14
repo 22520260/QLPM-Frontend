@@ -44,7 +44,10 @@ import {
 } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
-import { fetchPkByIdHdAction, fetchLSKByIdBnAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import {
+  fetchPkByIdHdAction,
+  fetchLSKByIdBnAction,
+} from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
@@ -52,6 +55,7 @@ import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTT
 import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon } from "./StatusIcon";
+import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
 const { format } = require("date-fns");
 
 export function ListForm({ columns, data, loading }) {
@@ -237,7 +241,7 @@ export function ListFormDSDK({ columns, data, loading }) {
       console.log(error);
       toast("Cập nhật trạng thái phiếu khám thành công");
     }
-  }
+  };
 
   const handleThanhToan = async () => {
     // if (selectedHD.MALOAIHD === 1) {
@@ -270,7 +274,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleHuyPK = async () => {
     await updateTrangThaiPK("Đã hủy");
     dispatch(fetchDSDKAction());
-  }
+  };
 
   return (
     <>
@@ -2703,9 +2707,9 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button className="btn btn-danger mx-1 rounded-circle">
+                  {/* <button className="btn btn-danger mx-1 rounded-circle">
                     <MdDeleteForever />
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))
@@ -2825,14 +2829,14 @@ export function ListFormCLS({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className="btn btn-danger mx-1"
                     data-bs-toggle="modal"
                     data-bs-target="#huyPhieu"
                   >
                     Hủy
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))
@@ -2996,6 +3000,8 @@ export function ListFormCLS({ columns, data, loading }) {
 export function ListFormDSBenhNhan({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
+  const lichSuKham = useSelector((state) => state.fetchDSDK.lskByIdBn) || [];
 
   const calculateAge = (birthDate) => {
     const today = new Date();
@@ -3013,6 +3019,8 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
   };
 
   const handleRowClick = (row) => {
+    dispatch(fetchLSKByIdBnAction(row?.MABN));
+    dispatch(selectRow(row));
     setFormData({
       maBN: row.MABN,
       CCCD: row.CCCD,
@@ -3147,6 +3155,14 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                     data-bs-target="#updateBenhNhan"
                   >
                     <FaEye />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary mx-1 rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#lichsukham"
+                  >
+                    <FaStethoscope />
                   </button>
                 </td>
               </tr>
@@ -3288,6 +3304,55 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
               >
                 Cập nhật
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal Lịch sử khám */}
+      <div
+        className="modal fade modal-xl"
+        id="lichsukham"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Lịch sử khám của BN{selectedRow?.MABN}: {selectedRow.HOTEN}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <LichSuKham/>
+              </div>
+            </div>
+            <div className="modal-footer">
+              {/* <button
+                id="cancelBtn"
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSave}
+              >
+                Lưu những thay đổi
+              </button> */}
             </div>
           </div>
         </div>
