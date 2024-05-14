@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchDSDKAction, fetchPkByIdHdAction } from '../../action/fetchDataAction/fetchDSDKAction';
+import { fetchDSDKAction, fetchPkByIdHdAction, fetchLSKByIdBnAction } from '../../action/fetchDataAction/fetchDSDKAction';
 
 const initialState = {
   data: [],
   isLoading: false,
-  pkByIdHd: []
+  pkByIdHd: [],
+  lskByIdBn: [],
 };
 
 const fetchDSDKSlice = createSlice({
@@ -26,7 +27,11 @@ const fetchDSDKSlice = createSlice({
       .addCase(fetchPkByIdHdAction.fulfilled, (state, action) => {
         state.isLoading = false;
         state.pkByIdHd = action.payload.data;
-      });
+      })
+      .addCase(fetchLSKByIdBnAction.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lskByIdBn = action.payload.data;
+      })
   },
 });
 

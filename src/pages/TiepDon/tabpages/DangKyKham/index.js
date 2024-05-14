@@ -100,8 +100,6 @@ function DangKyKham() {
       }
     } else {
       setFormData({ ...formData, [fieldName]: value });
-      setOldPatientID(0);
-
       if (fieldName === "ngaySinh") {
         const age = calculateAge(value);
         setAge(age);

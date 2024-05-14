@@ -44,7 +44,7 @@ import {
 } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
-import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { fetchPkByIdHdAction, fetchLSKByIdBnAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
@@ -240,9 +240,9 @@ export function ListFormDSDK({ columns, data, loading }) {
   }
 
   const handleThanhToan = async () => {
-    if (selectedHD.MALOAIHD === 1) {
-      await updateTrangThaiPK("Đang thực hiện");
-    }
+    // if (selectedHD.MALOAIHD === 1) {
+    //   await updateTrangThaiPK("Đang thực hiện");
+    // }
     try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
@@ -2641,6 +2641,8 @@ export function ListFormKhamBenh({ columns, data, loading }) {
     dispatch(fetchAllThuocKeDonAction());
     dispatch(fetchTTKAction(row.MAPK));
     dispatch(fetchBenhByIdAction(row.MAPK));
+    dispatch(fetchDsClsByIdAction(row?.MAPK));
+    dispatch(fetchLSKByIdBnAction(row?.MABN));
   };
 
   return (

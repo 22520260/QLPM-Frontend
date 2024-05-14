@@ -70,9 +70,15 @@ body {
 
 // export default GlobalStyle;
 
-.modal:nth-of-type(even) {
-  z-index: 1052 !important;
+.list-group-horizontal-scroll {
+  display: flex;
+  flex-wrap: nowrap;
 }
-.modal-backdrop.show:nth-of-type(even) {
-  z-index: 1051 !important;
+
+.list-group-horizontal-scroll .nav-link {
+  white-space: nowrap;
+}
+
+.list-group-horizontal-scroll.overflow-auto {
+  overflow-x: auto;
 }

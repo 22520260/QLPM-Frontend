@@ -10,5 +10,4 @@ export const tabsDataCTKB = [
     { title: 'Chỉ định CLS', content: 'ctpk-dv', component: DichVu },
     { title: 'Đơn thuốc', content: 'ctpk-dt', component: DonThuoc },
     { title: 'Lịch sử khám', content: 'ctpk-lsk', component: LichSuKham },
-    { title: 'Lịch sử thuốc', content: 'ctpk-lst', component: LichSuThuoc },
 ];
