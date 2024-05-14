@@ -18,11 +18,12 @@ import { toast } from "react-toastify";
 function DonThuoc() {
   const dispatch = useDispatch();
   const dsThuoc = useSelector((state) => state.thuocKeDon?.dsThuoc) || [];
-  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const selectedPK =
+    useSelector((state) => state.selectedRow?.selectedRow) || {};
   const leTan = useSelector((state) => state.auth?.user) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
 
-  console.log('dsThuoc', dsThuoc)
+  console.log("dsThuoc", dsThuoc);
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
   const [note, setNote] = useState("");
@@ -208,12 +209,12 @@ function DonThuoc() {
   const insertCTDT = async (medicines, maDT) => {
     const flag = await medicines.map(async (medicine) => {
       try {
-        const response = await axios.post(
-          "/donthuoc/insert-ctdt",
-          { ...medicine, maDT },
-        );
+        const response = await axios.post("/donthuoc/insert-ctdt", {
+          ...medicine,
+          maDT,
+        });
         if (response.status === 200) {
-          toast("Thêm chi tiết đơn thuốc thành công");
+          toast.success("Thêm chi tiết đơn thuốc thành công");
           dispatch(fetchAllThuocKeDonAction());
           return true;
         }
@@ -236,13 +237,13 @@ function DonThuoc() {
   const handleAddDonThuoc = async () => {
     let maDTinserted = "";
     try {
-      const response = await axios.post(
-        "/donthuoc/insert",
-        { maPK: selectedPK.MAPK, maLT: leTan.account.userInfo[0].MALT },
-      );
+      const response = await axios.post("/donthuoc/insert", {
+        maPK: selectedPK.MAPK,
+        maLT: leTan.account.userInfo[0].MALT,
+      });
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
-        toast("Thêm hóa đơn và đơn thuốc thành công");
+        toast.success("Thêm hóa đơn và đơn thuốc thành công");
         const isComplete = await insertCTDT(medicines, maDTinserted);
         if (isComplete === true) {
           setMedicines([]);
@@ -258,6 +259,12 @@ function DonThuoc() {
       console.log(error);
       toast.error("Thêm đơn thuốc không thành công");
     }
+  };
+
+  const [resetKey, setResetKey] = useState(Date.now);
+
+  const handleCancel = () => {
+    setResetKey(Date.now());
   };
 
   return (
@@ -342,7 +349,7 @@ function DonThuoc() {
         </div>
         <div className="d-flex justify-content-center px-3 py-2">
           <button
-            className="btn btn-primary"
+            className="btn btn-primary ms-auto mx-4 col-auto"
             type="button"
             onClick={handleAddMedicine}
           >
@@ -367,11 +374,19 @@ function DonThuoc() {
       />
       <div className="d-flex justify-content-center px-3 py-2">
         <button
-          className="btn btn-primary"
+          className="btn btn-primary ms-auto mx-4 col-auto"
           type="button"
           onClick={handleAddDonThuoc}
         >
           Kê Đơn Thuốc
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary me-4 col-auto"
+          onClick={handleCancel}
+          data-bs-dismiss="modal"
+        >
+          Đóng
         </button>
       </div>
     </div>

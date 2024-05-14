@@ -22,6 +22,12 @@ import getAllLoThuocReducer from './slice/getDataSlice/getAllLoThuocSlice'
 import getCheckThuocReducer from './slice/getDataSlice/getCheckThuocSlice'
 import getTTKReducer from './slice/getDataSlice/getTTKSlice'
 import getBenhByIdReducer from './slice/getDataSlice/getBenhByIdSlice'
+import getThongKeDichVuKhamReducer from './slice/getDataSlice/getThongKeDichVuKhamSlice'
+import getThongKeDichVuCLSReducer from './slice/getDataSlice/getThongKeDichVuCLSSlice'
+import getThongKeBenhReducer from './slice/getDataSlice/getThongKeBenhSlice'
+import getThongKeDoanhThuReducer from './slice/getDataSlice/getThongKeDoanhThuSlice'
+import getThongKeChatLuongReducer from './slice/getDataSlice/getThongKeChatLuongSlice'
+
 
 
 export default configureStore({
@@ -48,7 +54,12 @@ export default configureStore({
     loThuoc: getAllLoThuocReducer,
     checkThuoc: getCheckThuocReducer,
     ttk: getTTKReducer,
-    benhById: getBenhByIdReducer
+    benhById: getBenhByIdReducer,
+    tkDichVuKham: getThongKeDichVuKhamReducer,
+    tkDichVuCLS: getThongKeDichVuCLSReducer,
+    tkBenh: getThongKeBenhReducer,
+    tkDoanhThu: getThongKeDoanhThuReducer,
+    tkChatLuong: getThongKeChatLuongReducer,
   },
   devTools: true,
 })
