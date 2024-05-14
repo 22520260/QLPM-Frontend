@@ -21,8 +21,7 @@ import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchD
 
 function ThongTinKham() {
   const dispatch = useDispatch();
-  const selectedPK =
-    useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
   const ttkArray = useSelector((state) => state.ttk?.data) || [];
   const ttk = ttkArray ? ttkArray[0] : {};
   const [showError, setShowError] = useState(false);

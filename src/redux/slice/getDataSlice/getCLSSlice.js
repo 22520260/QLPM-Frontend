@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchDsClsByIdAction } from '../../action/fetchDataAction/fetchCLSAction';
+import { fetchDsClsByIdAction, fetchAllClsAction } from '../../action/fetchDataAction/fetchCLSAction';
 
 const initialState = {
   dsClsById: [],
   status: "",
   loading: false,
+  allCls: [],
 };
 
 const fetchCLSSlice = createSlice({
@@ -25,7 +26,20 @@ const fetchCLSSlice = createSlice({
       .addCase(fetchDsClsByIdAction.rejected, (state) => {
         state.status = 'failed';
         state.loading = false;
-      });
+      })
+      .addCase(fetchAllClsAction.pending, (state) => {
+        state.status = 'loading';
+        state.loading = true;
+      })
+      .addCase(fetchAllClsAction.fulfilled, (state, action) => {
+        state.status = 'success';
+        state.loading = false;
+        state.allCls = action.payload.data;
+      })
+      .addCase(fetchAllClsAction.rejected, (state) => {
+        state.status = 'failed';
+        state.loading = false;
+      })
   },
 });
 

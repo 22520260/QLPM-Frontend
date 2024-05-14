@@ -13,3 +13,15 @@ export const fetchDsClsByIdAction = createAsyncThunk(
     }
   }
 );
+
+export const fetchAllClsAction = createAsyncThunk(
+  "fetchAllCls",
+  async () => {
+    try {
+      const response = await axios.get(`/cls/getAll`);
+      return response.data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);

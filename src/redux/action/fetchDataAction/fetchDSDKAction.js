@@ -21,3 +21,15 @@ export const fetchPkByIdHdAction = createAsyncThunk(
     }
   }
 );
+
+export const fetchLSKByIdBnAction = createAsyncThunk(
+  "fetchLSKByIdBnAction",
+  async (maBN, { meta }) => {
+    try {
+      const response = await axios.get(`/phieukham/lichSuKham/getById/${maBN}`);
+      return response.data;
+    } catch (error) {
+      return error.message;
+    }
+  }
+);

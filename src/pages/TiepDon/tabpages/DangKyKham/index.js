@@ -100,8 +100,6 @@ function DangKyKham() {
       }
     } else {
       setFormData({ ...formData, [fieldName]: value });
-      setOldPatientID(0);
-
       if (fieldName === "ngaySinh") {
         const age = calculateAge(value);
         setAge(age);
@@ -163,7 +161,7 @@ function DangKyKham() {
       // thêm hóa đơn mới
       try {
         const response1 = await axios.post("/hoadon/insert", {
-          maLT: leTan.account.userInfo[0].MALT,
+          maLT: leTan?.account?.userInfo[0]?.MALT,
           maLHD: 1,
           tttt: "Chưa thanh toán",
         });
