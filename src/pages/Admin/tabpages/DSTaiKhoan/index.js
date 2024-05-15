@@ -1,132 +1,345 @@
 import React, { useState, useEffect } from "react";
 import {
-    IFSearch, IFInputText, IFNgay
+  IFSearch,
+  IFInputText,
+  IFNgay,
+  IFSelect,
+  IFPassword,
 } from "../../../../component/Layout/TabLayout/InputForm";
 import { ListFormDSTK } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
-
+import { fetchAllAccountAction } from "../../../../redux/action/fetchDataAction/fetchAllAccountAction";
 import { useDispatch, useSelector } from "react-redux";
-import { compareDates, formatDate } from "../../../../utils/appUtils";
+import axios from "../../../../setup/axios";
+import { toast } from "react-toastify";
+import { fetchAllUserGroupAction } from "../../../../redux/action/fetchDataAction/fetchAllUserGroupAction";
+import { formatDate } from "../../../../utils/appUtils";
 
 function DSTaiKhoan() {
-    const dispatch = useDispatch();
-    const data = useSelector((state) => state.fetchDSDK.data);
-    const DSDK = data.data;
-    const isLoading = useSelector((state) => state.fetchDSDK.loading);
-    const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(5);
-    const [displayDSDK, setDisplayDSDK] = useState([]);
-    const [searchKeyword, setSearchKeyword] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [totalPages, setTotalPages] = useState(0);
+  const dispatch = useDispatch();
+  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  const accounts = useSelector((state) => state.account?.data) || [];
+  const isLoading = useSelector((state) => state.account.data?.isLoading);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [displayAccounts, setDisplayAccounts] = useState([]);
+  const [roleKeyword, setRoleKeyword] = useState("");
+  const [nameKeyword, setNameKeyword] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const columns = [
+    { title: "Họ tên", key: "HOTEN" },
+    { title: "Vai trò", key: "TENNHOM" },
+    { title: "Tên tài khoản", key: "USERNAME" },
+    { title: "Giới tính", key: "GIOITINH" },
+    { title: "SĐT", key: "SDT" },
+    { title: "Ngày sinh", key: "NGAYSINH" },
+  ];
 
-    const columns = [
-        { title: "Họ tên", key: "MAPK" },
-        { title: "Vai trò", key: "STT" },
-        { title: "Tên tài khoản", key: "TENBN" },
-        { title: "Giới tính", key: "TENBS" },
-        { title: "SĐT", key: "TIENTHUOC" },
-        { title: "Ngày sinh", key: "TRANGTHAITH" },
-    ];
+  const defaultFormData = {
+    username: "",
+    password: "",
+    hoTen: "",
+    vaiTro: 0,
+    sdt: "",
+    trinhDo: "",
+    chuyenKhoa: "",
+    cccd: "",
+    gioiTinh: 0,
+    ngaySinh: null,
+    diaChi: "",
+    ghiChu: "",
+  };
+  const [formData, setFormData] = useState(defaultFormData);
 
-    useEffect(() => {
-        dispatch(fetchDSDKAction());
+  const defaultObjValidInput = {
+    isValidUsername: true,
+    isValidPassword: true,
+    isValidHoTen: true,
+    isValidVaiTro: true,
+    isValidCCCD: true,
+  };
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
-    }, []);
+  useEffect(() => {
+    dispatch(fetchAllAccountAction());
+    dispatch(fetchAllUserGroupAction());
+  }, []);
 
-    useEffect(() => {
-        if (DSDK) {
-            let filteredDSDK = [...DSDK];
-            // Lọc theo ngày bắt đầu và ngày kết thúc
-            if (startDate && endDate) {
-                filteredDSDK = filteredDSDK.filter((data) => {
-                    const formatedNGAYKHAM = new Date(data.NGAYKHAM);
-                    return (
-                        compareDates(startDate, formatedNGAYKHAM) >= 0 &&
-                        compareDates(formatedNGAYKHAM, endDate) >= 0
-                    );
-                });
-            } else if (startDate) {
-                // Chỉ có ngày bắt đầu
-                filteredDSDK = filteredDSDK.filter((data) => {
-                    const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+  useEffect(() => {
+    if (accounts) {
+      let filteredAccounts = [...accounts];
 
-                    return compareDates(startDate, formatedNGAYKHAM) >= 0;
-                });
-            } else if (endDate) {
-                // Chỉ có ngày kết thúc
-                filteredDSDK = filteredDSDK.filter((data) => {
-                    const formatedNGAYKHAM = new Date(data.NGAYKHAM);
+      // Lọc theo vai trò
+      if (roleKeyword) {
+        filteredAccounts = filteredAccounts.filter((data) =>
+          data.TENNHOM.includes(roleKeyword)
+        );
+      }
+      // Lọc theo tên
+      if (nameKeyword) {
+        filteredAccounts = filteredAccounts.filter((data) =>
+          data.HOTEN?.includes(nameKeyword)
+        );
+      }
 
-                    return compareDates(formatedNGAYKHAM, endDate) >= 0;
-                });
-            }
+      const calculatedTotalPages = Math.ceil(filteredAccounts.length / limit);
+      setTotalPages(calculatedTotalPages);
 
-            // Lọc theo từ khóa tìm kiếm
-            if (searchKeyword) {
-                filteredDSDK = filteredDSDK.filter((data) =>
-                    data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
-                );
-            }
+      // const formatedAccounts = filteredAccounts.map(account => account.NGAYSINH = formatDate(account.NGAYSINH))
 
-            const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
-            setTotalPages(calculatedTotalPages);
+      const formatedAccounts = filteredAccounts.map((account) => {
+        const { NGAYSINH, ...others } = account;
+        const formattedNgaySinh = formatDate(NGAYSINH);
 
-            const startIdx = (page - 1) * limit;
-            const endIdx = Math.min(startIdx + limit, filteredDSDK.length);
-            const pageDSDK = filteredDSDK.slice(startIdx, endIdx);
+        return { ...others, NGAYSINH: formattedNgaySinh };
+      });
+      const startIdx = (page - 1) * limit;
+      const endIdx = Math.min(startIdx + limit, filteredAccounts.length);
+      const pageAccounts = formatedAccounts.slice(startIdx, endIdx);
 
-            setDisplayDSDK(pageDSDK);
-        }
-    }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
+      setDisplayAccounts(pageAccounts);
+    }
+  }, [accounts, page, limit, roleKeyword, nameKeyword]);
 
-    const handleIFSearchChange = (value) => {
-        setSearchKeyword(value);
-    };
+  const handleIFRoleChange = (value) => {
+    setRoleKeyword(value);
+  };
 
-    const handlePageChange = usePaginationHandler(setPage, page, totalPages);
+  const handleIFNameChange = (value) => {
+    setNameKeyword(value);
+  };
 
-    return (
-        <>
-            <div className="row py-2 align-items-end">
-                <IFSearch
-                    title={"Tìm theo vai trò"}
-                    size={3}
-                    onChange={(value) => handleIFSearchChange(value)}
-                />
-                <IFSearch
-                    title={"Tìm theo tên"}
-                    size={4}
-                    onChange={(value) => handleIFSearchChange(value)}
-                />
-                <div className="col col-md-5 d-flex justify-content-end">
-                    <button
-                        className="btn btn-primary"
-                        type="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#idtm"
-                    >
-                        Thêm mới
-                    </button>
-                </div>
+  const handlePageChange = usePaginationHandler(setPage, page, totalPages);
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.username) {
+      setObjValidInput({ ...defaultObjValidInput, isValidUsername: false });
+      toast.error("Chưa nhập username");
+      return;
+    }
+    if (!formData.password) {
+      setObjValidInput({ ...defaultObjValidInput, isValidPassword: false });
+      toast.error("Chưa nhập password");
+      return;
+    }
+    if (!formData.hoTen) {
+      setObjValidInput({ ...defaultObjValidInput, isValidHoTen: false });
+      toast.error("Chưa nhập họ tên");
+      return;
+    }
+    if (!formData.vaiTro) {
+      setObjValidInput({ ...defaultObjValidInput, isValidVaiTro: false });
+      toast.error("Chưa nhập vai trò");
+      return;
+    }
+    if (!formData.cccd) {
+      setObjValidInput({ ...defaultObjValidInput, isValidCCCD: false });
+      toast.error("Chưa nhập CCCD");
+      return;
+    }
+
+    console.log(">>> formData", formData);
+
+    const response = await axios.post("/account/insert", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      setFormData(defaultFormData);
+      dispatch(fetchAllAccountAction());
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleCancel = () => {
+    setFormData(defaultFormData);
+  };
+
+  return (
+    <div className="container-fluid">
+      <div className="row py-2 align-items-end">
+        <IFSearch
+          title={"Tìm theo vai trò"}
+          size={4}
+          onChange={(value) => handleIFRoleChange(value)}
+        />
+        <IFSearch
+          title={"Tìm theo tên"}
+          size={4}
+          onChange={(value) => handleIFNameChange(value)}
+        />
+        <div className="col col-md-4 d-flex justify-content-end">
+          <button
+            className="btn btn-primary"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#addAccount"
+          >
+            Thêm mới
+          </button>
+        </div>
+      </div>
+      {/* Modal thêm mới BACSI & LETAN */}
+      <div
+        className="modal fade modal-xl"
+        id="addAccount"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Thêm mới tài khoản
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
 
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Tên tài khoản"}
+                    size={3}
+                    required={"true"}
+                    value={formData.username}
+                    valid={objValidInput.isValidUsername}
+                    onChange={(value) => handleChange("username", value)}
+                  />
+                  <IFPassword
+                    title={"Password"}
+                    size={3}
+                    required={"true"}
+                    value={formData.password}
+                    valid={objValidInput.isValidPassword}
+                    onChange={(value) => handleChange("password", value)}
+                  />
+                  <IFInputText
+                    title={"Họ tên"}
+                    size={4}
+                    required={"true"}
+                    value={formData.hoTen}
+                    valid={objValidInput.isValidHoTen}
+                    onChange={(value) => handleChange("hoTen", value)}
+                  />
+                  <IFNgay
+                    title={"Ngày sinh"}
+                    size={2}
+                    value={formData.ngaySinh}
+                    onChange={(value) => handleChange("ngaySinh", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFSelect
+                    title={"Vai trò"}
+                    size={2}
+                    options={groupUsers}
+                    keyObj={"MANHOM"}
+                    showObj={"TENNHOM"}
+                    required={"true"}
+                    value={formData.vaiTro}
+                    valid={objValidInput.isValidVaiTro}
+                    onChange={(value) => handleChange("vaiTro", value)}
+                  />
+                  <IFSelect
+                    title={"Giới tính"}
+                    size={2}
+                    options={[
+                      { gioiTinh: "Nam" },
+                      { gioiTinh: "Nữ" },
+                      { gioiTinh: "Khác" },
+                    ]}
+                    value={formData.gioiTinh}
+                    keyObj={"gioiTinh"}
+                    showObj={"gioiTinh"}
+                    onChange={(value) => handleChange("gioiTinh", value)}
+                  />
 
-            <ListFormDSTK columns={columns} data={displayDSDK} loading={isLoading} />
-            <Pagination
-                totalPages={totalPages}
-                page={page}
-                limit={limit}
-                siblings={1}
-                onPageChange={handlePageChange}
-            />
-
-
-        </>
-    );
+                  <IFInputText
+                    title={"CCCD"}
+                    size={4}
+                    value={formData.cccd}
+                    required={true}
+                    valid={objValidInput.isValidCCCD}
+                    onChange={(value) => handleChange("cccd", value)}
+                  />
+                  <IFInputText
+                    title={"Số điện thoại"}
+                    size={4}
+                    value={formData.sdt}
+                    onChange={(value) => handleChange("sdt", value)}
+                  />
+                </div>
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Chuyên khoa"}
+                    size={3}
+                    value={formData.chuyenKhoa}
+                    onChange={(value) => handleChange("chuyenKhoa", value)}
+                  />
+                  <IFInputText
+                    title={"Trình độ"}
+                    size={3}
+                    value={formData.trinhDo}
+                    onChange={(value) => handleChange("trinhDo", value)}
+                  />
+                  <IFInputText
+                    title={"Địa chỉ"}
+                    size={6}
+                    value={formData.diaChi}
+                    onChange={(value) => handleChange("diaChi", value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={handleCancel}
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleRegister}
+              >
+                Thêm mới
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ListFormDSTK
+        columns={columns}
+        data={displayAccounts}
+        loading={isLoading}
+      />
+      <Pagination
+        totalPages={totalPages}
+        page={page}
+        limit={limit}
+        siblings={1}
+        onPageChange={handlePageChange}
+      />
+    </div>
+  );
 }
 
 export default DSTaiKhoan;

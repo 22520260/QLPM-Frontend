@@ -14,7 +14,7 @@
 }
 
 html {
-  font-size: 100%;
+  font-size: 95%;
 }
 
 body {
@@ -69,3 +69,16 @@ body {
 // `;
 
 // export default GlobalStyle;
+
+.list-group-horizontal-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.list-group-horizontal-scroll .nav-link {
+  white-space: nowrap;
+}
+
+.list-group-horizontal-scroll.overflow-auto {
+  overflow-x: auto;
+}

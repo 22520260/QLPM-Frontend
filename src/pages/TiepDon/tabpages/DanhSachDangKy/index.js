@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSDK} from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDSDK } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
@@ -13,9 +13,8 @@ import { compareDates, formatDate } from "../../../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchDSDK.data);
-  const DSDK = data.data;
-  const isLoading = useSelector((state) => state.fetchDSDK.loading);
+  const DSDK = useSelector((state) => state.fetchDSDK?.data);
+  const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
@@ -25,17 +24,18 @@ function DanhSachDangKy() {
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã phiếu", key: "MAPK" },
+    { title: "Mã phiếu", key: "MAPKTG" }, 
     { title: "STT", key: "STT" },
-    { title: "Họ Tên", key: "TENBN" },
-    { title: "Tên Bác sĩ", key: "TENBS" },
-    { title: "Tổng tiền", key: "TIENTHUOC" },
-    { title: "Trạng thái", key: "TRANGTHAITH" },
+    { title: "Bệnh nhân", key: "INFOBN" },
+    { title: "Bác sĩ", key: "INFOBS" },
+    { title: "Dịch vụ", key: "TENDV" },
+    // { title: "TTTT HDPK", key: "TTTTPK" },
+    // { title: "TTTT HDCLS", key: "TTTTCLS" },
+    // { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
   useEffect(() => {
     dispatch(fetchDSDKAction());
-
   }, []);
 
   useEffect(() => {
@@ -116,7 +116,6 @@ function DanhSachDangKy() {
 
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
-
   return (
     <>
       <div className="row py-2">
@@ -137,7 +136,7 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading}/>
+      <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading} />
       <Pagination
         totalPages={totalPages}
         page={page}

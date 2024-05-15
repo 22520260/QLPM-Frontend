@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllBenhNhanAction } from '../../action/fetchDataAction/fetchAllBenhNhanAction';
+import { fetchAllBenhNhanAction, fetchBenhNhanByIdAction } from '../../action/fetchDataAction/fetchAllBenhNhanAction';
 
 const initialState = {
-  patients: [],
-  loading: false,
-  error: null,
+  data: [],
+  isLoading: false,
+  patientById: {},
 };
 
 const fetchAllBenhNhanSlice = createSlice({
@@ -14,16 +14,18 @@ const fetchAllBenhNhanSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchAllBenhNhanAction.pending, (state, action) => {
-        state.loading = true;
-        state.error = null;
+        state.isLoading = true;
       })
       .addCase(fetchAllBenhNhanAction.fulfilled, (state, action) => {
-        state.loading = false;
-        state.patients = action.payload.data;
+        state.isLoading = false;
+        state.data = action.payload.data;
       })
       .addCase(fetchAllBenhNhanAction.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
+        state.isLoading = false;
+      })
+      .addCase(fetchBenhNhanByIdAction.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.patientById = action.payload.data;
       });
   },
 });

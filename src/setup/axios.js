@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import store from '../redux/store'
+import store from "../redux/store";
+// import { useNavigate } from "react-router-dom";
 
 //Create an instance of axios
 const instance = axios.create({
@@ -14,9 +15,8 @@ instance.defaults.withCredentials = true;
 //Add a request interceptor
 instance.interceptors.request.use(
   (config) => {
-    const bearerToken = `Bearer ${store.getState().auth.user?.token}`
+    const bearerToken = `Bearer ${store.getState().auth.user?.token}`;
 
-    console.log('>>>bearerToken', bearerToken)
     return {
       ...config,
       headers: {
@@ -36,42 +36,40 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log('>>> error', error)
+    console.log(">>> error", error);
+    const status = error.response?.status || 500;
 
-    // const status = error.response?.status || 500;
-    // console.log('>>> error.response.status', error.response.status)
+    switch (status) {
+      case 401: {
+        toast.error("Không xác thực người dùng. Vui lòng đăng nhập...");
+        return error.response.data;
+      }
 
-    // console.log('>>> Status', status)
-    // switch (status) {
-    //   case 401: {
-    //     toast.error("Unauthorized the user. Please login...");
-    //     return error.response.data;
-    //   }
+      case 403: {
+        toast.error("Bạn không có quyền truy cập vào tài nguyên này...");
+        return error.response.data;
+      }
 
-    //   case 403: {
-    //     toast.error(`You don't have permission to access this resourse...`);
-    //     return Promise.reject(error);
-    //   }
+      case 400: {
+        toast.error("Bạn không có quyền truy cập vào tài nguyên này...");
+        return error.response.data;      }
 
-    //   case 400: {
-    //     return Promise.reject(error);
-    //   }
+      case 404: {
+        toast.error("Bạn không có quyền truy cập vào tài nguyên này...");
+        return error.response.data;      }
 
-    //   case 404: {
-    //     return Promise.reject(error);
-    //   }
+      case 409: {
+        toast.error("Bạn không có quyền truy cập vào tài nguyên này...");
+        return error.response.data;      }
 
-    //   case 409: {
-    //     return Promise.reject(error);
-    //   }
-
-    //   case 422: {
-    //     return Promise.reject(error);
-    //   }
-    //   default: {
-        return Promise.reject(error);
-    //   }
-    // }
+      case 422: {
+        toast.error("Bạn không có quyền truy cập vào tài nguyên này...");
+        return error.response.data;      }
+      default: {
+        toast.error("Lỗi ở server");
+        return error.response.data;
+      }
+    }
   }
 );
 

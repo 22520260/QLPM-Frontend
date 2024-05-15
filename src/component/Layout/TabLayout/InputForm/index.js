@@ -4,16 +4,19 @@ import { useState } from "react";
 import "rsuite/DatePicker/styles/index.css";
 import "./style.css";
 import { RiEyeCloseLine, RiEyeFill } from "react-icons/ri";
+import { StatusIcon } from "../ListForm/StatusIcon";
 
 export function IFSelect({
-  def = 'Chọn',
+  def = "Chọn",
   title,
   size,
   options,
-  selected,
+  value,
   onChange,
   keyObj,
+  showObj,
   required,
+  readOnly,
 }) {
   const style = "col-md-" + size;
 
@@ -24,8 +27,9 @@ export function IFSelect({
 
   return (
     <div className={style}>
-      <label htmlFor={title} className="form-label">
-        {title}
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
       </label>
       <select
         className="form-select"
@@ -33,12 +37,13 @@ export function IFSelect({
         aria-label="Default select example"
         onChange={handleSelectChange}
         required={required}
-        value={selected}
+        value={value}
+        disabled={readOnly}
       >
-        <option selected>{def}</option>
+        <option value={0}>{def}</option>
         {options.map((value, index) => (
           <option key={index} value={value[keyObj]}>
-            {value[keyObj]}
+            {value[showObj]}
           </option>
         ))}
       </select>
@@ -54,7 +59,7 @@ export function IFInputText({
   readOnly,
   onChange,
   required,
-  type = 'text'
+  type = "text",
 }) {
   const style = "col-md-" + size;
 
@@ -78,7 +83,7 @@ export function IFInputText({
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
           value={value}
-          readOnly={readOnly}
+          disabled={readOnly}
           required={required}
         />
       </div>
@@ -86,14 +91,35 @@ export function IFInputText({
   );
 }
 
-export function IFPassword({
+export function IFTrangThai({
   title,
-  valid,
   size,
-  value,
-  readOnly,
-  onChange,
+  trangThaiThucHien,
+  trangThaiThanhToanPK,
+  trangThaiThanhToanCLS,
+  trangThaiThanhToanDT
 }) {
+  const style = "col-md-" + size;
+
+  return (
+    <div className={style}>
+      <label htmlFor={title} className="form-label d-flex align-items-center">
+        <span>{title}</span>
+      </label>
+
+      <div className="input-group">
+        < StatusIcon
+            trangThaiThucHien={trangThaiThucHien}
+            trangThaiThanhToanPK={trangThaiThanhToanPK}
+            trangThaiThanhToanCLS={trangThaiThanhToanCLS}
+            trangThaiThanhToanDT={trangThaiThanhToanDT}
+        />
+      </div>
+    </div>
+  );
+}
+
+export function IFPassword({ title, valid, size, value, readOnly, onChange }) {
   const style = "col-md-" + size;
 
   const handleInputChange = (e) => {
@@ -102,11 +128,11 @@ export function IFPassword({
   };
 
   const [isViewPass, setIsViewPass] = useState(false);
-  const [btnClass, setBtnClass] = useState('btn btn-outline-primary');
+  const [btnClass, setBtnClass] = useState("btn btn-outline-primary");
 
   const toggleEye = () => {
     setIsViewPass(!isViewPass);
-    setBtnClass(isViewPass ? 'btn btn-outline-primary' : 'btn btn-primary');
+    setBtnClass(isViewPass ? "btn btn-outline-primary" : "btn btn-primary");
   };
 
   return (
@@ -118,19 +144,24 @@ export function IFPassword({
 
       <div className="input-group">
         <input
-          type={isViewPass ? 'text' : 'password'}
+          type={isViewPass ? "text" : "password"}
           className={valid ? "form-control" : "form-control is-invalid"}
           id={title}
           aria-describedby="basic-addon3 basic-addon4"
           onChange={handleInputChange}
           value={value}
           readOnly={readOnly}
-          required='true'
+          required="true"
         />
 
-<button className={btnClass} type="button" id="button-addon2" onClick={toggleEye}>
-      {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
-    </button>
+        <button
+          className={btnClass}
+          type="button"
+          id="button-addon2"
+          onClick={toggleEye}
+        >
+          {isViewPass ? <RiEyeFill /> : <RiEyeCloseLine />}
+        </button>
       </div>
     </div>
   );
@@ -171,7 +202,7 @@ export function TextArea({
   );
 }
 
-export function IFNgay({ title, size, defaultValue, value, onChange }) {
+export function IFNgay({ title, size, defaultValue, value, onChange, readOnly }) {
   const style = "col-md-" + size;
   const handleDateChange = (date) => {
     if (date) {
@@ -196,6 +227,7 @@ export function IFNgay({ title, size, defaultValue, value, onChange }) {
           onChange={handleDateChange}
           defaultValue={defaultValue}
           value={value}
+          readOnly={readOnly}
         />
       </div>
     </div>
@@ -231,7 +263,7 @@ export function IFNgayNgang({ title, size, defaultValue, value, onChange }) {
   );
 }
 
-export function IFSearchDV({ title, valid, size, options, onChange }) {
+export function IFSearchDV({ title, valid, size, options, onChange, value }) {
   const handleChange = (e) => {
     onChange(e);
   };
@@ -243,10 +275,13 @@ export function IFSearchDV({ title, valid, size, options, onChange }) {
       </label>
       <div className="input-group">
         <input
-          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
           list="servicesDatalist"
           id="servicesDataList"
           type="text"
+          value={value}
           onChange={handleChange}
         />
         <datalist id="servicesDatalist">
@@ -263,7 +298,49 @@ export function IFSearchDV({ title, valid, size, options, onChange }) {
   );
 }
 
-export function IFSearchHT({ title, valid, size, options, required, onChange }) {
+export function IFSearchBenh({ title, valid, size, options, onChange }) {
+  const handleChange = (e) => {
+    onChange(e);
+  };
+
+  return (
+    <div className={`col-md-${size}`}>
+      <label htmlFor="benhDataList" className="form-label">
+        {title}
+      </label>
+      <div className="input-group">
+        <input
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
+          list="benhDatalist"
+          id="benhDataList"
+          type="text"
+          onChange={handleChange}
+        />
+        <datalist id="benhDatalist">
+          {Array.isArray(options) ? (
+            options.map((option, index) => (
+              <option key={index} value={option.TENBENH} />
+            ))
+          ) : (
+            <option value="Loading..." />
+          )}
+        </datalist>
+      </div>
+    </div>
+  );
+}
+
+
+export function IFSearchHT({
+  title,
+  valid,
+  size,
+  options,
+  required,
+  onChange,
+}) {
   const handleInputChange = (e) => {
     const value = e.target.value;
     onChange(value);
@@ -281,7 +358,9 @@ export function IFSearchHT({ title, valid, size, options, required, onChange }) 
 
       <div className="input-group">
         <input
-          className={valid ? "form-control rounded" : "form-control rounded is-invalid"}
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
           list="hoTenDatalist"
           id="hoTenInput"
           onChange={handleInputChange}
@@ -291,6 +370,54 @@ export function IFSearchHT({ title, valid, size, options, required, onChange }) 
           {Array.isArray(options) ? (
             options.map((option, index) => (
               <option key={index} value={option.HOTEN} />
+            ))
+          ) : (
+            <option value="Loading..." />
+          )}
+        </datalist>
+      </div>
+    </div>
+  );
+}
+
+export function IFSearchThuoc({
+  title,
+  valid,
+  size,
+  options,
+  name,
+  required,
+  onChange,
+}) {
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    onChange(value);
+  };
+
+  return (
+    <div className={`col-md-${size}`}>
+      <label
+        htmlFor="thuocInput"
+        className="form-label d-flex align-items-center"
+      >
+        <span>{title}</span>
+        {required && <div className="text-danger ms-1">*</div>}
+      </label>
+
+      <div className="input-group">
+        <input
+          className={
+            valid ? "form-control rounded" : "form-control rounded is-invalid"
+          }
+          list="thuocDatalist"
+          id="thuocInput"
+          onChange={handleInputChange}
+          required
+        />
+        <datalist id="thuocDatalist">
+          {Array.isArray(options) ? (
+            options.map((option, index) => (
+              <option key={index} value={option[name]} />
             ))
           ) : (
             <option value="Loading..." />
@@ -311,22 +438,23 @@ export function IFSearch({ title, size, onChange }) {
   return (
     <div className={style}>
       <label htmlFor="exampleDataList" className="form-label">
+        <FaSearch className="me-2 mb-1" />
         {title}
       </label>
       <div className="input-group">
         <input
-          className="form-control"
+          className="form-control rounded"
           id="exampleDataList"
           type="text"
           onChange={handleInputChange}
           required
         />
-        <button className="input-group-text bg-primary">
+        {/* <button className="input-group-text bg-primary">
           <FaSearch />
         </button>
         <button className="input-group-text">
           <FaRedoAlt />
-        </button>
+        </button> */}
       </div>
     </div>
   );
@@ -350,4 +478,3 @@ export function ListGroupItem({ title, value, disable }) {
     </div>
   );
 }
-

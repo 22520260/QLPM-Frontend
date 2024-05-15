@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../component/Layout/TabLayout/InputForm";
-import { ListFormKhamBenh} from "../../component/Layout/TabLayout/ListForm";
+import { ListFormKhamBenh } from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,9 +11,8 @@ import { compareDates, usePaginationHandler } from "../../utils/appUtils";
 
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.fetchDSDK.data);
-  const DSDK = data.data;
-  const isLoading = useSelector((state) => state.fetchDSDK.loading);
+  const DSDK = useSelector((state) => state.fetchDSDK?.data);
+  const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
@@ -21,19 +20,21 @@ function DanhSachDangKy() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  
+
+
   const columns = [
-    { title: "Mã phiếu", key: "MAPK" },
+    { title: "Mã phiếu", key: "MAPKTG" },
     { title: "STT", key: "STT" },
-    { title: "Họ Tên", key: "TENBN" },
-    { title: "Tên Bác sĩ", key: "TENBS" },
-    { title: "Tổng tiền", key: "TIENTHUOC" },
-    { title: "Trạng thái", key: "TRANGTHAITH" },
+    { title: "Bệnh nhân", key: "INFOBN" },
+    { title: "Bác sĩ", key: "INFOBS" },
+    { title: "Dịch vụ", key: "TENDV" },
+    // { title: "TTTH PK", key: "TRANGTHAITH" },
+    // { title: "TTTT HDCLS", key: "TTTTCLS" },
+    // { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
   useEffect(() => {
     dispatch(fetchDSDKAction());
-
   }, []);
 
   useEffect(() => {
@@ -71,24 +72,6 @@ function DanhSachDangKy() {
         );
       }
 
-      // const formattedDSDK = filteredDSDK.map(data => {
-      //   const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
-      //   const formattedNgaySinh = formatDate(NGAYSINH);
-
-      //   return {
-      //     MABN,
-      //     MATK,
-      //     CCCD,
-      //     HOTEN,
-      //     formattedNgaySinh,
-      //     GIOITINH,
-      //     SDT,
-      //     DIACHI,
-      //     TIENSUBENH,
-      //     DIUNG
-      //   };
-      // });
-
       const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
       setTotalPages(calculatedTotalPages);
 
@@ -114,11 +97,10 @@ function DanhSachDangKy() {
 
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
-
   return (
     <>
-    <h1>Khám Bệnh</h1>
       <div className="container-fluid">
+        <h1>Khám Bệnh</h1>
         <div className="row py-2">
           <IFNgay
             title={"Từ ngày"}
@@ -136,7 +118,11 @@ function DanhSachDangKy() {
             onChange={(value) => handleIFSearchChange(value)}
           />
         </div>
-        <ListFormKhamBenh columns={columns} data={displayDSDK} loading={isLoading}/>
+        <ListFormKhamBenh
+          columns={columns}
+          data={displayDSDK}
+          loading={isLoading}
+        />
         <Pagination
           totalPages={totalPages}
           page={page}

@@ -3,10 +3,28 @@ import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PrivateRoute = ({ children }) => {
-  const isLoading = useSelector((state) => state.auth.isLoading);
-  const user = useSelector((state) => state.auth.user); // user chứa token, isAuthenticated, account
-  console.log(">>>>>>>>> PRIVATE ROUTE", user);
+  const isLoading = useSelector((state) => state.auth?.isLoading);
+  const user = useSelector((state) => state.auth?.user); // user chứa token, isAuthenticated, account
+  let groupNameUser = null;
+  if (user && user.account && user.account.groupName) {
+    groupNameUser = user.account.groupName;
+  }
+  const adminPath = ["/tiepdon", "khambenh"];
 
+  let showPath = "";
+  switch (groupNameUser) {
+    case "Admin":
+      showPath = adminPath;
+      break;
+    case "Bác sĩ":
+      showPath = adminPath;
+      break;
+    case "Admin":
+      showPath = adminPath;
+      break;
+    default:
+      break;
+  }
   // Nếu đang loading, hiển thị spinner
   if (isLoading) {
     return (

@@ -13,16 +13,18 @@ import { fetchAllBacSiAction } from "../../../../redux/action/fetchDataAction/fe
 import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { toast } from "react-toastify";
-import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
+import { MdError } from "react-icons/md";
 
 function DangKyKham() {
   const dispatch = useDispatch();
 
-  const services = useSelector((state) => state.fetchAllDichVu.services) || [];
+  const services = useSelector((state) => state.services?.data) || [];
 
-  const patients = useSelector((state) => state.fetchAllBenhNhan.patients)|| [];
-
-  const doctors = useSelector((state) => state.fetchAllBacSi.doctors)|| [];
+  const patients =
+    useSelector((state) => state.fetchAllBenhNhan?.data) || [];
+  const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
+  const leTan = useSelector((state) => state.auth?.user) || {};
 
   const [showError, setShowError] = useState(false);
   const [oldPatientID, setOldPatientID] = useState(0);
@@ -30,11 +32,11 @@ function DangKyKham() {
   const [age, setAge] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
 
-  const [formData, setFormData] = useState({
+  const formDataDefault = {
     hoTen: "",
-    gioiTinh: "",
+    gioiTinh: 0,
     diaChi: "",
-    ngaySinh: "",
+    ngaySinh: null,
     cccd: "",
     soDienThoai: "",
     diUng: "",
@@ -43,12 +45,14 @@ function DangKyKham() {
     lyDoKham: "",
     tienSuBenh: "",
     dichVu: [],
-  });
+  };
+
+  const [formData, setFormData] = useState(formDataDefault);
 
   const defaultObjValidInput = {
     isValidHoTen: true,
     isValidCCCD: true,
-    isValidDichVu: true
+    isValidDichVu: true,
   };
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
@@ -63,7 +67,6 @@ function DangKyKham() {
     dispatch(fetchAllDichVuAction());
     dispatch(fetchAllBenhNhanAction());
     dispatch(fetchAllBacSiAction());
-
   }, []);
 
   const checkPatientExistence = (fullName) => {
@@ -91,11 +94,12 @@ function DangKyKham() {
         const age = calculateAge(patient.NGAYSINH);
         setAge(age);
       } else {
-        setFormData({ ...formData, [fieldName]: value });
+        setFormData({ ...formDataDefault, [fieldName]: value });
+        setAge("");
+        setOldPatientID(0);
       }
     } else {
       setFormData({ ...formData, [fieldName]: value });
-
       if (fieldName === "ngaySinh") {
         const age = calculateAge(value);
         setAge(age);
@@ -130,15 +134,12 @@ function DangKyKham() {
       bodyReq["maBN"] = maBN;
       bodyReq["maHD"] = maHD;
       try {
-        const response = await axios.post(
-          "/phieukham/insert-just-pk",
-          bodyReq
-        );
+        const response = await axios.post("/phieukham/insert-just-pk", bodyReq);
         if (response.status === 200) {
-          alert("Thêm phiếu khám thành công!!!");
+          toast.success("Thêm phiếu khám thành công!!!");
         }
       } catch (error) {
-        alert("Thêm phiếu khám không thành công");
+        toast.error("Thêm phiếu khám không thành công");
       }
     });
   };
@@ -156,44 +157,43 @@ function DangKyKham() {
         toast.error("Chưa nhập CCCD");
         return;
       }
-        let maHDinserted = "";
-        // thêm hóa đơn mới
+      let maHDinserted = "";
+      // thêm hóa đơn mới
+      try {
+        const response1 = await axios.post("/hoadon/insert", {
+          maLT: leTan?.account?.userInfo[0]?.MALT,
+          maLHD: 1,
+          tttt: "Chưa thanh toán",
+        });
+        if (response1.status === 200) {
+          maHDinserted = response1.data.MAHD;
+          toast.success("Thêm hóa đơn thành công!!!");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Thêm hóa đơn không thành công");
+      }
+      console.log(">> oldPatientID", oldPatientID);
+      // nếu là bệnh nhân mới thì thêm hồ sơ bệnh nhân trước
+      if (oldPatientID === 0) {
+        let maBNinserted = "";
         try {
-          const response1 = await axios.post(
-            "/hoadon/insert",
-            { maLT: 1, maLHD: 1, tttt: "Chưa thanh toán" }
-          );
-          if (response1.status === 200) {
-            maHDinserted = response1.data.MAHD;
-            alert("Thêm hóa đơn thành công!!!");
+          const response2 = await axios.post("/benhnhan/insert", formData);
+          if (response2.status === 200) {
+            maBNinserted = response2.data.MABN;
+            toast.success("Thêm bệnh nhân thành công!!!");
+            await insertPK(maBNinserted, maHDinserted);
           }
         } catch (error) {
           console.log(error);
-          alert("Thêm hóa đơn không thành công");
+          toast.error("Thêm bệnh nhân không thành công");
         }
-        // nếu là bệnh nhân mới thì thêm hồ sơ bệnh nhân trước
-        if (oldPatientID === 0) {
-          let maBNinserted = "";
-          try {
-            const response2 = await axios.post(
-              "/benhnhan/insert",
-              formData
-            );
-            if (response2.status === 200) {
-              maBNinserted = response2.data.MABN;
-              alert("Thêm bệnh nhân thành công!!!");
-              await insertPK(maBNinserted, maHDinserted);
-            }
-          } catch (error) {
-            console.log(error);
-            alert("Thêm bệnh nhân không thành công");
-          }
-        } else {
-          await insertPK(oldPatientID, maHDinserted);
-        }
-        // chờ 1 giây đề các api call thực hiện xong rồi mới load lại trang
-        await timeout(1000);
-        window.location.reload();
+      } else {
+        await insertPK(oldPatientID, maHDinserted);
+      }
+      // chờ 1 giây đề các api call thực hiện xong rồi mới load lại trang
+      await timeout(1000);
+      window.location.reload();
     } else {
       setObjValidInput({ ...defaultObjValidInput, isValidDichVu: false });
       toast.error("Chưa thêm dịch vụ nào.");
@@ -241,6 +241,8 @@ function DangKyKham() {
               <IFSelect
                 title={"Giới tính"}
                 size={2}
+                keyObj={"gioiTinh"}
+                showObj={"gioiTinh"}
                 options={[
                   { gioiTinh: "Nam" },
                   { gioiTinh: "Nữ" },
@@ -248,7 +250,6 @@ function DangKyKham() {
                 ]}
                 onChange={(value) => handleChange("gioiTinh", value)}
                 selected={formData.gioiTinh}
-                keyObj={"gioiTinh"}
               />
               <IFInputText
                 title={"Địa chỉ"}
@@ -308,14 +309,10 @@ function DangKyKham() {
                 size={3}
                 options={doctors}
                 onChange={(value) => {
-                  const selected = doctors.find(
-                    (doctor) => doctor.HOTEN === value
-                  );
-                  if (selected) {
-                    handleChange("maBS", selected.MABS);
-                  }
+                  handleChange("maBS", value);
                 }}
-                keyObj={"HOTEN"}
+                keyObj={"MABS"}
+                showObj={"HOTEN"}
               />
               <IFInputText
                 title={"Lý do khám"}
@@ -343,7 +340,7 @@ function DangKyKham() {
                 title={"Nhập dịch vụ"}
                 valid={objValidInput.isValidDichVu}
                 size={6}
-                options={services}
+                options={services.filter(service => service.MALOAIDV === 100 || service.MALOAIDV === 102)}
                 onChange={(e) => {
                   const value = e.target.value;
                   const selected = services.find(
@@ -356,6 +353,7 @@ function DangKyKham() {
 
                     if (alreadySelected) {
                       setShowError(true);
+                      e.target.value = "";
                     } else {
                       setShowError(false);
                       handleAddService(selected, e);
@@ -364,14 +362,17 @@ function DangKyKham() {
                 }}
               />
               {showError && selectedServices.length > 0 && (
-                <div className="text-danger">Dịch vụ này đã được chọn.</div>
+                <div className="text-danger">
+                  <MdError />
+                  <span> Dịch vụ này đã được chọn.</span>
+                </div>
               )}
             </div>
             {selectedServices.length > 0 ? (
-              <ListForm
+              <ListFormDV
                 columns={columns}
                 data={selectedServices}
-                onDeleteService={handleDeleteService}
+                handleDelete={handleDeleteService}
               />
             ) : (
               <div className="d-flex justify-content-center text-danger">

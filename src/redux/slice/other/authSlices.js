@@ -13,7 +13,6 @@ const authSlice = createSlice({
   reducers: {
     login(state, action) {
       state.isLoading = false;
-      console.log('action.payload',action.payload)
 
       state.user = action.payload;
     },
@@ -24,34 +23,34 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserAccountAction.pending, (state) => {
-        console.log('>>>> PENDING', state.isLoading, state.user)
         state.isLoading = true;
-        state.user = state.user;
       })
       .addCase(fetchUserAccountAction.fulfilled, (state, action) => {
         state.isLoading = false;
-        const groupWithRoles = action.payload.data.groupWithRoles;
-        const username = action.payload.data.username;
-        const token = action.payload.data.access_token; // token chứa username và groupWithRoles
-  
+        const roles = action.payload.data?.roles;
+        const username = action.payload.data?.username;
+        const token = action.payload.data?.access_token; // token chứa username và roles
+        const groupName = action.payload.data?.groupName;
+        const groupID = action.payload.data?.groupID;
+        const userInfo = action.payload.data?.userInfo;
+
         const data = {
-          isAuthenticated: true,
+          isAuthenticated: token ? true : false,
           token,
           account: {
-            groupWithRoles,
-            username
+            roles,
+            username,
+            groupName,
+            groupID,
+            userInfo
           }
         };
-
         state.user = data;
-        console.log('>>>> SUCCESS', state.isLoading, state.user)
-
+        console.log('>>>Fulfilled user', state.user)
       })
-      .addCase(fetchUserAccountAction.rejected, (state, action) => {
+      .addCase(fetchUserAccountAction.rejected, (state) => {
         state.isLoading = false;
-        state.error = action.error.message;
-        console.log('>>>> FAILED', state.isLoading, state.user)
-
+        console.log('>>>Failed user', state.user)
       });
   },
 });

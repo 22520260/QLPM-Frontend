@@ -13,8 +13,21 @@ import { login } from "../../redux/slice/other/authSlices";
 
 function Login() {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const accountInfo = localStorage.getItem("account");
+  let isSave = false;
+  let usernameDefault = "";
+  let passwordDefault = "";
+  if (accountInfo) {
+    const parsedAccount = JSON.parse(accountInfo);
+    isSave = parsedAccount.isSave;
+    usernameDefault = parsedAccount.username;
+    passwordDefault = parsedAccount.password;
+  }
+  console.log("isSave", isSave);
+  console.log("usernameDefault", usernameDefault);
+  const [username, setUsername] = useState(usernameDefault);
+  const [password, setPassword] = useState(passwordDefault);
+  const [checked, setChecked] = useState(isSave);
   const defaultObjValidInput = {
     isValidUsername: true,
     isValidPassword: true,
@@ -37,44 +50,60 @@ function Login() {
       toast.error("Chưa nhập password");
       return;
     }
+    if (isSave) {
+      const data = {
+        isSave: true,
+        username: username,
+        password: password,
+      };
+      localStorage.setItem("account", JSON.stringify(data));
+    } else {
 
+    }
     const response = await loginUser(username, password);
 
     if (response && response.data && response.data.errcode === 0) {
-      const groupWithRoles = response.data.data.groupWithRoles;
+      const roles = response.data.data.roles;
       const username = response.data.data.username;
       const groupName = response.data.data.groupName;
+      const groupID = response.data.data.groupID;
       const userInfo = response.data.data.userInfo;
-      const token = response.data.data.access_token; // token chứa username và groupWithRoles
+      const token = response.data.data.access_token; // token chứa username và roles
 
       let data = {
         isAuthenticated: true,
         token,
         account: {
-          groupWithRoles,
+          roles,
           groupName,
+          groupID,
           username,
-          userInfo
-        }
+          userInfo,
+        },
       };
-      // sessionStorage.setItem("account", JSON.stringify(data));
-      // localStorage.setItem('jwt', token)
       dispatch(login(data));
 
-      navigate('/')
+      navigate("/");
     }
     if (response && response.data && response.data.errcode !== 0) {
-      toast.error(response.data.message)
+      toast.error(response.data.message);
     }
   };
 
-  // useEffect(() => {
-  //   let session  = sessionStorage.getItem('account');
-  //   if(session) {
-  //     navigate('/')
-  //     window.location.reload();
-  //   }
-  // })
+  const handleSaveInfo = (e) => {
+    if (isSave) {
+      setChecked(false);
+      localStorage.removeItem("account");
+    } else {
+      setChecked(true);
+      const data = {
+        isSave: true,
+        username: username,
+        password: password,
+      };
+      localStorage.setItem("account", JSON.stringify(data));
+    }
+  };
 
   return (
     <div
@@ -112,8 +141,9 @@ function Login() {
               <input
                 class="form-check-input"
                 type="checkbox"
-                value=""
+                checked={checked}
                 id="checkSave"
+                onChange={handleSaveInfo}
               />
               <label class="form-check-label" for="flexChecchekDefault">
                 Lưu thông tin

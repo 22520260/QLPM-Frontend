@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchDSDKAction } from '../../action/fetchDataAction/fetchDSDKAction';
+import { fetchDSDKAction, fetchPkByIdHdAction, fetchLSKByIdBnAction } from '../../action/fetchDataAction/fetchDSDKAction';
 
 const initialState = {
-  data: {},
-  status: "",
-  loading: false,
+  data: [],
+  isLoading: false,
+  pkByIdHd: [],
+  lskByIdBn: [],
 };
 
 const fetchDSDKSlice = createSlice({
@@ -14,18 +15,23 @@ const fetchDSDKSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(fetchDSDKAction.pending, (state) => {
-        state.status = 'loading';
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchDSDKAction.fulfilled, (state, action) => {
-        state.status = 'success';
-        state.loading = false;
-        state.data = action.payload;
+        state.isLoading = false;
+        state.data = action.payload.data;
       })
       .addCase(fetchDSDKAction.rejected, (state) => {
-        state.status = 'failed';
-        state.loading = false;
-      });
+        state.isLoading = false;
+      })
+      .addCase(fetchPkByIdHdAction.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.pkByIdHd = action.payload.data;
+      })
+      .addCase(fetchLSKByIdBnAction.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.lskByIdBn = action.payload.data;
+      })
   },
 });
 
