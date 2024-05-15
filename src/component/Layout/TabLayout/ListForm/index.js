@@ -31,7 +31,7 @@ import { fetchAllBenhAction } from "../../../../redux/action/fetchDataAction/fet
 import { fetchAllRoleAction } from "../../../../redux/action/fetchDataAction/fetchAllRoleAction";
 import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetchAllDVTAction";
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
-import { deFormatDate } from "../../../../utils/appUtils";
+import { deFormatDate, getBase64 } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
 import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
 
@@ -43,7 +43,10 @@ import {
   fetchBenhNhanByIdAction,
 } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
-import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
+import {
+  fetchAllClsAction,
+  fetchDsClsByIdAction,
+} from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchPkByIdHdAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { clearSelectedHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
@@ -237,7 +240,7 @@ export function ListFormDSDK({ columns, data, loading }) {
       console.log(error);
       toast("Cập nhật trạng thái phiếu khám thành công");
     }
-  }
+  };
 
   const handleThanhToan = async () => {
     if (selectedHD.MALOAIHD === 1) {
@@ -270,7 +273,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleHuyPK = async () => {
     await updateTrangThaiPK("Đã hủy");
     dispatch(fetchDSDKAction());
-  }
+  };
 
   return (
     <>
@@ -2764,14 +2767,157 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   );
 }
 
+const CLSForm = ({ formData, handleChange, handleUpdate, handleImageUpload, handleCancel }) => {
+  return (
+    <div className="modal-dialog modal-dialog-scrollable">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h1 className="modal-title fs-5" id="exampleModalLabel">
+            Thông tin phiếu CLS{formData.maKQ}
+          </h1>
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div className="modal-body py-0">
+          <div className="container-fluid p-0">
+            <table className="table">
+              <tr className="row">
+                <th className="border col col-md-1">Bệnh nhân</th>
+                <td className="border col col-md-3">{formData.tenBN}</td>
+                <th className="border col col-md-1">Bác sĩ chỉ định</th>
+                <td className="border col col-md-3">{formData.bacSiChiDinh}</td>
+                <th className="border col col-md-1">Trạng thái</th>
+                <td className="border col col-md-3">{formData.trangThai}</td>
+              </tr>
+              <tr className="row">
+                <th className="border col col-md-1">Dịch vụ</th>
+                <td className="border col col-md-3">{formData.dichVu}</td>
+                <th className="border col col-md-1">Bác sĩ thực hiện</th>
+                <td className="border col col-md-3">
+                  {formData.bacSiThucHien}
+                </td>
+                <th className="border col col-md-1">Thời gian</th>
+                <td className="border col col-md-3">
+                  {formData.ngayKham
+                    ? format(formData.ngayKham, "dd/MM/yyyy - HH:mm")
+                    : ""}
+                </td>
+              </tr>
+            </table>
+
+            <div className="row">
+              <div className="col col-md-6">
+                <TextArea
+                  title={"Mô tả"}
+                  size={12}
+                  row={10}
+                  value={formData.moTa}
+                  onChange={(value) => handleChange("moTa", value)}
+                />
+                <div className="row p-2">
+                  <TextArea
+                    title={"Kết luận"}
+                    size={6}
+                    row={3}
+                    value={formData.ketLuanCls}
+                    onChange={(value) => handleChange("ketLuanCls", value)}
+                  />
+                  {/* <TextArea
+                  title={"Đề nghị từ chuyên gia"}
+                  size={6}
+                  row={3}
+                  value={formData}
+                  onChange={(value) => handleChange("ketLuanCls", value)}
+                /> */}
+                </div>
+              </div>
+              <div className="col col-md-6">
+                <ImageUpload onImageUpload={handleImageUpload} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            data-bs-dismiss="modal"
+            id="closeBtn10"
+            onClick={handleCancel}
+          >
+            Đóng
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={handleUpdate}
+          >
+            Lưu những thay đổi
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export function ListFormCLS({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const [selectedRow, setSelectedRow] = useState({});
+  const [formData, setFormData] = useState({});
+  const [resetKey, setResetKey] = useState(Date.now());
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    console.log("row:", row);
+    setFormData({
+      maKQ: row.MAKQ,
+      trangThai: row.TRANGTHAITH,
+      moTa: row.MOTA === null ? "" : row.MOTA,
+      ketLuanCls: row.KETLUANCLS === null ? "" : row.KETLUANCLS,
+      tenBN: row.TENBN,
+      bacSiChiDinh: row.INFOBSCD,
+      dichVu: row.TENDV,
+      bacSiThucHien: row.INFOBSTH,
+      ngayKham: row.NGAYKHAM,
+      // image: row.IMAGE,
+    });
   };
-  const handleSave = () => {
-    console.log("SAVE");
+
+  console.log("formData:", formData);
+
+  const handleUpdate = async (e) => {
+    console.log("formData: ", formData);
+    const response = await axios.post("/cls/update-cls", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllClsAction());
+      const closeBtn = document.getElementById("closeBtn10");
+      if (closeBtn) {
+        closeBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleImageUpload = (base64Image) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      image: base64Image,
+    }));
+  };
+
+  const handleCancel = () => {
+    setResetKey(Date.now());
   };
 
   return (
@@ -2847,100 +2993,9 @@ export function ListFormCLS({ columns, data, loading }) {
         tabindex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
+        key={resetKey}
       >
-        <div className="modal-dialog modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu CLS{selectedRow.MAKQ}
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-
-            <div className="modal-body py-0">
-              <div className="container-fluid p-0">
-                <table className="table">
-                  <tr className="row">
-                    <th className="border col col-md-1">Bệnh nhân</th>
-                    <td className="border col col-md-3">{selectedRow.TENBN}</td>
-                    <th className="border col col-md-1">Bác sĩ chỉ định</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.INFOBSCD}
-                    </td>
-                    <th className="border col col-md-1">Trạng thái</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.TRANGTHAITH}
-                    </td>
-                  </tr>
-                  <tr className="row">
-                    <th className="border col col-md-1">Dịch vụ</th>
-                    <td className="border col col-md-3">{selectedRow.TENDV}</td>
-                    <th className="border col col-md-1">Bác sĩ thực hiện</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.INFOBSTH}
-                    </td>
-                    <th className="border col col-md-1">Thời gian</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.NGAYKHAM
-                        ? format(selectedRow.NGAYKHAM, "dd/MM/yyyy - HH:mm")
-                        : ""}
-                    </td>
-                  </tr>
-                </table>
-
-                <div className="row">
-                  <div className="col col-md-6">
-                    <TextArea
-                      title={"Mô tả"}
-                      size={12}
-                      row={10}
-                      onChange={() => {}}
-                    />
-                    <div className="row p-2">
-                      <TextArea
-                        title={"Kết luận"}
-                        size={6}
-                        row={3}
-                        onChange={() => {}}
-                      />
-                      <TextArea
-                        title={"Đề nghị từ chuyên gia"}
-                        size={6}
-                        row={3}
-                        onChange={() => {}}
-                      />
-                    </div>
-                  </div>
-                  <div className="col col-md-6">
-                    <ImageUpload />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-                id="closeBtn"
-              >
-                Đóng
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleSave}
-              >
-                Lưu những thay đổi
-              </button>
-            </div>
-          </div>
-        </div>
+        <CLSForm formData={formData} handleChange={handleChange} handleUpdate={handleUpdate} handleImageUpload={handleImageUpload} handleCancel={handleCancel}/>
       </div>
       {/*Bạn có chắc muốn hủy phiếu CLS*/}
       <div

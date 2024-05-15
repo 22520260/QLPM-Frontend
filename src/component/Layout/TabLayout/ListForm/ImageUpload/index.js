@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { FaTrash, FaExpand } from "react-icons/fa";
-import { getBase64 } from "../../../../../utils/appUtils";
 
-export const ImageUpload = () => {
+export const ImageUpload = ({ onImageUpload }) => {
   const [previewUrls, setPreviewUrls] = useState([]);
   const [msg, setMsg] = useState(null);
 
@@ -23,24 +22,6 @@ export const ImageUpload = () => {
         .then((res) => res.blob())
         .then((blob) => {
           fd.append(`file${index + 1}`, blob);
-          if (index === previewUrls.length - 1) {
-            // All files are appended, proceed to upload
-            setMsg("Uploading ... ");
-            //const response = await axios.post("http://httpbin.org/post", res.data);
-            
-            // .then((res) => {
-            //     if (!res.ok) {
-            //       throw new Error("Bad response");
-            //     }
-            //     setMsg("Upload Successful");
-            //     return res.json();
-            //   })
-            //   .then((data) => console.log(data))
-            //   .catch((err) => {
-            //     setMsg("Upload failed");
-            //     console.error(err);
-            //   });
-          }
         })
         .catch((err) => console.error(err));
     });
@@ -48,15 +29,22 @@ export const ImageUpload = () => {
 
   function handleFileChange(event) {
     const selectedFiles = Array.from(event.target.files);
-    const imageFiles = selectedFiles.filter(async (file) => {
-      let base64 = await getBase64(file);
-      console.log("base64: ", base64);
-      // Keep the existing previewUrls and add new ones
-      setPreviewUrls(prevUrls => [...prevUrls, ...imageFiles.map(file => URL.createObjectURL(file))]);
+    const imageFiles = selectedFiles.filter((file) => {
       const extension = file.name.split(".").pop().toLowerCase();
       return ["jpg", "jpeg", "png", "gif", "bmp"].includes(extension);
     });
-  }
+
+    const newPreviewUrls = imageFiles.map((file) => URL.createObjectURL(file));
+    setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviewUrls]);
+
+    imageFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        onImageUpload(reader.result); // Pass base64 string to parent component
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   function handleFileRemove(index) {
     const newPreviewUrls = [...previewUrls];
