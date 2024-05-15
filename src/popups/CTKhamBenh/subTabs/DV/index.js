@@ -39,7 +39,7 @@ function DichVu() {
     { title: "Tên loại dịch vụ", key: "TENLOAIDV" },
     { title: "Tên dịch vụ", key: "TENDV" },
     { title: "Giá dịch vụ", key: "GIADV" },
-    { title: "Bác sĩ thực hiện", key: "HOTEN" },
+    { title: "Bác sĩ thực hiện", key: "INFOBSTH" },
   ];
 
   useEffect(() => {

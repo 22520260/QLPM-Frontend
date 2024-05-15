@@ -2709,13 +2709,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
-              {/* <button
+              <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-                onClick={handleCancel}
-              ></button> */}
+                onClick={()=>{}}
+              ></button>
             </div>
 
             <div className="modal-body ">
