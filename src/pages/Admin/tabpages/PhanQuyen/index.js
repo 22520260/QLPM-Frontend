@@ -16,6 +16,7 @@ function PhanQuyen() {
   const roles = useSelector((state) => state.roles?.data) || [];
   const isLoading = useSelector((state) => state.roles?.isloading);
   const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  console.log('groupUsers', groupUsers)
   const roleById = useSelector((state) => state.roleById?.data) || [];
   const selectedMAVAITRO =
     roleById.length > 0 ? roleById.map((item) => item.MAVAITRO) : [];

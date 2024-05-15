@@ -29,15 +29,6 @@ function ThongTinKham() {
   const benh = useSelector((state) => state.benh?.data) || [];
   const benhById = useSelector((state) => state.benhById?.data) || [];
   const [resetKey, setResetKey] = useState(Date.now);
-  console.log('benhById', benhById)
-
-  console.log("benh", benh);
-  console.log("selectedBenh", selectedBenh);
-
-  console.log("selectedPK", selectedPK);
-  console.log("ttk", ttk);
-
-  console.log(Math.floor(Math.random() * 11) + 100);
 
   const defaultFormData = {
     maPK: ttk?.MAPK,
@@ -50,11 +41,9 @@ function ThongTinKham() {
     benh: benhById,
   };
   const [formData, setFormData] = useState('');
-  console.log(">>> formData", formData);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log(">>> formData", formData);
 
     const response = await axios.post("/phieukham/update", formData);
     if (response && response.data && response.data.errcode === 0) {

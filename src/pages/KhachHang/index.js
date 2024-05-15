@@ -38,10 +38,8 @@ function DanhSachBenhNhan() {
     dispatch(fetchAllBenhNhanAction());
   }, []);
 
-  console.log(dsBenhNhan);
   useEffect(() => {
     if (dsBenhNhan) {
-      console.log(dsBenhNhan);
       let filtereddsBenhNhan = [...dsBenhNhan];
 
       // Lọc theo từ khóa tìm kiếm
@@ -70,7 +68,6 @@ function DanhSachBenhNhan() {
   }, [dsBenhNhan, page, limit, searchKeyword]);
 
   const handleIFSearchChange = (value) => {
-    console.log("handle filter: ", value);
     setSearchKeyword(value);
   };
 

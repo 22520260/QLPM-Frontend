@@ -76,10 +76,9 @@ import { fetchThongKeBenhAction } from "../../../redux/action/fetchDataAction/fe
 const LoaiBenh = () => {
   const dispatch = useDispatch();
   const d = new Date();
-  const defaultMonth = d.getMonth();
+  const defaultMonth = (d.getMonth() + 1).toString().padStart(2, "0");
   const defaultYear = d.getFullYear().toString();
   const dataset = useSelector((state) => state.tkBenh?.data) || [];
-  console.log("dataset", dataset);
   const [month, setMonth] = useState(defaultMonth);
   const [year, setYear] = useState(defaultYear);
   const [totalIntensityData, setTotalIntensityData] = useState([]);
@@ -94,40 +93,54 @@ const LoaiBenh = () => {
     if (year) {
       const yearData = dataset.filter((item) => item.YEAR === year);
       const intensityMap = {};
+      const nameMap = {};
       yearData.forEach((item) => {
-        if (!intensityMap[item.NAME]) {
-          intensityMap[item.NAME] = 0;
+        if (!intensityMap[item.ID]) {
+          intensityMap[item.ID] = 0;
         }
-        intensityMap[item.NAME] += item.FREQUENCY;
+        intensityMap[item.ID] += item.FREQUENCY;
+
+        if (!nameMap[item.ID]) {
+          nameMap[item.ID] = 0;
+        }
+        nameMap[item.ID] = item.NAME;
       });
-      const totalIntensity = Object.keys(intensityMap).map((name) => ({
-        name,
-        totalIntensity: intensityMap[name],
+      const totalIntensity = Object.keys(intensityMap).map((id) => ({
+        id,
+        name: nameMap[id],
+        totalIntensity: intensityMap[id],
       }));
       setTotalIntensityData(totalIntensity);
     }
-  }, [year]);
+  }, [year, dataset]);
 
   // Tính tổng cường độ cho mỗi loại bệnh trong từng tháng của năm được chọn
   useEffect(() => {
     if (year && month) {
       const monthlyData = dataset.filter(
-        (item) => item.YEAR === year && item.MONTH === month.toString()
+        (item) => item.YEAR === year && item.MONTH === month
       );
       const intensityMap = {};
+      const nameMap = {};
       monthlyData.forEach((item) => {
-        if (!intensityMap[item.NAME]) {
-          intensityMap[item.NAME] = 0;
+        if (!intensityMap[item.ID]) {
+          intensityMap[item.ID] = 0;
         }
-        intensityMap[item.NAME] += item.FREQUENCY;
+        intensityMap[item.ID] += item.FREQUENCY;
+
+        if (!nameMap[item.ID]) {
+          nameMap[item.ID] = 0;
+        }
+        nameMap[item.ID] = item.NAME;
       });
-      const monthlyIntensity = Object.keys(intensityMap).map((name) => ({
-        name,
-        monthlyIntensity: intensityMap[name],
+      const monthlyIntensity = Object.keys(intensityMap).map((id) => ({
+        id,
+        name: nameMap[id],
+        monthlyIntensity: intensityMap[id],
       }));
       setMonthlyIntensityData(monthlyIntensity);
     }
-  }, [year, month]);
+  }, [year, month, dataset]);
 
   return (
     <div>
@@ -140,9 +153,9 @@ const LoaiBenh = () => {
           }))}
           def={"Chọn"}
           onChange={(value) =>
-            setMonth(value === "Chọn" ? defaultMonth : value)
+            setMonth(value === "Chọn" ? null : value)
           }
-          selected={month.toString()}
+          value={month}
           keyObj="month"
           showObj={"month"}
         />
@@ -152,8 +165,8 @@ const LoaiBenh = () => {
           size={1}
           options={[{ year: "2022" }, { year: "2023" }, { year: "2024" }]}
           def={"Chọn"}
-          onChange={(value) => setYear(value === "Chọn" ? defaultYear : value)}
-          selected={year}
+          onChange={(value) => setYear(value === "Chọn" ? null : value)}
+          value={year}
           keyObj="year"
           showObj={"year"}
         />
@@ -164,19 +177,46 @@ const LoaiBenh = () => {
           <h2>Thống kê trong cả năm {year}</h2>
           <ResponsiveChartContainer
             series={[
-              { type: "bar", dataKey: "totalIntensity", color: "var(--sub)" },
+              {
+                type: "bar",
+                dataKey: "totalIntensity",
+                color: "var(--sub)",
+                label: "Cường độ",
+              },
             ]}
-            xAxis={[{ scaleType: "band", dataKey: "name", label: "Tên bệnh" }]}
+            xAxis={[
+              {
+                scaleType: "band",
+                dataKey: "id",
+                label: "Mã ICD Bệnh",
+                tickLabelStyle: {
+                  angle: 75,
+                  textAnchor: "start",
+                  fontSize: 12,
+                },
+                valueFormatter: (id, context) =>
+                  context.location === "tick"
+                    ? id
+                    : `${id}. ${
+                        totalIntensityData.find((d) => d.id === id)?.name
+                      }`,
+              },
+            ]}
             yAxis={[{ label: "Tổng cường độ" }]}
             dataset={totalIntensityData}
             height={400}
-            margin={{ left: 90, right: 50 }}
+            margin={{ left: 90, right: 50, bottom: 80 }}
           >
             <ChartsGrid horizontal />
             <BarPlot />
-            <ChartsXAxis />
+            <ChartsXAxis
+              labelStyle={{
+                fontSize: 14,
+                translate: "0px 25px",
+              }}
+            />
             <ChartsYAxis
-              label="Tổng cường độ"
+              label="Cường độ trong tháng"
               labelStyle={{ translate: "-25px 0px" }}
             />
             <ChartsTooltip />
@@ -193,19 +233,40 @@ const LoaiBenh = () => {
                   type: "bar",
                   dataKey: "monthlyIntensity",
                   color: "var(--sub)",
+                  label: "Cường độ",
                 },
               ]}
               xAxis={[
-                { scaleType: "band", dataKey: "name", label: "Tên bệnh" },
+                {
+                  scaleType: "band",
+                  dataKey: "id",
+                  label: "Mã ICD Bệnh",
+                  tickLabelStyle: {
+                    angle: 75,
+                    textAnchor: "start",
+                    fontSize: 12,
+                  },
+                  valueFormatter: (id, context) =>
+                    context.location === "tick"
+                      ? id
+                      : `${id}. ${
+                          totalIntensityData.find((d) => d.id === id)?.name
+                        }`,
+                },
               ]}
               yAxis={[{ label: "Cường độ trong tháng" }]}
               dataset={monthlyIntensityData}
               height={400}
-              margin={{ left: 90, right: 50 }}
+              margin={{ left: 90, right: 50, bottom: 80 }}
             >
               <ChartsGrid horizontal />
               <BarPlot />
-              <ChartsXAxis />
+              <ChartsXAxis
+                labelStyle={{
+                  fontSize: 14,
+                  translate: "0px 25px",
+                }}
+              />
               <ChartsYAxis
                 label="Cường độ trong tháng"
                 labelStyle={{ translate: "-25px 0px" }}

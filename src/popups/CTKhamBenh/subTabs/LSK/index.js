@@ -16,7 +16,7 @@ import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fe
 function LichSuKham() {
   const dispatch = useDispatch();
   const lichSuKham = useSelector((state) => state.fetchDSDK.lskByIdBn) || [];
-
+  const [resetKey, setResetKey] = useState(Date.now);
   const ttkArray = useSelector((state) => state.ttk?.data) || [];
   const ttk = ttkArray ? ttkArray[0] : {};
   const benhById = useSelector((state) => state.benhById?.data) || [];
@@ -56,120 +56,152 @@ function LichSuKham() {
     dispatch(fetchCTDTByIdAction(phieuKham?.MAPK));
   };
 
+  const handleCancel = () => {
+    setResetKey(Date.now());
+  };
+
   return (
     <>
       {lichSuKham.length === 0 ? (
-        <h2>Không có lịch sử khám</h2>
-      ) : (
-        <div className="shadow rounded">
-          <ul className="nav nav-pills list-group-horizontal-scroll position-relative overflow-auto">
-            {lichSuKham?.map((phieuKham, index) => (
-              <li className="nav-item" key={index}>
-                <a
-                  className={`nav-link ${activeTab === index ? "active" : ""}`}
-                  onClick={() => handleTabClick(phieuKham, index)}
-                >
-                  {"PK" +
-                    phieuKham.MAPK +
-                    " - " +
-                    phieuKham.NGAYKHAMMIN +
-                    " - " +
-                    phieuKham.TENDV}
-                </a>
-              </li>
-            ))}
-          </ul>
-
-          <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
-          <div className="container-fluid mb-2 py-2">
-            <div className="row py-2">
-              <IFInputText
-                title={"Trạng thái"}
-                size={3}
-                value={ttk?.TRANGTHAITH}
-                readOnly={true}
-              />
-
-              <IFNgay
-                title={"Ngày khám"}
-                size={3}
-                value={new Date(ttk?.NGAYKHAM)}
-                readOnly={true}
-              />
-              <IFInputText
-                title={"Dịch vụ khám"}
-                size={6}
-                value={ttk?.TENDV}
-                readOnly={true}
-              />
-            </div>
-            <div className="row py-2">
-              <IFInputText
-                title={"Lý do khám"}
-                size={5}
-                value={ttk?.LYDOKHAM}
-                readOnly={true}
-              />
-              <IFInputText
-                title={"Phòng khám"}
-                size={3}
-                value={ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")"}
-                readOnly={true}
-              />
-              <IFInputText
-                title={"Bác sĩ khám"}
-                size={4}
-                value={"BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN}
-                readOnly={true}
-              />
-            </div>
-            <div className="row py-2">
-              <TextArea
-                title={"Bệnh sử"}
-                size={4}
-                value={ttk?.TRIEUCHUNGBENH}
-                readOnly={true}
-              />
-              <TextArea
-                title={"Khám lâm sàn"}
-                size={4}
-                value={ttk?.TINHTRANGCOTHE}
-                readOnly={true}
-              />
-              <TextArea
-                title={"Lời dặn"}
-                size={4}
-                value={ttk?.KETLUAN}
-                readOnly={true}
-              />
-            </div>
-
-            <div className="px-3 py-2 bg-primary">Chẩn đoán bệnh</div>
-            <div className="container">
-              <div className="row py-2">
-                {benhById?.length > 0 ? (
-                  <ListForm columns={columnsBenh} data={benhById} />
-                ) : (
-                  <div className="d-flex justify-content-center text-danger">
-                    Chưa có kết luận bệnh nào.
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
-            {existedCTDT.length === 0 ? null : (
-              <ListForm
-                columns={columnsDT}
-                data={existedCTDT.map((item) => ({
-                  ...item,
-                  thanhTien: item.GIABAN * item.SOLUONGTHUOC,
-                }))}
-                loading={false}
-              />
-            )}
+        <>
+          <h2>Không có lịch sử khám</h2>
+          <div className="float-end">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleCancel}
+              data-bs-dismiss="modal"
+            >
+              Đóng
+            </button>
           </div>
-        </div>
+        </>
+      ) : (
+        <>
+          <div className="shadow rounded" key={resetKey}>
+            <ul className="nav nav-pills list-group-horizontal-scroll position-relative overflow-auto">
+              {lichSuKham?.map((phieuKham, index) => (
+                <li className="nav-item" key={index}>
+                  <a
+                    className={`nav-link ${
+                      activeTab === index ? "active" : ""
+                    }`}
+                    onClick={() => handleTabClick(phieuKham, index)}
+                  >
+                    {"PK" +
+                      phieuKham.MAPK +
+                      " - " +
+                      phieuKham.NGAYKHAMMIN +
+                      " - " +
+                      phieuKham.TENDV}
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <div className="px-3 py-2 bg-primary rounded-top">
+              Thông tin khám
+            </div>
+            <div className="container-fluid mb-2 py-2">
+              <div className="row py-2">
+                <IFInputText
+                  title={"Trạng thái"}
+                  size={3}
+                  value={ttk?.TRANGTHAITH}
+                  readOnly={true}
+                />
+
+                <IFNgay
+                  title={"Ngày khám"}
+                  size={3}
+                  value={new Date(ttk?.NGAYKHAM)}
+                  readOnly={true}
+                />
+                <IFInputText
+                  title={"Dịch vụ khám"}
+                  size={6}
+                  value={ttk?.TENDV}
+                  readOnly={true}
+                />
+              </div>
+              <div className="row py-2">
+                <IFInputText
+                  title={"Lý do khám"}
+                  size={5}
+                  value={ttk?.LYDOKHAM}
+                  readOnly={true}
+                />
+                <IFInputText
+                  title={"Phòng khám"}
+                  size={3}
+                  value={ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")"}
+                  readOnly={true}
+                />
+                <IFInputText
+                  title={"Bác sĩ khám"}
+                  size={4}
+                  value={"BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN}
+                  readOnly={true}
+                />
+              </div>
+              <div className="row py-2">
+                <TextArea
+                  title={"Bệnh sử"}
+                  size={4}
+                  value={ttk?.TRIEUCHUNGBENH}
+                  readOnly={true}
+                />
+                <TextArea
+                  title={"Khám lâm sàn"}
+                  size={4}
+                  value={ttk?.TINHTRANGCOTHE}
+                  readOnly={true}
+                />
+                <TextArea
+                  title={"Lời dặn"}
+                  size={4}
+                  value={ttk?.KETLUAN}
+                  readOnly={true}
+                />
+              </div>
+
+              <div className="px-3 py-2 bg-primary">Chẩn đoán bệnh</div>
+              <div className="container">
+                <div className="row py-2">
+                  {benhById?.length > 0 ? (
+                    <ListForm columns={columnsBenh} data={benhById} />
+                  ) : (
+                    <div className="d-flex justify-content-center text-danger">
+                      Chưa có kết luận bệnh nào.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
+              {existedCTDT.length === 0 ? null : (
+                <ListForm
+                  columns={columnsDT}
+                  data={existedCTDT.map((item) => ({
+                    ...item,
+                    thanhTien: item.GIABAN * item.SOLUONGTHUOC,
+                  }))}
+                  loading={false}
+                />
+              )}
+            </div>
+            <div className="row py-2 d-flex justify-content-between">
+              <button
+                type="button"
+                className="btn btn-secondary ms-auto mx-4 col-auto"
+                onClick={handleCancel}
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </>
   );

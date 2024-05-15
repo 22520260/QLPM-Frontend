@@ -23,8 +23,7 @@ function Login() {
     usernameDefault = parsedAccount.username;
     passwordDefault = parsedAccount.password;
   }
-  console.log("isSave", isSave);
-  console.log("usernameDefault", usernameDefault);
+
   const [username, setUsername] = useState(usernameDefault);
   const [password, setPassword] = useState(passwordDefault);
   const [checked, setChecked] = useState(isSave);

@@ -17,7 +17,6 @@ export function TTK({ value }) {
     "Đang thực hiện",
   ];
   const stt = findIndexByValue(values, value);
-  console.log("TTK", value, stt);
   let style =
     "p-2 rounded bg-opacity-10 fw-semibold text-" +
     styles[stt] +
@@ -38,7 +37,6 @@ export function TTK({ value }) {
 export function TTTT({ value }) {
   const values = ["Không có đơn", "Chưa thanh toán", "Đã thanh toán"];
   const stt = findIndexByValue(values, value);
-  console.log("TTTT", value, stt);
 
   let style =
     "p-2 rounded bg-opacity-10 fw-semibold text-" +
@@ -62,7 +60,6 @@ export function TTTT({ value }) {
 export function TTCLS({ value }) {
   const values = ["Không có đơn", "Chưa thanh toán", "Đã thanh toán"];
   const stt = findIndexByValue(values, value);
-  console.log("TTCLS", value, stt);
 
   let style =
     "p-2 rounded bg-opacity-10 fw-semibold text-" +
@@ -86,7 +83,6 @@ export function TTCLS({ value }) {
 export function TTT({ value }) {
   const values = ["Không có đơn", "Chưa thanh toán", "Đã thanh toán"];
   const stt = findIndexByValue(values, value);
-  console.log("TTT", value, stt);
 
   let style =
     "p-2 rounded bg-opacity-10 fw-semibold text-" +

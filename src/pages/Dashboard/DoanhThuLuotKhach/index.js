@@ -5,7 +5,7 @@ import { ChartsXAxis } from "@mui/x-charts/ChartsXAxis";
 import { ChartsYAxis } from "@mui/x-charts/ChartsYAxis";
 import { ChartsGrid } from "@mui/x-charts/ChartsGrid";
 import { ChartsTooltip } from "@mui/x-charts/ChartsTooltip";
-import { ChartsOnAxisClickHandler } from "@mui/x-charts";
+import { ChartsLegend, ChartsOnAxisClickHandler } from "@mui/x-charts";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchThongKeDoanhThuAction } from "../../../redux/action/fetchDataAction/fetchThongKeDoanhThuAction";
@@ -55,7 +55,6 @@ function DoanhThuLuotKhach({ year }) {
   const dispatch = useDispatch();
   const [filterData, setFilterData] = useState([]);
   const dataset = useSelector((state) => state.tkDoanhThu?.data) || [];
-  console.log("dataset", dataset);
 
   const series = [
     {
@@ -88,7 +87,7 @@ function DoanhThuLuotKhach({ year }) {
       const yearData = dataset.filter((item) => item.YEAR === year);
       setFilterData(yearData);
     }
-  }, [year]);
+  }, [year, dataset]);
 
   return (
     <div>
@@ -108,6 +107,7 @@ function DoanhThuLuotKhach({ year }) {
       >
         <ChartsGrid horizontal />
         <ChartsOnAxisClickHandler onAxisClick={onAxisClick} />
+        <ChartsLegend position={{ vertical: 'top', horizontal: 'right' }} />
         <BarPlot />
         <LinePlot />
         <MarkPlot />

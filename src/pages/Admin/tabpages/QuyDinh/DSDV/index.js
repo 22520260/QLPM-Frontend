@@ -16,7 +16,6 @@ import axios from "../../../../../setup/axios";
 function DSDV() {
   const dispatch = useDispatch();
   const services = useSelector((state) => state.services?.data) || [];
-  console.log('services', services)
   const loaiDichVu = useSelector((state) => state.loaiDichVu?.data) || [];
   const isLoading = useSelector((state) => state.services?.isloading);
   const [limit, setLimit] = useState(5);

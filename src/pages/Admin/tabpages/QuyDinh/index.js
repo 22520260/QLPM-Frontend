@@ -14,7 +14,6 @@ function QuyDinh() {
   const thamso = useSelector((state) => state.thamso?.data) || [];
   const isLoading = useSelector((state) => state.thamso?.isLoading);
 
-  console.log("thamso", thamso);
   useEffect(() => {
     dispatch(fetchThamSoAction());
   }, []);
@@ -25,7 +24,6 @@ function QuyDinh() {
   };
 
   const [formData, setFormData] = useState(defaultFormData);
-  console.log("formData", formData);
 
   const defaultObjValidInput = {
     isValidGiaTri: true,

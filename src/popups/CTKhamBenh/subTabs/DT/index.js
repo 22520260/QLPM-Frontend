@@ -23,7 +23,6 @@ function DonThuoc() {
   const leTan = useSelector((state) => state.auth?.user) || {};
   let existedCTDT = useSelector((state) => state.existedCTDT?.data) || [];
 
-  console.log("dsThuoc", dsThuoc);
   const [formula, setFormula] = useState("");
   const [unit, setUnit] = useState("");
   const [note, setNote] = useState("");
@@ -148,7 +147,6 @@ function DonThuoc() {
     // Add total daily dose if 'n' is specified
     if (totalDailyDose > 0 && !parts.includes("n")) {
       dosageText += totalDailyDose + " " + unit + "/ngày";
-      console.log(totalDailyDose.toString());
 
       let bien = totalDailyDose * parseInt(day);
       newRowData.SOLUONGTHUOC = bien;

@@ -18,9 +18,10 @@ import { formatDate } from "../../../../utils/appUtils";
 
 function DSTaiKhoan() {
   const dispatch = useDispatch();
-  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  const groupUsersRaw = useSelector((state) => state.groupUsers?.data) || [];
   const accounts = useSelector((state) => state.account?.data) || [];
   const isLoading = useSelector((state) => state.account.data?.isLoading);
+  const [groupUsers, setGroupUsers] = useState(groupUsersRaw);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayAccounts, setDisplayAccounts] = useState([]);
@@ -50,6 +51,7 @@ function DSTaiKhoan() {
     diaChi: "",
     ghiChu: "",
   };
+
   const [formData, setFormData] = useState(defaultFormData);
 
   const defaultObjValidInput = {
@@ -60,6 +62,12 @@ function DSTaiKhoan() {
     isValidCCCD: true,
   };
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  useEffect(() => {
+    const filteredGroupUsers = groupUsersRaw.filter(item => item.MANHOM !== 1)
+    console.log('filteredGroupUsers', filteredGroupUsers);
+    setGroupUsers(filteredGroupUsers)
+  }, [groupUsersRaw]);
 
   useEffect(() => {
     dispatch(fetchAllAccountAction());
@@ -140,8 +148,6 @@ function DSTaiKhoan() {
       toast.error("Chưa nhập CCCD");
       return;
     }
-
-    console.log(">>> formData", formData);
 
     const response = await axios.post("/account/insert", formData);
 

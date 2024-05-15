@@ -52,6 +52,7 @@ function DangKyKham() {
   const defaultObjValidInput = {
     isValidHoTen: true,
     isValidCCCD: true,
+    isValidBacSiKham: true,
     isValidDichVu: true,
   };
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
@@ -79,7 +80,7 @@ function DangKyKham() {
       const patient = checkPatientExistence(value);
       if (patient) {
         setFormData({
-          ...formData,
+          ...formDataDefault,
           hoTen: patient.HOTEN,
           gioiTinh: patient.GIOITINH,
           diaChi: patient.DIACHI,
@@ -152,9 +153,14 @@ function DangKyKham() {
         toast.error("Chưa nhập họ tên");
         return;
       }
-      if (formData.cccd === "") {
+      if (!formData.cccd) {
         setObjValidInput({ ...defaultObjValidInput, isValidCCCD: false });
         toast.error("Chưa nhập CCCD");
+        return;
+      }
+      if (!formData.maBS || +formData.maBS === 0) {
+        setObjValidInput({ ...defaultObjValidInput, isValidBacSiKham: false });
+        toast.error("Chưa chọn bác sĩ khám");
         return;
       }
       let maHDinserted = "";
@@ -173,7 +179,6 @@ function DangKyKham() {
         console.log(error);
         toast.error("Thêm hóa đơn không thành công");
       }
-      console.log(">> oldPatientID", oldPatientID);
       // nếu là bệnh nhân mới thì thêm hồ sơ bệnh nhân trước
       if (oldPatientID === 0) {
         let maBNinserted = "";
@@ -193,7 +198,10 @@ function DangKyKham() {
       }
       // chờ 1 giây đề các api call thực hiện xong rồi mới load lại trang
       await timeout(1000);
-      window.location.reload();
+      setFormData(formDataDefault);
+      setSelectedServices([]);
+      setAge(null);
+
     } else {
       setObjValidInput({ ...defaultObjValidInput, isValidDichVu: false });
       toast.error("Chưa thêm dịch vụ nào.");
@@ -233,6 +241,7 @@ function DangKyKham() {
               <IFSearchHT
                 title={"Họ và Tên"}
                 valid={objValidInput.isValidHoTen}
+                value={formData.hoTen}
                 size={4}
                 options={patients}
                 required={true}
@@ -249,7 +258,7 @@ function DangKyKham() {
                   { gioiTinh: "Khác" },
                 ]}
                 onChange={(value) => handleChange("gioiTinh", value)}
-                selected={formData.gioiTinh}
+                value={formData.gioiTinh}
               />
               <IFInputText
                 title={"Địa chỉ"}
@@ -270,9 +279,7 @@ function DangKyKham() {
                 title={"Tuổi"}
                 size={1}
                 value={age}
-                valid={true}
                 readOnly={true}
-                onChange={(value) => handleChange("tuoi", value)}
               />
               <IFInputText
                 title={"CCCD"}
@@ -307,6 +314,9 @@ function DangKyKham() {
               <IFSelect
                 title={"Bác sĩ"}
                 size={3}
+                required={true}
+                valid={objValidInput.isValidBacSiKham}
+                value={formData.maBS}
                 options={doctors}
                 onChange={(value) => {
                   handleChange("maBS", value);
@@ -318,6 +328,7 @@ function DangKyKham() {
                 title={"Lý do khám"}
                 size={4}
                 valid={true}
+                value={formData.lyDoKham}
                 onChange={(value) => handleChange("lyDoKham", value)}
               />
               <IFInputText

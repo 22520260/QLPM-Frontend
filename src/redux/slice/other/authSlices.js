@@ -46,11 +46,9 @@ const authSlice = createSlice({
           }
         };
         state.user = data;
-        console.log('>>>Fulfilled user', state.user)
       })
       .addCase(fetchUserAccountAction.rejected, (state) => {
         state.isLoading = false;
-        console.log('>>>Failed user', state.user)
       });
   },
 });

@@ -16,7 +16,7 @@ function ChatLuongandDoanhThu() {
                 options={[{ year: '2022' }, { year: '2023' }, { year: '2024' }]}
                 def={"Chọn"}
                 onChange={(value) => setYear(value === "Chọn" ? defaultYear : value)}
-                selected={year}
+                value={year}
                 keyObj='year'
                 showObj={'year'}
             />

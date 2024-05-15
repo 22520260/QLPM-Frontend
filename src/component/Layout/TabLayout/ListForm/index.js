@@ -208,6 +208,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   const leTan = useSelector((state) => state.auth?.user) || {};
 
   const [pttt, setPttt] = useState("Tiền mặt");
+  const [tdtt, setTdtt] = useState(new Date());
 
   const handleRowClick = (row) => {
     dispatch(fetchCTDTByIdAction(row?.MAPK));
@@ -224,6 +225,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleChangePttt = (value) => {
     setPttt(value);
   };
+  console.log('tdtt', tdtt);
 
   const updateTrangThaiPK = async (varTrangThai) => {
     try {
@@ -245,12 +247,13 @@ export function ListFormDSDK({ columns, data, loading }) {
     // if (selectedHD.MALOAIHD === 1) {
     //   await updateTrangThaiPK("Đang thực hiện");
     // }
+    console.log('tdtt', tdtt);
     try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
         maLT: leTan.account.userInfo[0].MALT,
         tttt: "Đã thanh toán",
-        tdtt: new Date(),
+        tdtt: tdtt,
         pttt: pttt,
       });
 
@@ -428,7 +431,8 @@ export function ListFormDSDK({ columns, data, loading }) {
                     <IFNgay
                       title={"Ngày bán"}
                       size={12}
-                      onChange={() => {}}
+                      value={tdtt}
+                      onChange={(value) => setTdtt(value)}
                       defaultValue={new Date()}
                     />
                     <ListGroupItem
@@ -586,9 +590,7 @@ export function ListFormThuoc({ columns, data, loading }) {
   const [formData, setFormData] = useState({});
   const [formDelete, setFormDelete] = useState({});
   const thuoc = useSelector((state) => state.thuoc?.data);
-  console.log("thuoc", thuoc);
   const handleRowClick = (row) => {
-    console.log("row", row);
     setFormData({
       maLoThuoc: row.MALOTHUOC,
       maThuoc: row.MATHUOC,
@@ -911,7 +913,13 @@ export function ListFormDSTK({ columns, data, loading }) {
   const [formDataTTCN, setFormDataTTCN] = useState({});
   const [formDataTTTK, setFormDataTTTK] = useState({});
   const [formDelete, setFormDelete] = useState({});
-  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  const groupUsersRaw = useSelector((state) => state.groupUsers?.data) || [];
+  const [groupUsers, setGroupUsers] = useState(groupUsersRaw);
+
+  useEffect(() => {
+    const filteredGroupUsers = groupUsersRaw.filter(item => item.MANHOM !== 1)
+    setGroupUsers(filteredGroupUsers)
+  }, [groupUsersRaw]);
 
   const handleRowClick = (selectedRow) => {
     setFormDataTTCN({
@@ -1575,7 +1583,6 @@ export function ListFormDST({ columns, data, loading }) {
   const [formDelete, setFormDelete] = useState({});
   const dvt = useSelector((state) => state.dvt?.data) || [];
   const handleRowClick = (row) => {
-    console.log("row", row);
     setFormData({
       maThuoc: row.MATHUOC,
       maDVT: row.MADVT,
@@ -1850,7 +1857,6 @@ export function ListFormDSLB({ columns, data, loading }) {
     isValidMaICD: true,
     isValidTenBenh: true,
   };
-  console.log("formData", formData);
 
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
@@ -2074,7 +2080,6 @@ export function ListFormDVT({ columns, data, loading }) {
   const [formDelete, setFormDelete] = useState({});
 
   const handleRowClick = (row) => {
-    console.log("row", row);
     setFormData({
       maDVT: row.MADVT,
       tenDVT: row.TENDONVI,
@@ -2389,7 +2394,6 @@ export function ListFormPQ({
       return;
     }
     const data = buildDataToSave();
-    console.log("data", data);
     const response = await axios.post("/role/assignRoleToGroup", data);
 
     if (response && response.data && response.data.errcode === 0) {
@@ -2614,7 +2618,6 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   const dispatch = useDispatch();
   const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
   const handleRowClick = (row) => {
-    console.log("row", row);
     dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
     dispatch(fetchAllThuocKeDonAction());
@@ -2754,7 +2757,6 @@ export function ListFormCLS({ columns, data, loading }) {
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
   };
   const handleSave = () => {
-    console.log("SAVE");
   };
 
   return (
@@ -3006,7 +3008,6 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
       diUng: row.DIUNG,
     });
   };
-  console.log(formData);
 
   const defaultObjValidInput = {
     isValidTenBN: true,

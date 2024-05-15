@@ -17,9 +17,9 @@ export function IFSelect({
   showObj,
   required,
   readOnly,
+  valid = true
 }) {
   const style = "col-md-" + size;
-
   const handleSelectChange = (e) => {
     const value = e.target.value;
     onChange(value);
@@ -32,7 +32,7 @@ export function IFSelect({
         {required && <div className="text-danger ms-1">*</div>}
       </label>
       <select
-        className="form-select"
+        className={valid ? "form-select" : "form-select is-invalid"}
         id={title}
         aria-label="Default select example"
         onChange={handleSelectChange}
@@ -332,7 +332,6 @@ export function IFSearchBenh({ title, valid, size, options, onChange }) {
   );
 }
 
-
 export function IFSearchHT({
   title,
   valid,
@@ -340,6 +339,7 @@ export function IFSearchHT({
   options,
   required,
   onChange,
+  value
 }) {
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -365,6 +365,7 @@ export function IFSearchHT({
           id="hoTenInput"
           onChange={handleInputChange}
           required
+          value={value}
         />
         <datalist id="hoTenDatalist">
           {Array.isArray(options) ? (

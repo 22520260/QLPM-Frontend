@@ -166,8 +166,6 @@ function Thuoc() {
       return;
     }
 
-    console.log(">>> formData", formData);
-
     const response = await axios.post("/lothuoc/insert", formData);
 
     if (response && response.data && response.data.errcode === 0) {

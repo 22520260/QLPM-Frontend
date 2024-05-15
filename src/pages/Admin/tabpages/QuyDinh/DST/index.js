@@ -16,7 +16,6 @@ import axios from "../../../../../setup/axios";
 function DST() {
   const dispatch = useDispatch();
   const thuoc = useSelector((state) => state.thuoc?.data) || [];
-  console.log('thuoc', thuoc)
   const dvt = useSelector((state) => state.dvt?.data) || [];
   const isLoading = useSelector((state) => state.thuoc?.isloading);
   const [limit, setLimit] = useState(5);
