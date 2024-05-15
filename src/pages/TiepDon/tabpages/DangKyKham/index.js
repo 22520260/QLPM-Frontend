@@ -59,7 +59,7 @@ function DangKyKham() {
 
   const columns = [
     { title: "Mã dịch vụ", key: "MADV" },
-    { title: "Mã loại dịch vụ", key: "MALOAIDV" },
+    { title: "Loại dịch vụ", key: "TENLOAIDV" },
     { title: "Tên dịch vụ", key: "TENDV" },
     { title: "Giá dịch vụ", key: "GIADV" },
   ];

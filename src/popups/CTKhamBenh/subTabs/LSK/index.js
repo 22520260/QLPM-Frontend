@@ -27,7 +27,6 @@ function LichSuKham() {
   ];
 
   const columnsDT = [
-    { title: "STT", key: "" }, //STT
     { title: "Tên thuốc", key: "TENTHUOC" },
     { title: "Liều dùng", key: "GHICHU" },
     { title: "Đơn vị thuốc", key: "TENDONVI" },

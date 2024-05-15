@@ -27,9 +27,6 @@ function CanLamSang() {
     { title: "Bệnh nhân", key: "INFOBN" },
     { title: "Dịch vụ", key: "TENDV" },
     { title: "Bác sĩ thực hiện", key: "INFOBSTH" },
-    { title: "TTTH", key: "TRANGTHAITH" },
-    { title: "TTTT", key: "TTTT" },
-
   ];
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
 import { selectHD } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 import { setIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
+import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDonSlice";
 
 function HoaDon() {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ function HoaDon() {
   ];
 
   const columnsCTDT = [
-    { title: "STT", key: "" }, //STT
+    { title: "Mã thuốc", key: "MATHUOC" }, //STT
     { title: "Tên thuốc", key: "TENTHUOC" },
     { title: "Liều dùng", key: "GHICHU" },
     { title: "Đơn vị thuốc", key: "TENDONVI" },
@@ -58,6 +59,7 @@ function HoaDon() {
 
   const handleCancel = () => {
     setResetKey(Date.now());
+    dispatch(clearIsShowHdRow());
   };
 
   return (
