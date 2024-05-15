@@ -104,6 +104,7 @@ function DonThuoc() {
     let timeParts = [];
     let doseParts = [];
     let totalDailyDose = 0;
+    let soLanUongTrongNgay = 0;
 
     parts.forEach((part) => {
       if (part !== "") {
@@ -112,6 +113,7 @@ function DonThuoc() {
           const letter = match[1].toLowerCase();
           const number = match[2];
           if (letter in conversionTable) {
+            soLanUongTrongNgay++;
             if (letter === "n") {
               totalDailyDose += parseInt(number);
             } else {
@@ -163,7 +165,7 @@ function DonThuoc() {
       dosageText += " " + note.trim() + ".";
     }
     newRowData.GHICHU = dosageText.trim();
-    setRowData(newRowData);
+    setRowData({...newRowData, SOLANUONG: soLanUongTrongNgay, SOLUONGUONG: totalDailyDose});
   };
 
   const handleAddMedicine = () => {
@@ -189,11 +191,11 @@ function DonThuoc() {
   };
 
   const columns = [
-    { title: "STT", key: "" }, //STT
+    // { title: "STT", key: "" }, //STT
     { title: "Tên thuốc", key: "TENTHUOC" },
     { title: "Liều dùng", key: "GHICHU" },
     { title: "Đơn vị thuốc", key: "TENDONVI" },
-    { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
+    { title: "Số lượng", key: "SOLUONGTHUOC" },
     { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
   ];
@@ -357,19 +359,23 @@ function DonThuoc() {
       </div>
 
       <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
-      <ListFormDV
-        columns={columns}
-        data={
-          existedCTDT.length === 0
-            ? medicines
-            : existedCTDT.map((item) => ({
-                ...item,
-                thanhTien: item.GIABAN * item.SOLUONGTHUOC,
-              }))
-        } // Truyền dữ liệu các loại thuốc vào ListFormDV
-        loading={false}
-        handleDelete={handleDeleteMedicine}
-      />
+      <div className="container-fluid mb-3">
+        <ListFormDV
+          columns={columns}
+          data={
+            existedCTDT.length === 0
+              ? medicines
+              : existedCTDT.map((item) => ({
+                  ...item,
+                  thanhTien: item.GIABAN * item.SOLUONGTHUOC,
+                }))
+          } // Truyền dữ liệu các loại thuốc vào ListFormDV
+          loading={false}
+          handleDelete={handleDeleteMedicine}
+          buttonColor={existedCTDT.length > 0 ? "btn-secondary" : null}
+        />
+      </div>
+
       <div className="d-flex justify-content-center px-3 py-2">
         <button
           className="btn btn-primary ms-auto mx-4 col-auto"

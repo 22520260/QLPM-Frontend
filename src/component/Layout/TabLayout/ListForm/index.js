@@ -53,7 +53,7 @@ import { clearIsShowHdRow } from "../../../../redux/slice/getDataSlice/getHoaDon
 import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTTKAction";
 import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
-import { StatusIcon } from "./StatusIcon";
+import { StatusIcon, TTCLS, TTK } from "./StatusIcon";
 import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
 
 const { format } = require("date-fns");
@@ -98,7 +98,7 @@ export function ListForm({ columns, data, loading }) {
   );
 }
 
-export function ListFormDV({ columns, data, loading, handleDelete }) {
+export function ListFormDV({ columns, data, loading, handleDelete, buttonColor }) {
   function handleRowClick(row) {}
 
   return (
@@ -134,7 +134,7 @@ export function ListFormDV({ columns, data, loading, handleDelete }) {
                 ))}
                 <td>
                   <button
-                    className="btn btn-danger rounded-circle"
+                    className={`btn ${buttonColor ? buttonColor : "btn-danger"} rounded-circle`}
                     onClick={() => handleDelete(rowIndex)}
                   >
                     <MdDeleteForever />
@@ -2932,6 +2932,7 @@ export function ListFormCLS({ columns, data, loading }) {
                 {column.title}
               </th>
             ))}
+            <th>Trạng thái</th>
             <th>Thao tác</th>
           </tr>
         </thead>
@@ -2961,6 +2962,12 @@ export function ListFormCLS({ columns, data, loading }) {
                         ))}
                   </td>
                 ))}
+                <td>
+                  <div>
+                    <TTK value={row.TRANGTHAITH} />
+                    <TTCLS value={row.TTTT} />
+                  </div>
+                </td>
                 <td>
                   <button
                     type="button"
