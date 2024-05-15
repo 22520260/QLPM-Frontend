@@ -10,7 +10,7 @@ import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
-import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDV, ListFormDVCLS } from "../../../../component/Layout/TabLayout/ListForm";
 
 function DichVu() {
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ function DichVu() {
     { title: "Tên loại dịch vụ", key: "TENLOAIDV" },
     { title: "Tên dịch vụ", key: "TENDV" },
     { title: "Giá dịch vụ", key: "GIADV" },
-    { title: "Bác sĩ thực hiện", key: "HOTEN" },
+    { title: "Bác sĩ thực hiện", key: "INFOBSTH" },
   ];
 
   useEffect(() => {
@@ -198,17 +198,26 @@ function DichVu() {
             )}
           </div>
 
-          {selectedServices.length > 0 || existedDsCls.length > 0 ? (
-            <ListFormDV
+          {existedDsCls.length > 0 ? (
+            <ListFormDVCLS
               columns={columns}
-              data={existedDsCls.length > 0 ? existedDsCls : selectedServices}
+              data={existedDsCls}
               handleDelete={handleDeleteService}
             />
-          ) : (
+          ) : null}
+          {selectedServices.length > 0 ? (
+            <ListFormDV
+              columns={columns}
+              data={selectedServices}
+              handleDelete={handleDeleteService}
+            />
+          ) : null}
+          {existedDsCls.length === 0 && selectedServices.length === 0 ? ( 
             <div className="d-flex justify-content-center text-danger">
               Chưa thêm dịch vụ nào.
             </div>
-          )}
+          ) : null}
+      
         </div>
       </div>
 

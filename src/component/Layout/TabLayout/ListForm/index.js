@@ -6,7 +6,6 @@ import {
   FaStethoscope,
 } from "react-icons/fa";
 import {
-  IFNgayNgang,
   ListGroupItem,
   TextArea,
   IFInputText,
@@ -15,14 +14,9 @@ import {
   IFPassword,
 } from "../InputForm";
 import NavTabVertical from "../../../NavTabVertical";
-import Navtab from "../../../Navtab";
 import { tabsDataCTPK } from "../../../../popups/CTPhieuKham/data";
-import { tabsDataTT } from "../../../../popups/ThanhToan/data";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  clearSelectedRow,
-  selectRow,
-} from "../../../../redux/slice/other/selectedRowSlice";
+import { selectRow } from "../../../../redux/slice/other/selectedRowSlice";
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { tabsDataCTKB } from "../../../../popups/CTKhamBenh/data";
 import { MdDeleteForever } from "react-icons/md";
@@ -34,7 +28,7 @@ import { fetchAllBenhAction } from "../../../../redux/action/fetchDataAction/fet
 import { fetchAllRoleAction } from "../../../../redux/action/fetchDataAction/fetchAllRoleAction";
 import { fetchAllDVTAction } from "../../../../redux/action/fetchDataAction/fetchAllDVTAction";
 import { fetchRoleByIdAction } from "../../../../redux/action/fetchDataAction/fetchRoleByIdAction";
-import { deFormatDate } from "../../../../utils/appUtils";
+import { deFormatDate, getBase64 } from "../../../../utils/appUtils";
 import { fetchAllThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocAction";
 import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataAction/fetchAllThuocKeDonAction";
 import { fetchAllLoThuocAction } from "../../../../redux/action/fetchDataAction/fetchAllLoThuocAction";
@@ -45,7 +39,10 @@ import {
   fetchBenhNhanByIdAction,
 } from "../../../../redux/action/fetchDataAction/fetchAllBenhNhanAction";
 import { fetchDSHDByIdAction } from "../../../../redux/action/fetchDataAction/fetchHoaDonAction";
-import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
+import {
+  fetchAllClsAction,
+  fetchDsClsByIdAction,
+} from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import {
   fetchPkByIdHdAction,
   fetchLSKByIdBnAction,
@@ -57,6 +54,8 @@ import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTT
 import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon } from "./StatusIcon";
+import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
+
 const { format } = require("date-fns");
 
 export function ListForm({ columns, data, loading }) {
@@ -225,7 +224,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   const handleChangePttt = (value) => {
     setPttt(value);
   };
-  console.log('tdtt', tdtt);
+  console.log("tdtt", tdtt);
 
   const updateTrangThaiPK = async (varTrangThai) => {
     try {
@@ -247,7 +246,7 @@ export function ListFormDSDK({ columns, data, loading }) {
     // if (selectedHD.MALOAIHD === 1) {
     //   await updateTrangThaiPK("Đang thực hiện");
     // }
-    console.log('tdtt', tdtt);
+    console.log("tdtt", tdtt);
     try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
@@ -917,8 +916,10 @@ export function ListFormDSTK({ columns, data, loading }) {
   const [groupUsers, setGroupUsers] = useState(groupUsersRaw);
 
   useEffect(() => {
-    const filteredGroupUsers = groupUsersRaw.filter(item => item.MANHOM !== 1)
-    setGroupUsers(filteredGroupUsers)
+    const filteredGroupUsers = groupUsersRaw.filter(
+      (item) => item.MANHOM !== 1
+    );
+    setGroupUsers(filteredGroupUsers);
   }, [groupUsersRaw]);
 
   const handleRowClick = (selectedRow) => {
@@ -2626,6 +2627,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
     dispatch(fetchDsClsByIdAction(row?.MAPK));
     dispatch(fetchLSKByIdBnAction(row?.MABN));
   };
+  const handleCancel = (row) => {};
 
   return (
     <>
@@ -2685,9 +2687,9 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button className="btn btn-danger mx-1 rounded-circle">
+                  {/* <button className="btn btn-danger mx-1 rounded-circle">
                     <MdDeleteForever />
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))
@@ -2711,13 +2713,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
               <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Thông tin phiếu khám {selectedRow?.MAPK}
               </h1>
-              {/* <button
+              <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-                onClick={handleCancel}
-              ></button> */}
+                onClick={() => {}}
+              ></button>
             </div>
 
             <div className="modal-body ">
@@ -2746,17 +2748,177 @@ export function ListFormKhamBenh({ columns, data, loading }) {
           </div>
         </div>
       </div>
+
+      {/* Modal CLS */}
+      <div
+        className="modal fade modal-xl"
+        id="ketquacls"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <CLSForm
+              formData={selectedRow}
+              handleChange={() => {}}
+              handleImageUpload={() => {}}
+            />
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                data-bs-toggle="modal"
+                data-bs-target="#idkb"
+                id="closeBtn10"
+                onClick={handleCancel}
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
+  );
+}
+
+function CLSForm({ formData, handleChange, handleImageUpload }) {
+  return (
+    // <div className="modal-dialog modal-dialog-scrollable">
+    //   <div className="modal-content">
+    <>
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="exampleModalLabel">
+          Thông tin phiếu CLS{formData?.MAKQ}
+        </h1>
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div className="modal-body py-0">
+        <div className="container-fluid p-0">
+          <table className="table">
+            <tr className="row">
+              <th className="border col col-md-1">Bệnh nhân</th>
+              <td className="border col col-md-3">{formData?.TENBN}</td>
+              <th className="border col col-md-1">Bác sĩ chỉ định</th>
+              <td className="border col col-md-3">{formData?.INFOBSCD}</td>
+              <th className="border col col-md-1">Trạng thái</th>
+              <td className="border col col-md-3">{formData?.TRANGTHAITH}</td>
+            </tr>
+            <tr className="row">
+              <th className="border col col-md-1">Dịch vụ</th>
+              <td className="border col col-md-3">{formData?.TENDV}</td>
+              <th className="border col col-md-1">Bác sĩ thực hiện</th>
+              <td className="border col col-md-3">{formData?.INFOBSTH}</td>
+              <th className="border col col-md-1">Thời gian</th>
+              <td className="border col col-md-3">
+                {formData?.NGAYKHAM
+                  ? format(formData?.NGAYKHAM, "dd/MM/yyyy - HH:mm")
+                  : ""}
+              </td>
+            </tr>
+          </table>
+
+          <div className="row">
+            <div className="col col-md-6">
+              <TextArea
+                title={"Mô tả"}
+                size={12}
+                row={10}
+                value={formData.MOTA ? formData.MOTA : ""}
+                onChange={(value) => handleChange("MOTA", value)}
+              />
+              <div className="row p-2">
+                <TextArea
+                  title={"Kết luận"}
+                  size={6}
+                  row={3}
+                  value={formData.KETLUANCLS ? formData.KETLUANCLS : ""}
+                  onChange={(value) => handleChange("KETLUANCLS", value)}
+                />
+                {/* <TextArea
+                  title={"Đề nghị từ chuyên gia"}
+                  size={6}
+                  row={3}
+                  value={formData}
+                  onChange={(value) => handleChange("ketLuanCls", value)}
+                /> */}
+              </div>
+            </div>
+            <div className="col col-md-6">
+              <ImageUpload onImageUpload={handleImageUpload} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+    //   </div>
+    // </div>
   );
 }
 
 export function ListFormCLS({ columns, data, loading }) {
   const dispatch = useDispatch();
-  const selectedRow = useSelector((state) => state.selectedRow.selectedRow);
+  const [selectedRow, setSelectedRow] = useState({});
+  const [formData, setFormData] = useState({});
+  const [resetKey, setResetKey] = useState(Date.now());
   const handleRowClick = (row) => {
-    dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
+    console.log("row:", row);
+    setFormData({
+      MAKQ: row.MAKQ,
+      TRANGTHAITH: row.TRANGTHAITH,
+      MOTA: row.MOTA === null ? "" : row.MOTA,
+      KETLUANCLS: row.KETLUANCLS === null ? "" : row.KETLUANCLS,
+      TENBN: row.TENBN,
+      INFOBSCD: row.INFOBSCD,
+      TENDV: row.TENDV,
+      INFOBSTH: row.INFOBSTH,
+      NGAYKHAM: row.NGAYKHAM,
+      // image: row.IMAGE,
+    });
   };
-  const handleSave = () => {
+
+  console.log("formData:", formData);
+
+  const handleUpdate = async (e) => {
+    console.log("formData: ", formData);
+    const response = await axios.post("/cls/update-cls", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllClsAction());
+      const closeBtn = document.getElementById("closeBtn10");
+      if (closeBtn) {
+        closeBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleImageUpload = (base64Image) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      image: base64Image,
+    }));
+  };
+
+  const handleCancel = () => {
+    setResetKey(Date.now());
   };
 
   return (
@@ -2808,14 +2970,14 @@ export function ListFormCLS({ columns, data, loading }) {
                   >
                     <FaStethoscope />
                   </button>
-                  <button
+                  {/* <button
                     type="button"
                     className="btn btn-danger mx-1"
                     data-bs-toggle="modal"
                     data-bs-target="#huyPhieu"
                   >
                     Hủy
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))
@@ -2832,141 +2994,31 @@ export function ListFormCLS({ columns, data, loading }) {
         tabindex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
+        key={resetKey}
       >
-        <div className="modal-dialog modal-dialog-scrollable">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thông tin phiếu CLS{selectedRow.MAKQ}
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-
-            <div className="modal-body py-0">
-              <div className="container-fluid p-0">
-                <table className="table">
-                  <tr className="row">
-                    <th className="border col col-md-1">Bệnh nhân</th>
-                    <td className="border col col-md-3">{selectedRow.TENBN}</td>
-                    <th className="border col col-md-1">Bác sĩ chỉ định</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.INFOBSCD}
-                    </td>
-                    <th className="border col col-md-1">Trạng thái</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.TRANGTHAITH}
-                    </td>
-                  </tr>
-                  <tr className="row">
-                    <th className="border col col-md-1">Dịch vụ</th>
-                    <td className="border col col-md-3">{selectedRow.TENDV}</td>
-                    <th className="border col col-md-1">Bác sĩ thực hiện</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.INFOBSTH}
-                    </td>
-                    <th className="border col col-md-1">Thời gian</th>
-                    <td className="border col col-md-3">
-                      {selectedRow.NGAYKHAM
-                        ? format(selectedRow.NGAYKHAM, "dd/MM/yyyy - HH:mm")
-                        : ""}
-                    </td>
-                  </tr>
-                </table>
-
-                <div className="row">
-                  <div className="col col-md-6">
-                    <TextArea
-                      title={"Mô tả"}
-                      size={12}
-                      row={10}
-                      onChange={() => {}}
-                    />
-                    <div className="row p-2">
-                      <TextArea
-                        title={"Kết luận"}
-                        size={6}
-                        row={3}
-                        onChange={() => {}}
-                      />
-                      <TextArea
-                        title={"Đề nghị từ chuyên gia"}
-                        size={6}
-                        row={3}
-                        onChange={() => {}}
-                      />
-                    </div>
-                  </div>
-                  <div className="col col-md-6">
-                    <ImageUpload />
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <CLSForm
+              formData={formData}
+              handleChange={handleChange}
+              handleImageUpload={handleImageUpload}
+            />
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                id="closeBtn"
+                id="closeBtn10"
+                onClick={handleCancel}
               >
                 Đóng
               </button>
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={handleSave}
+                onClick={handleUpdate}
               >
                 Lưu những thay đổi
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/*Bạn có chắc muốn hủy phiếu CLS*/}
-      <div
-        class="modal fade"
-        id="huyPhieu"
-        tabindex="-1"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">
-                Cảnh báo
-              </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              Bạn có chắc chắn muốn hủy phiếu CLS{selectedRow.MAKQ}
-            </div>
-            <div class="modal-footer">
-              <button
-                id="cancelBtnDelete4"
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Hủy
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-bs-dismiss="modal"
-                onClick={() => {}}
-              >
-                Đồng ý
               </button>
             </div>
           </div>
@@ -2976,9 +3028,67 @@ export function ListFormCLS({ columns, data, loading }) {
   );
 }
 
+export function ListFormDVCLS({ columns, data, loading, handleDelete }) {
+  const dispatch = useDispatch();
+  const handleInspectKQ = (row) => {
+    dispatch(selectRow(row));
+  };
+
+  return (
+    <>
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns?.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 2}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data?.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {columns?.map((column, colIndex) => (
+                  <td key={colIndex}>
+                    {column.render ? column.render(row) : row[column.key]}
+                  </td>
+                ))}
+                <td>
+                  <button
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#ketquacls"
+                    onClick={() => handleInspectKQ(row)}
+                  >
+                    <FaEye />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
 export function ListFormDSBenhNhan({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
+  const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
+  const lichSuKham = useSelector((state) => state.fetchDSDK.lskByIdBn) || [];
 
   const calculateAge = (birthDate) => {
     const today = new Date();
@@ -2996,6 +3106,8 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
   };
 
   const handleRowClick = (row) => {
+    dispatch(fetchLSKByIdBnAction(row?.MABN));
+    dispatch(selectRow(row));
     setFormData({
       maBN: row.MABN,
       CCCD: row.CCCD,
@@ -3129,6 +3241,14 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                     data-bs-target="#updateBenhNhan"
                   >
                     <FaEye />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary mx-1 rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#lichsukham"
+                  >
+                    <FaStethoscope />
                   </button>
                 </td>
               </tr>
@@ -3270,6 +3390,55 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
               >
                 Cập nhật
               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal Lịch sử khám */}
+      <div
+        className="modal fade modal-xl"
+        id="lichsukham"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Lịch sử khám của BN{selectedRow?.MABN}: {selectedRow.HOTEN}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <LichSuKham />
+              </div>
+            </div>
+            <div className="modal-footer">
+              {/* <button
+                id="cancelBtn"
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => handleSave}
+              >
+                Lưu những thay đổi
+              </button> */}
             </div>
           </div>
         </div>
