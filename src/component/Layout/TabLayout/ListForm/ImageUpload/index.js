@@ -1,55 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTrash, FaExpand } from "react-icons/fa";
+import { fetchDsClsByIdAction } from "../../../../../redux/action/fetchDataAction/fetchCLSAction";
+import { useDispatch } from "react-redux";
 
-export const ImageUpload = ({ onImageUpload }) => {
-  const [previewUrls, setPreviewUrls] = useState([]);
+export const ImageUpload = ({ maPK, onImageUpload }) => {
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [files, setFiles] = useState([]);
   const [msg, setMsg] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("maPK::", maPK);
+    const res = dispatch(fetchDsClsByIdAction(maPK));
+    res.then(({ payload }) => {
+      const image = payload.data[0].IMAGE;
+      setPreviewUrl(image);
+    });
+  }, [maPK]);
 
   function handleUpload() {
     const cancelBtn = document.getElementById("closeBtn");
 
-    if (previewUrls.length === 0) {
+    if (files.length === 0) {
       setMsg("No file selected");
-      if (cancelBtn) {
-        cancelBtn.click();
-      }
       return;
     }
 
-    const fd = new FormData();
-    previewUrls.forEach((url, index) => {
-      fetch(url)
-        .then((res) => res.blob())
-        .then((blob) => {
-          fd.append(`file${index + 1}`, blob);
-        })
-        .catch((err) => console.error(err));
-    });
+    onImageUpload(files);
   }
 
   function handleFileChange(event) {
     const selectedFiles = Array.from(event.target.files);
     const imageFiles = selectedFiles.filter((file) => {
+      console.log("file: ", file.name);
       const extension = file.name.split(".").pop().toLowerCase();
       return ["jpg", "jpeg", "png", "gif", "bmp"].includes(extension);
     });
 
-    const newPreviewUrls = imageFiles.map((file) => URL.createObjectURL(file));
-    setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviewUrls]);
+    const newPreviewUrl = imageFiles.map((file) => URL.createObjectURL(file));
+    setPreviewUrl(newPreviewUrl);
+    setFiles((prevFiles) => [...prevFiles, ...imageFiles]);
+  }
 
-    imageFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onImageUpload(reader.result); // Pass base64 string to parent component
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  function handleFileRemove(index) {
-    const newPreviewUrls = [...previewUrls];
-    newPreviewUrls.splice(index, 1);
-    setPreviewUrls(newPreviewUrls);
+  function handleFileRemove() {
+    setPreviewUrl("");
   }
 
   function handleViewImage(url) {
@@ -64,6 +58,7 @@ export const ImageUpload = ({ onImageUpload }) => {
         </label>
         <input
           id="inputfile"
+          name="image"
           style={{ display: "none" }}
           className="form-control"
           onChange={handleFileChange}
@@ -75,33 +70,29 @@ export const ImageUpload = ({ onImageUpload }) => {
           Upload
         </button>
       </div>
-      {previewUrls.length > 0 && (
-        <div className="overflow-x-auto" style={{ display: "flex" }}>
-          {previewUrls.map((url, index) => (
-            <div key={index} className="mx-3">
-              <div className="row al">
-                <button
-                  className="btn col col-md-auto"
-                  onClick={() => handleViewImage(url)}
-                >
-                  <FaExpand />
-                </button>
-                <button
-                  className="btn col col-md-auto"
-                  onClick={() => handleFileRemove(index)}
-                >
-                  <FaTrash style={{ color: "red" }} />
-                </button>
-              </div>
-              <img
-                src={url}
-                alt={`Preview ${index + 1}`}
-                style={{ maxWidth: "200px", maxHeight: "200px" }}
-              />
-            </div>
-          ))}
+      <div className="overflow-x-auto" style={{ display: "flex" }}>
+        <div className="mx-3">
+          <div className="row al">
+            <button
+              className="btn col col-md-auto"
+              onClick={() => handleViewImage(previewUrl)}
+            >
+              <FaExpand />
+            </button>
+            <button
+              className="btn col col-md-auto"
+              onClick={() => handleFileRemove()}
+            >
+              <FaTrash style={{ color: "red" }} />
+            </button>
+          </div>
+          <img
+            src={previewUrl}
+            alt={previewUrl}
+            style={{ maxWidth: "200px", maxHeight: "200px" }}
+          />
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -55,6 +55,7 @@ import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTT
 import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fetchBenhByIdAction";
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon } from "./StatusIcon";
+import { RiErrorWarningFill } from "react-icons/ri";
 const { format } = require("date-fns");
 
 export function ListForm({ columns, data, loading }) {
@@ -2767,7 +2768,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   );
 }
 
-const CLSForm = ({ formData, handleChange, handleUpdate, handleImageUpload, handleCancel }) => {
+const CLSForm = ({
+  formData,
+  handleChange,
+  handleUpdate,
+  handleImageUpload,
+  handleCancel,
+}) => {
   return (
     <div className="modal-dialog modal-dialog-scrollable">
       <div className="modal-content">
@@ -2827,17 +2834,16 @@ const CLSForm = ({ formData, handleChange, handleUpdate, handleImageUpload, hand
                     value={formData.ketLuanCls}
                     onChange={(value) => handleChange("ketLuanCls", value)}
                   />
-                  {/* <TextArea
-                  title={"Đề nghị từ chuyên gia"}
-                  size={6}
-                  row={3}
-                  value={formData}
-                  onChange={(value) => handleChange("ketLuanCls", value)}
-                /> */}
                 </div>
               </div>
               <div className="col col-md-6">
-                <ImageUpload onImageUpload={handleImageUpload} />
+                {/* khong biet lay mapk*/}
+                {formData.maPK && (
+                  <ImageUpload
+                    maPK={formData.maPK}
+                    onImageUpload={handleImageUpload}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -2870,9 +2876,11 @@ export function ListFormCLS({ columns, data, loading }) {
   const [selectedRow, setSelectedRow] = useState({});
   const [formData, setFormData] = useState({});
   const [resetKey, setResetKey] = useState(Date.now());
+
   const handleRowClick = (row) => {
     console.log("row:", row);
     setFormData({
+      maPK: row.MAPK,
       maKQ: row.MAKQ,
       trangThai: row.TRANGTHAITH,
       moTa: row.MOTA === null ? "" : row.MOTA,
@@ -2882,16 +2890,21 @@ export function ListFormCLS({ columns, data, loading }) {
       dichVu: row.TENDV,
       bacSiThucHien: row.INFOBSTH,
       ngayKham: row.NGAYKHAM,
-      // image: row.IMAGE,
+      image: row.IMAGE,
     });
   };
 
-  console.log("formData:", formData);
-
   const handleUpdate = async (e) => {
     console.log("formData: ", formData);
-    const response = await axios.post("/cls/update-cls", formData);
-
+    const form = new FormData();
+    for (let key in formData) {
+      form.append(key, formData[key]);
+    }
+    const response = await axios.post("/cls/update-cls", form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       dispatch(fetchAllClsAction());
@@ -2909,11 +2922,8 @@ export function ListFormCLS({ columns, data, loading }) {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleImageUpload = (base64Image) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      image: base64Image,
-    }));
+  const handleImageUpload = (files) => {
+    setFormData({ ...formData, image: files[0] });
   };
 
   const handleCancel = () => {
@@ -2995,7 +3005,13 @@ export function ListFormCLS({ columns, data, loading }) {
         aria-hidden="true"
         key={resetKey}
       >
-        <CLSForm formData={formData} handleChange={handleChange} handleUpdate={handleUpdate} handleImageUpload={handleImageUpload} handleCancel={handleCancel}/>
+        <CLSForm
+          formData={formData}
+          handleChange={handleChange}
+          handleUpdate={handleUpdate}
+          handleImageUpload={handleImageUpload}
+          handleCancel={handleCancel}
+        />
       </div>
       {/*Bạn có chắc muốn hủy phiếu CLS*/}
       <div
