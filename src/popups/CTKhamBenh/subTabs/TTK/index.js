@@ -12,7 +12,10 @@ import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTT
 import axios from "../../../../setup/axios";
 import { toast } from "react-toastify";
 import { MdError } from "react-icons/md";
-import { ListForm, ListFormDSB } from "../../../../component/Layout/TabLayout/ListForm";
+import {
+  ListForm,
+  ListFormDSB,
+} from "../../../../component/Layout/TabLayout/ListForm";
 import {
   TTK,
   StatusIcon,
@@ -21,7 +24,8 @@ import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchD
 
 function ThongTinKham() {
   const dispatch = useDispatch();
-  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const selectedPK =
+    useSelector((state) => state.selectedRow?.selectedRow) || {};
   const ttkArray = useSelector((state) => state.ttk?.data) || [];
   const ttk = ttkArray ? ttkArray[0] : {};
   const [showError, setShowError] = useState(false);
@@ -32,15 +36,15 @@ function ThongTinKham() {
 
   const defaultFormData = {
     maPK: ttk?.MAPK,
-    trieuChung: ttk?.TRIEUCHUNGBENH || null,
-    tinhTrangCoThe: ttk?.TINHTRANGCOTHE || null,
-    ketLuan: ttk?.KETLUAN || null,
-    huyetAp: ttk?.HUYETAP || null,
-    chieuCao: ttk?.CHIEUCAO || null,
-    canNang: ttk?.CANNANG || null,
+    trieuChung: ttk?.TRIEUCHUNGBENH === null ? "" : ttk?.TRIEUCHUNGBENH,
+    tinhTrangCoThe: ttk?.TINHTRANGCOTHE === null ? "" : ttk?.TINHTRANGCOTHE,
+    ketLuan: ttk?.KETLUAN === null ? "" : ttk?.KETLUAN,
+    huyetAp: ttk?.HUYETAP === null ? "" : ttk?.HUYETAP,
+    chieuCao: ttk?.CHIEUCAO === null ? "" : ttk?.CHIEUCAO,
+    canNang: ttk?.CANNANG === null ? "" : ttk?.CANNANG,
     benh: benhById,
   };
-  const [formData, setFormData] = useState('');
+  const [formData, setFormData] = useState("");
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -48,7 +52,7 @@ function ThongTinKham() {
     const response = await axios.post("/phieukham/update", formData);
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
-      setFormData(defaultFormData);
+      // setFormData(defaultFormData);
       dispatch(fetchDSDKAction());
       // cancelBtn.disabled = false;
     }
@@ -66,11 +70,11 @@ function ThongTinKham() {
   }, []);
 
   useEffect(() => {
-    setFormData(defaultFormData)
+    setFormData(defaultFormData);
   }, [ttk]);
 
   useEffect(() => {
-    setSelectedBenh(benhById)
+    setSelectedBenh(benhById);
   }, [benhById]);
 
   const columns = [
@@ -89,7 +93,9 @@ function ThongTinKham() {
   };
 
   const handleDeleteBenh = (row) => {
-    const updatedBenh = selectedBenh.filter((item) => item.MABENH !== row.MABENH);
+    const updatedBenh = selectedBenh.filter(
+      (item) => item.MABENH !== row.MABENH
+    );
     setSelectedBenh(updatedBenh);
     setFormData({ ...formData, benh: updatedBenh });
   };
@@ -104,7 +110,7 @@ function ThongTinKham() {
       canNang: null,
     });
     setResetKey(Date.now());
-  }
+  };
 
   return (
     <div className="shadow rounded" key={resetKey}>
@@ -141,13 +147,19 @@ function ThongTinKham() {
           <IFInputText
             title={"Phòng khám"}
             size={3}
-            value={ttk?.TENPHONG ? (ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")") : (null)}
+            value={
+              ttk?.TENPHONG
+                ? ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")"
+                : null
+            }
             onChange={(value) => handleChange(1)}
           />
           <IFInputText
             title={"Bác sĩ khám"}
             size={4}
-            value={ttk?.HOTEN ? ("BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN) : (null)}
+            value={
+              ttk?.HOTEN ? "BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN : null
+            }
             readOnly={true}
           />
         </div>

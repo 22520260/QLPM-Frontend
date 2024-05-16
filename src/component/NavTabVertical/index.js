@@ -1,10 +1,22 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {fetchTTKAction} from "../../redux/action/fetchDataAction/fetchTTKAction"
+import {fetchBenhByIdAction} from "../../redux/action/fetchDataAction/fetchBenhByIdAction"
+import {fetchCTDTByIdAction} from "../../redux/action/fetchDataAction/fetchCTDTById"
 
-function NavTabVertical({ tabsData }) {
+function NavTabVertical({ tabsData, MAPK }) {
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabClick = (index) => {
     setActiveTab(index);
+    if (index === 0 && MAPK && MAPK !== "") {
+      dispatch(fetchTTKAction(MAPK));
+      dispatch(fetchBenhByIdAction(MAPK));
+    }
+    if (index === 2 && MAPK && MAPK !== "") {
+      dispatch(fetchCTDTByIdAction(MAPK));
+    }
   };
 
   const renderActiveTabContent = () => {

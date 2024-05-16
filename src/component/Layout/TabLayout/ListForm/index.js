@@ -2733,7 +2733,7 @@ export function ListFormKhamBenh({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTKB} />
+                <NavTabVertical tabsData={tabsDataCTKB} MAPK={selectedRow?.MAPK}/>
               </div>
             </div>
             {/* <div className="modal-footer">
