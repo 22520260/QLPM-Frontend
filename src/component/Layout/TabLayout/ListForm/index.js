@@ -56,6 +56,7 @@ import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon, TTCLS, TTK } from "./StatusIcon";
 import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
 
+import { RiErrorWarningFill } from "react-icons/ri";
 const { format } = require("date-fns");
 
 export function ListForm({ columns, data, loading }) {
@@ -98,7 +99,13 @@ export function ListForm({ columns, data, loading }) {
   );
 }
 
-export function ListFormDV({ columns, data, loading, handleDelete, buttonColor }) {
+export function ListFormDV({
+  columns,
+  data,
+  loading,
+  handleDelete,
+  buttonColor,
+}) {
   function handleRowClick(row) {}
 
   return (
@@ -134,7 +141,9 @@ export function ListFormDV({ columns, data, loading, handleDelete, buttonColor }
                 ))}
                 <td>
                   <button
-                    className={`btn ${buttonColor ? buttonColor : "btn-danger"} rounded-circle`}
+                    className={`btn ${
+                      buttonColor ? buttonColor : "btn-danger"
+                    } rounded-circle`}
                     onClick={() => handleDelete(rowIndex)}
                   >
                     <MdDeleteForever />
@@ -2786,7 +2795,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
   );
 }
 
-function CLSForm({ formData, handleChange, handleImageUpload }) {
+const CLSForm = ({
+  formData,
+  handleChange,
+  handleUpdate,
+  handleImageUpload,
+  handleCancel,
+}) => {
   return (
     // <div className="modal-dialog modal-dialog-scrollable">
     //   <div className="modal-content">
@@ -2845,35 +2860,54 @@ function CLSForm({ formData, handleChange, handleImageUpload }) {
                   value={formData.KETLUANCLS ? formData.KETLUANCLS : ""}
                   onChange={(value) => handleChange("KETLUANCLS", value)}
                 />
-                {/* <TextArea
-                  title={"Đề nghị từ chuyên gia"}
-                  size={6}
-                  row={3}
-                  value={formData}
-                  onChange={(value) => handleChange("ketLuanCls", value)}
-                /> */}
               </div>
             </div>
             <div className="col col-md-6">
-              <ImageUpload onImageUpload={handleImageUpload} />
+              {/* khong biet lay mapk*/}
+              {formData.MAPK && (
+                <ImageUpload
+                  maPK={formData.MAPK}
+                  onImageUpload={handleImageUpload}
+                />
+              )}
             </div>
           </div>
         </div>
       </div>
     </>
+    // {/* <div className="modal-footer">
+    //   <button
+    //     type="button"
+    //     className="btn btn-secondary"
+    //     data-bs-dismiss="modal"
+    //     id="closeBtn10"
+    //     onClick={handleCancel}
+    //   >
+    //     Đóng
+    //   </button>
+    //   <button
+    //     type="button"
+    //     className="btn btn-primary"
+    //     onClick={handleUpdate}
+    //   >
+    //     Lưu những thay đổi
+    //   </button>
+    // </div> */}
     //   </div>
     // </div>
   );
-}
+};
 
 export function ListFormCLS({ columns, data, loading }) {
   const dispatch = useDispatch();
   const [selectedRow, setSelectedRow] = useState({});
   const [formData, setFormData] = useState({});
   const [resetKey, setResetKey] = useState(Date.now());
+
   const handleRowClick = (row) => {
     console.log("row:", row);
     setFormData({
+      MAPK: row.MAPK,
       MAKQ: row.MAKQ,
       TRANGTHAITH: row.TRANGTHAITH,
       MOTA: row.MOTA === null ? "" : row.MOTA,
@@ -2883,16 +2917,21 @@ export function ListFormCLS({ columns, data, loading }) {
       TENDV: row.TENDV,
       INFOBSTH: row.INFOBSTH,
       NGAYKHAM: row.NGAYKHAM,
-      // image: row.IMAGE,
+      IMAGE: row.IMAGE,
     });
   };
 
-  console.log("formData:", formData);
-
   const handleUpdate = async (e) => {
     console.log("formData: ", formData);
-    const response = await axios.post("/cls/update-cls", formData);
-
+    const form = new FormData();
+    for (let key in formData) {
+      form.append(key, formData[key]);
+    }
+    const response = await axios.post("/cls/update-cls", form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       dispatch(fetchAllClsAction());
@@ -2910,11 +2949,8 @@ export function ListFormCLS({ columns, data, loading }) {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleImageUpload = (base64Image) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      image: base64Image,
-    }));
+  const handleImageUpload = (files) => {
+    setFormData({ ...formData, image: files[0] });
   };
 
   const handleCancel = () => {
@@ -3002,6 +3038,42 @@ export function ListFormCLS({ columns, data, loading }) {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
         key={resetKey}
+      >
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <CLSForm
+              formData={formData}
+              handleChange={handleChange}
+              handleImageUpload={handleImageUpload}
+            />
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                id="closeBtn10"
+                onClick={handleCancel}
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleUpdate}
+              >
+                Lưu những thay đổi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*Bạn có chắc muốn hủy phiếu CLS*/}
+      <div
+        class="modal fade"
+        id="huyPhieu"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
       >
         <div class="modal-dialog modal-dialog-scrollable">
           <div class="modal-content">
