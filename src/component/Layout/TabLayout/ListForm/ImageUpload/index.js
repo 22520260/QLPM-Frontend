@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
 import { FaTrash, FaExpand } from "react-icons/fa";
-import { fetchDsClsByIdAction } from "../../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
-export const ImageUpload = ({ maPK, onImageUpload }) => {
+export const ImageUpload = ({ imageUrl, onImageUpload }) => {
   const [previewUrl, setPreviewUrl] = useState("");
   const [files, setFiles] = useState([]);
   const [msg, setMsg] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("maPK::", maPK);
-    const res = dispatch(fetchDsClsByIdAction(maPK));
-    res.then(({ payload }) => {
-      const image = payload.data[0].IMAGE;
-      setPreviewUrl(image);
-    });
-  }, [maPK]);
+    if (imageUrl && imageUrl !== "") {
+      setPreviewUrl(imageUrl);
+    } else {
+      setPreviewUrl("");
+    }
+
+  }, [imageUrl]);
 
   function handleUpload() {
     const cancelBtn = document.getElementById("closeBtn");
 
     if (files.length === 0) {
-      setMsg("No file selected");
+      toast.error("Chưa chọn file!");
       return;
     }
 

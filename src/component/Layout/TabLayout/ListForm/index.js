@@ -2866,7 +2866,7 @@ const CLSForm = ({
               {/* khong biet lay mapk*/}
               {formData.MAPK && (
                 <ImageUpload
-                  maPK={formData.MAPK}
+                  imageUrl={formData.IMAGE}
                   onImageUpload={handleImageUpload}
                 />
               )}
@@ -2917,7 +2917,7 @@ export function ListFormCLS({ columns, data, loading }) {
       TENDV: row.TENDV,
       INFOBSTH: row.INFOBSTH,
       NGAYKHAM: row.NGAYKHAM,
-      IMAGE: row.IMAGE,
+      IMAGE: (!row.IMAGE || row.IMAGE === null) ? null : row.IMAGE,
     });
   };
 
@@ -2951,6 +2951,7 @@ export function ListFormCLS({ columns, data, loading }) {
 
   const handleImageUpload = (files) => {
     setFormData({ ...formData, image: files[0] });
+    toast.success('Cập nhật ảnh thành công')
   };
 
   const handleCancel = () => {
