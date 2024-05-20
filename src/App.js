@@ -9,11 +9,20 @@ import privateRoutes from "./routes/privateRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserAccountAction } from "./redux/action/fetchDataAction/fetchUserAccountAction";
 import store from "./redux/store";
-
+import io from "socket.io-client";
+import { fetchDSDKAction } from "./redux/action/fetchDataAction/fetchDSDKAction";
+import socket from "./setup/socket";
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
+    // socket.emit("send-message", {message: 'HELLO LO LO CC'});
+    socket.on("receive-message", (data)=>{
+      dispatch(fetchDSDKAction());
+      // alert(data.message);
+    })
+
     if (window.location.pathname !== "/login") {
       dispatch(fetchUserAccountAction());
     }

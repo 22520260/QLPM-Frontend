@@ -55,6 +55,7 @@ import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fe
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon, TTCLS, TTK } from "./StatusIcon";
 import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
+import socket from "../../../../setup/socket";
 
 import { RiErrorWarningFill } from "react-icons/ri";
 const { format } = require("date-fns");
@@ -269,6 +270,7 @@ export function ListFormDSDK({ columns, data, loading }) {
         toast.success("Thanh toán hóa đơn thành công");
         dispatch(fetchDSHDByIdAction(selectedRow?.MAPK));
         dispatch(fetchDSDKAction());
+        socket.emit("send-message", {message: 'Thanh toan thanh cong'});
       }
     } catch (error) {
       console.log(error);

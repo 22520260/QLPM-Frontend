@@ -15,6 +15,7 @@ import { fetchAllBenhNhanAction } from "../../../../redux/action/fetchDataAction
 import { toast } from "react-toastify";
 import { ListFormDV } from "../../../../component/Layout/TabLayout/ListForm";
 import { MdError } from "react-icons/md";
+import socket from "../../../../setup/socket"
 
 function DangKyKham() {
   const dispatch = useDispatch();
@@ -138,6 +139,7 @@ function DangKyKham() {
         const response = await axios.post("/phieukham/insert-just-pk", bodyReq);
         if (response.status === 200) {
           toast.success("Thêm phiếu khám thành công!!!");
+          socket.emit("send-message", {message: 'Them phieu kham'});
         }
       } catch (error) {
         toast.error("Thêm phiếu khám không thành công");
