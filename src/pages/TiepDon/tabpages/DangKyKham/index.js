@@ -139,7 +139,7 @@ function DangKyKham() {
         const response = await axios.post("/phieukham/insert-just-pk", bodyReq);
         if (response.status === 200) {
           toast.success("Thêm phiếu khám thành công!!!");
-          socket.emit("send-message", {message: 'Them phieu kham'});
+          socket.emit("send-message", {actionName: 'DSDK'});
         }
       } catch (error) {
         toast.error("Thêm phiếu khám không thành công");
@@ -189,6 +189,7 @@ function DangKyKham() {
           if (response2.status === 200) {
             maBNinserted = response2.data.MABN;
             toast.success("Thêm bệnh nhân thành công!!!");
+            socket.emit("send-message", {actionName: 'DSBN'});
             await insertPK(maBNinserted, maHDinserted);
           }
         } catch (error) {

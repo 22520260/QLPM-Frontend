@@ -94,7 +94,6 @@ function CanLamSang() {
 
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
-
   return (
     <>
       <h1>Cận lâm sàn</h1>

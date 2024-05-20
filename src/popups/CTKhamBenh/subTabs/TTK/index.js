@@ -21,6 +21,7 @@ import {
   StatusIcon,
 } from "../../../../component/Layout/TabLayout/ListForm/StatusIcon";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import socket from "../../../../setup/socket";
 
 function ThongTinKham() {
   const dispatch = useDispatch();
@@ -55,6 +56,7 @@ function ThongTinKham() {
       // setFormData(defaultFormData);
       dispatch(fetchDSDKAction());
       // cancelBtn.disabled = false;
+      socket.emit("send-message", {actionName: 'DSDK'});
     }
     if (response && response.data && response.data.errcode !== 0) {
       toast.error(response.data.message);

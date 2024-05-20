@@ -1,4 +1,23 @@
 import _ from "lodash";
+import { fetchDSDKAction } from "../redux/action/fetchDataAction/fetchDSDKAction";
+import { fetchDSHDByIdAction } from "../redux/action/fetchDataAction/fetchHoaDonAction";
+import { fetchAllClsAction } from "../redux/action/fetchDataAction/fetchCLSAction";
+import { fetchAllBenhNhanAction } from "../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+
+export const selectAction = (actionName) => {
+  switch (actionName) {
+    case "DSDK":
+      return fetchDSDKAction;
+    case "DSCLS":
+      return fetchAllClsAction;
+    case "DSHD":
+      return fetchDSHDByIdAction;
+    case "DSBN":
+      return fetchAllBenhNhanAction;
+    default:
+      return ()=>{};
+  }
+};
 
 export const returnPagiationRange = (totalPages, page, limit, siblings) => {
   let totalPagesNotInArray = 7 + siblings;
@@ -106,6 +125,6 @@ export function getBase64(file) {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = (error) => reject(error);
   });
 }
