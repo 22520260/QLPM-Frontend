@@ -20,10 +20,12 @@ function App() {
   useEffect(() => {
     socket.on("receive-message", (data) => {
       const fetchAction = selectAction(data?.actionName);
-      data?.maID === ""
+      if (fetchAction !== null) {
+        data?.maID === ""
         ? dispatch(fetchAction())
         : dispatch(fetchAction(data.maID));
-      // toast(`Người dùng ${data.id} vừa thực hiện thay đổi`)
+        // toast(`Người dùng ${data.id} vừa thực hiện thay đổi`)
+      }
     });
 
     if (window.location.pathname !== "/login") {
