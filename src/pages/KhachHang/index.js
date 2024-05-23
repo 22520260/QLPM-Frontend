@@ -25,9 +25,10 @@ function DanhSachBenhNhan() {
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã khách hàng", key: "MABN" },
+    { title: "Mã KH", key: "MABN" },
     { title: "CCCD", key: "CCCD" },
     { title: "Họ tên", key: "HOTEN" },
+    { title: "Email", key: "EMAIL" },
     { title: "Giới tính", key: "GIOITINH" },
     { title: "Ngày sinh", key: "NGAYSINH" },
     { title: "Số điện thoại", key: "SDT" },

@@ -143,8 +143,11 @@ const LoaiBenh = () => {
   }, [year, month, dataset]);
 
   return (
-    <div>
-      <div className="row align-items-end">
+    <div className="shadow rounded pt-4">
+      <h2 className="d-flex justify-content-center">
+        Biểu Đồ Thống Kê Loại Bệnh
+      </h2>
+      <div className="row d-flex justify-content-center mb-4">
         <IFSelect
           title="Tháng"
           size={1}
@@ -152,9 +155,7 @@ const LoaiBenh = () => {
             month: `${String(i + 1).padStart(2, "0")}`,
           }))}
           def={"Chọn"}
-          onChange={(value) =>
-            setMonth(value === "Chọn" ? null : value)
-          }
+          onChange={(value) => setMonth(value === "Chọn" ? null : value)}
           value={month}
           keyObj="month"
           showObj={"month"}
@@ -174,7 +175,9 @@ const LoaiBenh = () => {
 
       <div className="row">
         <div className="col col-md-6">
-          <h2>Thống kê trong cả năm {year}</h2>
+          <h4 className="d-flex justify-content-center">
+            Thống kê loại bệnh trong cả năm {year}
+          </h4>
           <ResponsiveChartContainer
             series={[
               {
@@ -216,7 +219,7 @@ const LoaiBenh = () => {
               }}
             />
             <ChartsYAxis
-              label="Cường độ trong tháng"
+              label="Tổng cường độ"
               labelStyle={{ translate: "-25px 0px" }}
             />
             <ChartsTooltip />
@@ -224,9 +227,9 @@ const LoaiBenh = () => {
         </div>
         {month && (
           <div className="col col-md-6">
-            <h2>
-              Thống kê trong tháng {month}/{year}
-            </h2>
+            <h4 className="d-flex justify-content-center">
+              Thống kê loại bệnh trong tháng {month}/{year}
+            </h4>
             <ResponsiveChartContainer
               series={[
                 {

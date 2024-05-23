@@ -64,9 +64,11 @@ function DSTaiKhoan() {
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
   useEffect(() => {
-    const filteredGroupUsers = groupUsersRaw.filter(item => item.MANHOM !== 1)
-    console.log('filteredGroupUsers', filteredGroupUsers);
-    setGroupUsers(filteredGroupUsers)
+    const filteredGroupUsers = groupUsersRaw.filter(
+      (item) => item.MANHOM !== 1 && item.MANHOM !== 4
+    );
+    console.log("filteredGroupUsers", filteredGroupUsers);
+    setGroupUsers(filteredGroupUsers);
   }, [groupUsersRaw]);
 
   useEffect(() => {

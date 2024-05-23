@@ -31,7 +31,6 @@ function CanLamSang() {
 
   useEffect(() => {
     dispatch(fetchAllClsAction());
-
   }, []);
 
   useEffect(() => {
@@ -96,7 +95,7 @@ function CanLamSang() {
 
   return (
     <>
-      <h1>Cận lâm sàn</h1>
+      <h1 className="container-fluid">Cận lâm sàng</h1>
       <div className="container-fluid">
         <div className="row py-2">
           <IFNgay
