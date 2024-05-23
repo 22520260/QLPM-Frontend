@@ -245,7 +245,7 @@ export function ListFormDSDK({ columns, data, loading }) {
 
       if (response2.status === 200) {
         toast.success("Cập nhật trạng thái phiếu khám thành công");
-        socket.emit("send-message", {actionName: 'DSDK'});
+        socket.emit("send-message", { actionName: "DSDK" });
       }
     } catch (error) {
       console.log(error);
@@ -261,7 +261,7 @@ export function ListFormDSDK({ columns, data, loading }) {
     try {
       const response = await axios.post("/hoadon/thanhtoan", {
         ...selectedHD,
-        maLT: leTan.account.userInfo[0].MALT,
+        maLT: leTan?.account?.userInfo[0]?.MALT,
         tttt: "Đã thanh toán",
         tdtt: tdtt,
         pttt: pttt,
@@ -271,8 +271,11 @@ export function ListFormDSDK({ columns, data, loading }) {
         toast.success("Thanh toán hóa đơn thành công");
         dispatch(fetchDSHDByIdAction(selectedRow?.MAPK));
         dispatch(fetchDSDKAction());
-        socket.emit("send-message", {actionName: 'DSHD', maID: selectedRow?.MAPK});
-        socket.emit("send-message", {actionName: 'DSDK'});
+        socket.emit("send-message", {
+          actionName: "DSHD",
+          maID: selectedRow?.MAPK,
+        });
+        socket.emit("send-message", { actionName: "DSDK" });
       }
     } catch (error) {
       console.log(error);
@@ -436,7 +439,7 @@ export function ListFormDSDK({ columns, data, loading }) {
                       title={"Người bán"}
                       value={
                         selectedHD.TTTT === "Chưa thanh toán"
-                          ? leTan.account.userInfo[0].HOTEN
+                          ? (leTan?.account?.userInfo ? leTan.account.userInfo[0].HOTEN : "")
                           : selectedHD.TENLT
                       }
                     />
@@ -2942,7 +2945,7 @@ export function ListFormCLS({ columns, data, loading }) {
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       dispatch(fetchAllClsAction());
-      socket.emit("send-message", {actionName: "DSCLS"});
+      socket.emit("send-message", { actionName: "DSCLS" });
       const closeBtn = document.getElementById("closeBtn10");
       if (closeBtn) {
         closeBtn.click();

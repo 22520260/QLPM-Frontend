@@ -15,7 +15,7 @@ export const selectAction = (actionName) => {
     case "DSBN":
       return fetchAllBenhNhanAction;
     default:
-      return ()=>{};
+      return null;
   }
 };
 
