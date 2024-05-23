@@ -53,21 +53,27 @@ function LichSuKham() {
 
   return (
     <>
-      {lichSuKham.length === 0 ? (
+      {lichSuKham.length === 0 || lichSuKham.filter(phieuKham => phieuKham.TRANGTHAITH === "Đã hoàn thành").length === 0 ? (
         <h2>Không có lịch sử khám</h2>
       ) : (
         <div className="shadow rounded">
           <ul className="nav nav-pills list-group-horizontal-scroll position-relative overflow-auto">
-            {lichSuKham?.map((phieuKham, index) => (
-              <li className="nav-item mr-3 shadow rounded" key={index}>
-                <a
-                  className={`nav-link ${activeTab === index ? "active" : ""}`}
-                  onClick={() => handleTabClick(phieuKham, index)}
-                >
-                  {"PK" + phieuKham.MAPK + " - " + phieuKham.NGAYKHAMMIN}
-                </a>
-              </li>
-            ))}
+            {lichSuKham?.map((phieuKham, index) => {
+              if (phieuKham.TRANGTHAITH === "Đã hoàn thành") {
+                return (
+                  <li className="nav-item mr-3 shadow rounded" key={index}>
+                    <a
+                      className={`nav-link ${
+                        activeTab === index ? "active" : ""
+                      }`}
+                      onClick={() => handleTabClick(phieuKham, index)}
+                    >
+                      {"PK" + phieuKham.MAPK + " - " + phieuKham.NGAYKHAMMIN}
+                    </a>
+                  </li>
+                );
+              }
+            })}
           </ul>
 
           <div className="px-3 py-2 my-1 bg-primary rounded-top">

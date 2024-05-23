@@ -55,6 +55,7 @@ import { fetchBenhByIdAction } from "../../../../redux/action/fetchDataAction/fe
 import HoaDon from "../../../../popups/CTPhieuKham/subTabs/HD";
 import { StatusIcon, TTCLS, TTK } from "./StatusIcon";
 import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
+import socket from "../../../../setup/socket";
 
 import { RiErrorWarningFill } from "react-icons/ri";
 const { format } = require("date-fns");
@@ -244,6 +245,7 @@ export function ListFormDSDK({ columns, data, loading }) {
 
       if (response2.status === 200) {
         toast.success("Cập nhật trạng thái phiếu khám thành công");
+        socket.emit("send-message", {actionName: 'DSDK'});
       }
     } catch (error) {
       console.log(error);
@@ -269,6 +271,8 @@ export function ListFormDSDK({ columns, data, loading }) {
         toast.success("Thanh toán hóa đơn thành công");
         dispatch(fetchDSHDByIdAction(selectedRow?.MAPK));
         dispatch(fetchDSDKAction());
+        socket.emit("send-message", {actionName: 'DSHD', maID: selectedRow?.MAPK});
+        socket.emit("send-message", {actionName: 'DSDK'});
       }
     } catch (error) {
       console.log(error);
@@ -2938,6 +2942,7 @@ export function ListFormCLS({ columns, data, loading }) {
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       dispatch(fetchAllClsAction());
+      socket.emit("send-message", {actionName: "DSCLS"});
       const closeBtn = document.getElementById("closeBtn10");
       if (closeBtn) {
         closeBtn.click();

@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DefaultLayout from "./component/Layout/DefaultLayout";
 import { Fragment, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./helpers/authHelper";
 import publicRoutes from "./routes/publicRoutes";
@@ -9,11 +9,23 @@ import privateRoutes from "./routes/privateRoutes";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserAccountAction } from "./redux/action/fetchDataAction/fetchUserAccountAction";
 import store from "./redux/store";
-
+import io from "socket.io-client";
+import { fetchDSDKAction } from "./redux/action/fetchDataAction/fetchDSDKAction";
+import socket from "./setup/socket";
+import { selectAction } from "./utils/appUtils";
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
+    socket.on("receive-message", (data) => {
+      const fetchAction = selectAction(data?.actionName);
+      data?.maID === ""
+        ? dispatch(fetchAction())
+        : dispatch(fetchAction(data.maID));
+      // toast(`Người dùng ${data.id} vừa thực hiện thay đổi`)
+    });
+
     if (window.location.pathname !== "/login") {
       dispatch(fetchUserAccountAction());
     }
@@ -21,7 +33,7 @@ function App() {
 
   const isLoading = useSelector((state) => state.auth?.isLoading);
   const user = useSelector((state) => state.auth?.user);
-  console.log('user', user)
+  console.log("user", user);
 
   return (
     <>

@@ -14,6 +14,7 @@ import { fetchAllThuocKeDonAction } from "../../../../redux/action/fetchDataActi
 import { fetchCTDTByIdAction } from "../../../../redux/action/fetchDataAction/fetchCTDTById";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
+import socket from "../../../../setup/socket";
 
 function DonThuoc() {
   const dispatch = useDispatch();
@@ -244,11 +245,13 @@ function DonThuoc() {
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
         toast.success("Thêm hóa đơn và đơn thuốc thành công");
+        socket.emit("send-message", {actionName: 'DSHD', maID: selectedPK.MAPK});
         const isComplete = await insertCTDT(medicines, maDTinserted);
         if (isComplete === true) {
           setMedicines([]);
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
           dispatch(fetchDSDKAction());
+          socket.emit("send-message", {actionName: 'DSDK'});
           setFormula("");
           setUnit("");
           setDay(0);

@@ -11,6 +11,7 @@ import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
 import { ListFormDV, ListFormDVCLS } from "../../../../component/Layout/TabLayout/ListForm";
+import socket from "../../../../setup/socket";
 
 function DichVu() {
   const dispatch = useDispatch();
@@ -97,10 +98,13 @@ function DichVu() {
         if (response1.status === 200) {
           maHDinserted = response1.data.MAHD;
           toast.success("Thêm hóa đơn thành công!!!");
+          socket.emit("send-message", {actionName: 'DSHD', maID: selectedPK.MAPK});
           const isComplete = await insertCLS(selectedPK?.MAPK, maHDinserted);
           if (isComplete) {
             dispatch(fetchDsClsByIdAction(selectedPK.MAPK));
             dispatch(fetchDSDKAction());
+            socket.emit("send-message", {actionName: 'DSDK'});
+            socket.emit("send-message", {actionName: 'DSCLS'});
             setSelectedServices([]);
           }
         }
