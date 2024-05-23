@@ -27,6 +27,7 @@ import getThongKeDichVuCLSReducer from './slice/getDataSlice/getThongKeDichVuCLS
 import getThongKeBenhReducer from './slice/getDataSlice/getThongKeBenhSlice'
 import getThongKeDoanhThuReducer from './slice/getDataSlice/getThongKeDoanhThuSlice'
 import getThongKeChatLuongReducer from './slice/getDataSlice/getThongKeChatLuongSlice'
+import getThongKeThuocReducer from './slice/getDataSlice/getThongKeThuocSlice'
 
 
 
@@ -60,6 +61,7 @@ export default configureStore({
     tkBenh: getThongKeBenhReducer,
     tkDoanhThu: getThongKeDoanhThuReducer,
     tkChatLuong: getThongKeChatLuongReducer,
+    tkThuoc: getThongKeThuocReducer
   },
   devTools: true,
 })

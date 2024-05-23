@@ -21,8 +21,7 @@ function DangKyKham() {
 
   const services = useSelector((state) => state.services?.data) || [];
 
-  const patients =
-    useSelector((state) => state.fetchAllBenhNhan?.data) || [];
+  const patients = useSelector((state) => state.fetchAllBenhNhan?.data) || [];
   const doctors = useSelector((state) => state.fetchAllBacSi?.data) || [];
   const leTan = useSelector((state) => state.auth?.user) || {};
 
@@ -34,6 +33,7 @@ function DangKyKham() {
 
   const formDataDefault = {
     hoTen: "",
+    email: "",
     gioiTinh: 0,
     diaChi: "",
     ngaySinh: null,
@@ -51,6 +51,7 @@ function DangKyKham() {
 
   const defaultObjValidInput = {
     isValidHoTen: true,
+    isValidEmail: true,
     isValidCCCD: true,
     isValidBacSiKham: true,
     isValidDichVu: true,
@@ -82,6 +83,7 @@ function DangKyKham() {
         setFormData({
           ...formDataDefault,
           hoTen: patient.HOTEN,
+          email: patient.EMAIL,
           gioiTinh: patient.GIOITINH,
           diaChi: patient.DIACHI,
           ngaySinh: new Date(patient.NGAYSINH),
@@ -153,6 +155,11 @@ function DangKyKham() {
         toast.error("Chưa nhập họ tên");
         return;
       }
+      if (formData.email === "") {
+        setObjValidInput({ ...defaultObjValidInput, isValidEmail: false });
+        toast.error("Chưa nhập email");
+        return;
+      }
       if (!formData.cccd) {
         setObjValidInput({ ...defaultObjValidInput, isValidCCCD: false });
         toast.error("Chưa nhập CCCD");
@@ -201,7 +208,6 @@ function DangKyKham() {
       setFormData(formDataDefault);
       setSelectedServices([]);
       setAge(null);
-
     } else {
       setObjValidInput({ ...defaultObjValidInput, isValidDichVu: false });
       toast.error("Chưa thêm dịch vụ nào.");
@@ -242,10 +248,18 @@ function DangKyKham() {
                 title={"Họ và Tên"}
                 valid={objValidInput.isValidHoTen}
                 value={formData.hoTen}
-                size={4}
+                size={3}
                 options={patients}
                 required={true}
                 onChange={(value) => handleChange("hoTen", value)}
+              />
+              <IFInputText
+                title={"Email"}
+                valid={objValidInput.isValidEmail}
+                value={formData.email}
+                size={3}
+                required={true}
+                onChange={(value) => handleChange("email", value)}
               />
               <IFSelect
                 title={"Giới tính"}
@@ -262,7 +276,7 @@ function DangKyKham() {
               />
               <IFInputText
                 title={"Địa chỉ"}
-                size={6}
+                size={4}
                 valid={true}
                 onChange={(value) => handleChange("diaChi", value)}
                 value={formData.diaChi}
@@ -351,7 +365,10 @@ function DangKyKham() {
                 title={"Nhập dịch vụ"}
                 valid={objValidInput.isValidDichVu}
                 size={6}
-                options={services.filter(service => service.MALOAIDV === 100 || service.MALOAIDV === 102)}
+                options={services.filter(
+                  (service) =>
+                    service.MALOAIDV === 100 || service.MALOAIDV === 102
+                )}
                 onChange={(e) => {
                   const value = e.target.value;
                   const selected = services.find(

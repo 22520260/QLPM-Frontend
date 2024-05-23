@@ -926,7 +926,7 @@ export function ListFormDSTK({ columns, data, loading }) {
 
   useEffect(() => {
     const filteredGroupUsers = groupUsersRaw.filter(
-      (item) => item.MANHOM !== 1
+      (item) => item.MANHOM !== 1 && item.MANHOM !== 4
     );
     setGroupUsers(filteredGroupUsers);
   }, [groupUsersRaw]);
@@ -2733,7 +2733,10 @@ export function ListFormKhamBenh({ columns, data, loading }) {
 
             <div className="modal-body ">
               <div className="container-fluid">
-                <NavTabVertical tabsData={tabsDataCTKB} MAPK={selectedRow?.MAPK}/>
+                <NavTabVertical
+                  tabsData={tabsDataCTKB}
+                  MAPK={selectedRow?.MAPK}
+                />
               </div>
             </div>
             {/* <div className="modal-footer">
@@ -2917,7 +2920,7 @@ export function ListFormCLS({ columns, data, loading }) {
       TENDV: row.TENDV,
       INFOBSTH: row.INFOBSTH,
       NGAYKHAM: row.NGAYKHAM,
-      IMAGE: (!row.IMAGE || row.IMAGE === null) ? null : row.IMAGE,
+      IMAGE: !row.IMAGE || row.IMAGE === null ? null : row.IMAGE,
     });
   };
 
@@ -2951,7 +2954,7 @@ export function ListFormCLS({ columns, data, loading }) {
 
   const handleImageUpload = (files) => {
     setFormData({ ...formData, image: files[0] });
-    toast.success('Cập nhật ảnh thành công')
+    toast.success("Cập nhật ảnh thành công");
   };
 
   const handleCancel = () => {
@@ -3190,8 +3193,9 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
     dispatch(selectRow(row));
     setFormData({
       maBN: row.MABN,
-      CCCD: row.CCCD,
-      tenBN: row.HOTEN,
+      hoTen: row.HOTEN,
+      email: row.EMAIL,
+      cccd: row.CCCD,
       gioiTinh: row.GIOITINH,
       ngaySinh: deFormatDate(row.NGAYSINH),
       soDienThoai: row.SDT,
@@ -3202,7 +3206,8 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
   };
 
   const defaultObjValidInput = {
-    isValidTenBN: true,
+    isValidHoTen: true,
+    isValidEmail: true,
     isValidCCCD: true,
     isValidGioiTinh: true,
     isValidNgaySinh: true,
@@ -3217,9 +3222,14 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
   const handleUpdate = async (e) => {
     e.preventDefault();
     setObjValidInput(defaultObjValidInput);
-    if (!formData.tenBN) {
-      setObjValidInput({ ...objValidInput, isValidTenBN: false });
+    if (!formData.hoTen) {
+      setObjValidInput({ ...objValidInput, isValidHoTen: false });
       toast.error("Chưa nhập tên bệnh nhân");
+      return;
+    }
+    if (!formData.email) {
+      setObjValidInput({ ...objValidInput, isValidEmail: false });
+      toast.error("Chưa nhập email");
       return;
     }
     if (!formData.gioiTinh || formData.gioiTinh === 0) {
@@ -3364,17 +3374,25 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                   <IFInputText
                     title={"Mã KH"}
                     readOnly={true}
-                    size={3}
+                    size={2}
                     value={formData.maBN}
                     valid={objValidInput.isValidGioiTinh}
                   />
                   <IFInputText
                     title={"Tên khách hàng"}
-                    size={5}
+                    size={4}
                     required={"true"}
-                    value={formData.tenBN}
-                    valid={objValidInput.isValidTenBN}
-                    onChange={(value) => handleChange("tenBN", value)}
+                    value={formData.hoTen}
+                    valid={objValidInput.isValidHoTen}
+                    onChange={(value) => handleChange("hoTen", value)}
+                  />
+                  <IFInputText
+                    title={"Email"}
+                    size={4}
+                    required={"true"}
+                    value={formData.email}
+                    valid={objValidInput.isValidEmail}
+                    onChange={(value) => handleChange("email", value)}
                   />
                   <IFSelect
                     title={"Giới tính"}
@@ -3412,7 +3430,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                     title={"CCCD"}
                     size={4}
                     required={"true"}
-                    value={formData.CCCD}
+                    value={formData.cccd}
                     valid={objValidInput.isValidCCCD}
                     onChange={(value) => handleChange("cccd", value)}
                   />
