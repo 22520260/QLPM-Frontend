@@ -31,7 +31,7 @@ function LichSuKham() {
     { title: "Liều dùng", key: "GHICHU" },
     { title: "Đơn vị thuốc", key: "TENDONVI" },
     { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
-    { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
+    { title: "Đơn giá", key: "GIABANLUCKE" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
   ];
 
@@ -161,7 +161,7 @@ function LichSuKham() {
                 columns={columnsDT}
                 data={existedCTDT.map((item) => ({
                   ...item,
-                  thanhTien: item.GIABAN * item.SOLUONGTHUOC,
+                  thanhTien: item.GIABANLUCKE * item.SOLUONGTHUOC,
                 }))}
                 loading={false}
               />
