@@ -37,7 +37,7 @@ function DonThuoc() {
     GHICHU: "",
     TENDONVI: "",
     SOLUONGTHUOC: 0,
-    GIABAN: 0,
+    GIABANLUCKE: 0,
     thanhTien: 0,
     soLuongTon: 0,
     // cần sửa lại code để 2 trường này cập nhật tự động khi bs nhập liều dùng
@@ -60,7 +60,7 @@ function DonThuoc() {
           TENTHUOC: thuocExisted.TENTHUOC,
           THANHPHAN: thuocExisted.THANHPHAN,
           TENDONVI: thuocExisted.TENDONVI,
-          GIABAN: thuocExisted.GIABAN,
+          GIABANLUCKE: thuocExisted.GIABAN,
           soLuongTon: thuocExisted.SOLUONGTON,
         });
       } else {
@@ -153,7 +153,7 @@ function DonThuoc() {
 
       let bien = totalDailyDose * parseInt(day);
       newRowData.SOLUONGTHUOC = bien;
-      newRowData.thanhTien = bien * newRowData.GIABAN;
+      newRowData.thanhTien = bien * newRowData.GIABANLUCKE;
     }
 
     // Add dose parts if any
@@ -166,7 +166,11 @@ function DonThuoc() {
       dosageText += " " + note.trim() + ".";
     }
     newRowData.GHICHU = dosageText.trim();
-    setRowData({...newRowData, SOLANUONG: soLanUongTrongNgay, SOLUONGUONG: totalDailyDose});
+    setRowData({
+      ...newRowData,
+      SOLANUONG: soLanUongTrongNgay,
+      SOLUONGUONG: totalDailyDose,
+    });
   };
 
   const handleAddMedicine = () => {
@@ -182,7 +186,7 @@ function DonThuoc() {
       GHICHU: "",
       TENDONVI: "",
       SOLUONGTHUOC: 0,
-      GIABAN: 0,
+      GIABANLUCKE: 0,
       thanhTien: 0,
       soLuongTon: 0,
       SOLANUONG: 0,
@@ -197,7 +201,7 @@ function DonThuoc() {
     { title: "Liều dùng", key: "GHICHU" },
     { title: "Đơn vị thuốc", key: "TENDONVI" },
     { title: "Số lượng", key: "SOLUONGTHUOC" },
-    { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
+    { title: "Đơn giá", key: "GIABANLUCKE" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
   ];
 
@@ -245,13 +249,16 @@ function DonThuoc() {
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
         toast.success("Thêm hóa đơn và đơn thuốc thành công");
-        socket.emit("send-message", {actionName: 'DSHD', maID: selectedPK.MAPK});
+        socket.emit("send-message", {
+          actionName: "DSHD",
+          maID: selectedPK.MAPK,
+        });
         const isComplete = await insertCTDT(medicines, maDTinserted);
         if (isComplete === true) {
           setMedicines([]);
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
           dispatch(fetchDSDKAction());
-          socket.emit("send-message", {actionName: 'DSDK'});
+          socket.emit("send-message", { actionName: "DSDK" });
           setFormula("");
           setUnit("");
           setDay(0);
@@ -314,7 +321,7 @@ function DonThuoc() {
             title={"Đơn giá"}
             size={3}
             readOnly={"true"}
-            value={rowData.GIABAN}
+            value={rowData.GIABANLUCKE}
           />
           <IFInputText
             title={"Ghi chú (VD: Sau ăn, trước ăn,...)"}
@@ -370,7 +377,7 @@ function DonThuoc() {
               ? medicines
               : existedCTDT.map((item) => ({
                   ...item,
-                  thanhTien: item.GIABAN * item.SOLUONGTHUOC,
+                  thanhTien: item.GIABANLUCKE * item.SOLUONGTHUOC,
                 }))
           } // Truyền dữ liệu các loại thuốc vào ListFormDV
           loading={false}

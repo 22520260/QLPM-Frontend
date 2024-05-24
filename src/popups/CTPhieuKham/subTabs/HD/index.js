@@ -35,7 +35,7 @@ function HoaDon() {
     { title: "Liều dùng", key: "GHICHU" },
     { title: "Đơn vị thuốc", key: "TENDONVI" },
     { title: "Số lượng thuốc", key: "SOLUONGTHUOC" },
-    { title: "Đơn giá", key: "GIABAN" }, //Giá 1 đơn vị thuốc
+    { title: "Đơn giá", key: "GIABANLUCKE" }, //Giá 1 đơn vị thuốc
     { title: "Thành tiền", key: "thanhTien" }, //Giá 1 đơn vị x số lượng thuốc
   ];
 
