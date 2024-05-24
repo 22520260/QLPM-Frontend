@@ -290,8 +290,12 @@ export function ListFormDSDK({ columns, data, loading }) {
   };
 
   const handleHuyPK = async () => {
-    await updateTrangThaiPK("Đã hủy");
-    dispatch(fetchDSDKAction());
+    if (selectedRow.TRANGTHAITH === 'Chưa thực hiện') {
+      await updateTrangThaiPK("Đã hủy");
+      dispatch(fetchDSDKAction());
+    } else {
+      toast.error("Phiếu khám đã được thực hiện, không thể hủy");
+    }
   };
 
   return (
@@ -433,32 +437,39 @@ export function ListFormDSDK({ columns, data, loading }) {
                   </div>
                   <div className="col-3">
                     <ListGroupItem
-                      title={"Khách hàng"}
+                      title={"Khách hàng:"}
                       value={selectedRow.TENBN}
                       disable={true}
                     />
                     <ListGroupItem
-                      title={"Người bán"}
+                      title={"Người bán:"}
                       value={
                         selectedHD.TTTT === "Chưa thanh toán"
-                          ? (leTan?.account?.userInfo ? leTan.account.userInfo[0].HOTEN : "")
+                          ? leTan?.account?.userInfo
+                            ? leTan.account.userInfo[0].HOTEN
+                            : ""
                           : selectedHD.TENLT
                       }
                     />
                     <IFNgay
-                      title={"Ngày bán"}
+                      title={"Ngày bán:"}
                       size={12}
                       value={tdtt}
                       onChange={(value) => setTdtt(value)}
                       defaultValue={new Date()}
                     />
                     <ListGroupItem
-                      title={"Mã hóa đơn"}
+                      title={"Mã hóa đơn:"}
                       value={selectedHD.MAHD ? "HD" + selectedHD.MAHD : ""}
                       disable={true}
                     />
                     <ListGroupItem
-                      title={"Tổng tiền"}
+                      title={"Loại hóa đơn:"}
+                      value={selectedHD.TENLOAIHD}
+                      disable={true}
+                    />
+                    <ListGroupItem
+                      title={"Tổng tiền:"}
                       value={selectedHD.THANHTIEN ? selectedHD.THANHTIEN : ""}
                       disable={true}
                     />
@@ -839,6 +850,7 @@ export function ListFormThuoc({ columns, data, loading }) {
                   <IFInputText
                     title={"Giá nhập"}
                     size={3}
+                    readOnly={true}
                     required={true}
                     value={formData.giaNhap}
                     valid={objValidInput.isValidGiaNhap}
@@ -3085,6 +3097,8 @@ export function ListFormPQ({
 export function ListFormKhamBenh({ columns, data, loading }) {
   const dispatch = useDispatch();
   const selectedRow = useSelector((state) => state.selectedRow?.selectedRow);
+  const bacSi = useSelector((state) => state.auth?.user) || {};
+
   const handleRowClick = (row) => {
     dispatch(fetchCTDTByIdAction(row?.MAPK));
     dispatch(selectRow(row)); // Gửi hành động selectRow với dữ liệu hàng được chọn
@@ -3093,6 +3107,12 @@ export function ListFormKhamBenh({ columns, data, loading }) {
     dispatch(fetchBenhByIdAction(row.MAPK));
     dispatch(fetchDsClsByIdAction(row?.MAPK));
     dispatch(fetchLSKByIdBnAction(row?.MABN));
+    if (row.TRANGTHAITH === "Đã hủy") {
+      toast.error("Phiếu khám đã bị hủy, không thể khám bệnh")
+    }
+    if (bacSi?.account?.groupName === 'Bác sĩ' && bacSi.account.userInfo[0].MABS !== row.MABS) {
+      toast.error("Bệnh nhân này không phải của bạn")
+    }
   };
   const handleCancel = (row) => {};
 
@@ -3462,7 +3482,7 @@ export function ListFormCLS({ columns, data, loading }) {
                   </td>
                 ))}
                 <td>
-                  <div>
+                  <div className="pt-2 d-flex" style={{ gap: '10px' }}>        
                     <TTK value={row.TRANGTHAITH} />
                     <TTCLS value={row.TTTT} />
                   </div>

@@ -244,7 +244,7 @@ function DonThuoc() {
     try {
       const response = await axios.post("/donthuoc/insert", {
         maPK: selectedPK.MAPK,
-        maLT: leTan.account.userInfo[0].MALT,
+        maLT: 102,
       });
       if (response.status === 200) {
         maDTinserted = response.data.MADT;

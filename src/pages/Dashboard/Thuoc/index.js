@@ -27,7 +27,7 @@ const Thuoc = () => {
     { title: "Năm", key: "YEAR" },
     { title: "Mã thuốc", key: "ID" },
     { title: "Tên thuốc", key: "NAME" },
-    { title: "Tần suất", key: "FREQUENCY" },
+    { title: "Số lượng (đơn vị)", key: "FREQUENCY" },
   ];
 
   useEffect(() => {
