@@ -42,7 +42,7 @@ function HoaDon() {
   const columnsDSPK = [
     { title: "Mã phiếu khám", key: "MAPK" },
     { title: "Dịch vụ", key: "TENDV" },
-    { title: "Giá", key: "GIADV" },
+    { title: "Giá", key: "GIADVLUCDK" },
     { title: "Ngày khám", key: "NGAYKHAMMIN" },
     { title: "Trạng thái", key: "TRANGTHAITH" },
   ];
@@ -50,7 +50,7 @@ function HoaDon() {
   const columnsDSCLS = [
     { title: "Mã phiếu CLS", key: "MAKQ" },
     { title: "Dịch vụ", key: "TENDV" },
-    { title: "Giá", key: "GIADV" },
+    { title: "Giá", key: "GIADVCLSLUCDK" },
     { title: "Thời gian thực hiện", key: "NGAYKHAMMIN" },
     { title: "Trạng thái", key: "TRANGTHAITH" },
   ];

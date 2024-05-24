@@ -37,10 +37,11 @@ function LichSuKham() {
 
   useEffect(() => {
     setActiveTab(0);
-    if (lichSuKham.length > 0) {
-      dispatch(fetchTTKAction(lichSuKham[0].MAPK));
-      dispatch(fetchBenhByIdAction(lichSuKham[0]?.MAPK));
-      dispatch(fetchCTDTByIdAction(lichSuKham[0]?.MAPK));
+    const lichSuKhamHoanThanh = lichSuKham.filter(phieuKham => phieuKham.TRANGTHAITH === "Đã hoàn thành");
+    if (lichSuKhamHoanThanh.length > 0) {
+      dispatch(fetchTTKAction(lichSuKhamHoanThanh[0]?.MAPK));
+      dispatch(fetchBenhByIdAction(lichSuKhamHoanThanh[0]?.MAPK));
+      dispatch(fetchCTDTByIdAction(lichSuKhamHoanThanh[0]?.MAPK));
     }
   }, [lichSuKham]);
 
@@ -58,8 +59,8 @@ function LichSuKham() {
       ) : (
         <div className="shadow rounded">
           <ul className="nav nav-pills list-group-horizontal-scroll position-relative overflow-auto">
-            {lichSuKham?.map((phieuKham, index) => {
-              if (phieuKham.TRANGTHAITH === "Đã hoàn thành") {
+            {lichSuKham?.filter(phieuKham => phieuKham.TRANGTHAITH === "Đã hoàn thành").map((phieuKham, index) => {
+              // if (phieuKham.TRANGTHAITH === "Đã hoàn thành") {
                 return (
                   <li className="nav-item mr-3 shadow rounded" key={index}>
                     <a
@@ -72,7 +73,7 @@ function LichSuKham() {
                     </a>
                   </li>
                 );
-              }
+              // }
             })}
           </ul>
 
