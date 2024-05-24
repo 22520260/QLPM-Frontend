@@ -9,6 +9,7 @@ import { ChartsLegend, ChartsOnAxisClickHandler } from "@mui/x-charts";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { fetchThongKeDoanhThuAction } from "../../../redux/action/fetchDataAction/fetchThongKeDoanhThuAction";
+import { ListForm } from "../../../component/Layout/TabLayout/ListForm";
 
 // const dataset = [
 //   { guest: 4, bill: 1200000, month: "1", year: "2024" },
@@ -55,7 +56,12 @@ function DoanhThuLuotKhach({ year }) {
   const dispatch = useDispatch();
   const [filterData, setFilterData] = useState([]);
   const dataset = useSelector((state) => state.tkDoanhThu?.data) || [];
-
+  const columns = [
+    { title: "Tháng", key: "MONTH" },
+    { title: "Năm", key: "YEAR" },
+    { title: "Số lượt khách", key: "GUEST" },
+    { title: "Doanh thu", key: "BILL" },
+  ];
   const series = [
     {
       type: "line",
@@ -107,7 +113,7 @@ function DoanhThuLuotKhach({ year }) {
       >
         <ChartsGrid horizontal />
         <ChartsOnAxisClickHandler onAxisClick={onAxisClick} />
-        <ChartsLegend position={{ vertical: 'top', horizontal: 'right' }} />
+        <ChartsLegend position={{ vertical: "top", horizontal: "right" }} />
         <BarPlot />
         <LinePlot />
         <MarkPlot />
@@ -127,6 +133,15 @@ function DoanhThuLuotKhach({ year }) {
       </ResponsiveChartContainer>
 
       <div>{console.log(axisData)}</div>
+
+      <h4 className="d-flex justify-content-center">
+        Danh Sách Thống Kê Doanh Thu
+      </h4>
+      <div className="row justify-content-center">
+        <div className="col-9">
+          <ListForm columns={columns} data={dataset} />
+        </div>
+      </div>
     </div>
   );
 }

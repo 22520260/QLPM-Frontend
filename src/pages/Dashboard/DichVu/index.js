@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchThongKeDichVuKhamAction } from "../../../redux/action/fetchDataAction/fetchThongKeDichVuKhamAction";
 import { fetchThongKeDichVuCLSAction } from "../../../redux/action/fetchDataAction/fetchThongKeDichVuCLSAction";
 import { fetchAllLoaiDichVuAction } from "../../../redux/action/fetchDataAction/fetchAllLoaiDichVuAction";
+import { ListForm } from "../../../component/Layout/TabLayout/ListForm";
 
 const DichVu = () => {
   const dispatch = useDispatch();
@@ -22,14 +23,20 @@ const DichVu = () => {
   const loaiDichVu = useSelector((state) => state.loaiDichVu?.data) || [];
   const tkDichVuKham = useSelector((state) => state.tkDichVuKham?.data) || [];
   const tkDichVuCLS = useSelector((state) => state.tkDichVuCLS?.data) || [];
-
   const [dataset, setDataset] = useState(tkDichVuKham);
-
   const [loai, setLoai] = useState("Tất cả");
   const [month, setMonth] = useState(defaultMonth);
   const [year, setYear] = useState(defaultYear);
   const [totalIntensityData, setTotalIntensityData] = useState([]);
   const [monthlyIntensityData, setMonthlyIntensityData] = useState([]);
+
+  const columns = [
+    { title: "Tháng", key: "MONTH" },
+    { title: "Năm", key: "YEAR" },
+    { title: "Mã dịch vụ", key: "ID" },
+    { title: "Tên dịch vụ", key: "NAME" },
+    { title: "Tần suất", key: "FREQUENCY" },
+  ];
 
   useEffect(() => {
     dispatch(fetchAllLoaiDichVuAction());
@@ -281,6 +288,14 @@ const DichVu = () => {
             </ResponsiveChartContainer>
           </div>
         )}
+      </div>
+
+      <h2 className="d-flex justify-content-center">Danh Sách Thống Kê Dịch Vụ</h2>
+
+      <div className="row justify-content-center">
+        <div className="col-6">
+          <ListForm columns={columns} data={dataset} />
+        </div>
       </div>
     </div>
   );

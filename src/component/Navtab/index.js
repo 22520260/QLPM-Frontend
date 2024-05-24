@@ -29,7 +29,7 @@ function Navtab({ tabsData }) {
                 </ul>
             </div>
 
-            <div className="tab-content">
+            <div className="tab-content border border-primary">
                 {renderActiveTabContent()}
             </div>
         </div>

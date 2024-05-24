@@ -101,7 +101,7 @@ function DanhSachDangKy() {
     <>
       <div className="container-fluid">
         <h1>Khám Bệnh</h1>
-        <div className="row py-2">
+        <div className="row p-3 ">
           <IFNgay
             title={"Từ ngày"}
             size={2}
@@ -118,18 +118,20 @@ function DanhSachDangKy() {
             onChange={(value) => handleIFSearchChange(value)}
           />
         </div>
-        <ListFormKhamBenh
-          columns={columns}
-          data={displayDSDK}
-          loading={isLoading}
-        />
-        <Pagination
-          totalPages={totalPages}
-          page={page}
-          limit={limit}
-          siblings={1}
-          onPageChange={handlePageChange}
-        />
+        <div className="px-3">
+          <ListFormKhamBenh
+            columns={columns}
+            data={displayDSDK}
+            loading={isLoading}
+          />
+          <Pagination
+            totalPages={totalPages}
+            page={page}
+            limit={limit}
+            siblings={1}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </>
   );

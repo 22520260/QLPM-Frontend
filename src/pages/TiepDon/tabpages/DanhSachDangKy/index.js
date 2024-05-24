@@ -118,7 +118,7 @@ function DanhSachDangKy() {
 
   return (
     <>
-      <div className="row py-2">
+      <div className="row p-3">
         <IFNgay
           title={"Từ ngày"}
           size={2}
@@ -136,14 +136,16 @@ function DanhSachDangKy() {
         />
       </div>
 
-      <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading} />
-      <Pagination
-        totalPages={totalPages}
-        page={page}
-        limit={limit}
-        siblings={1}
-        onPageChange={handlePageChange}
-      />
+      <div className="px-3">
+        <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading} />
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          limit={limit}
+          siblings={1}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 }

@@ -58,6 +58,7 @@ import LichSuKham from "../../../../popups/CTKhamBenh/subTabs/LSK";
 import socket from "../../../../setup/socket";
 
 import { RiErrorWarningFill } from "react-icons/ri";
+import { fetchAllLoaiDichVuAction } from "../../../../redux/action/fetchDataAction/fetchAllLoaiDichVuAction";
 const { format } = require("date-fns");
 
 export function ListForm({ columns, data, loading }) {
@@ -2070,6 +2071,231 @@ export function ListFormDSLB({ columns, data, loading }) {
             <div class="modal-footer">
               <button
                 id="cancelBtnDelete1"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={handleDelete}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ListFormDSLDV({ columns, data, loading }) {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({});
+  const [formDelete, setFormDelete] = useState({});
+
+  const handleRowClick = (row) => {
+    setFormData({
+      maLDV: row.MALOAIDV,
+      tenLDV: row.TENLOAIDV,
+    });
+    setFormDelete({
+      maLDV: row.MALOAIDV,
+      tenLDV: row.TENLOAIDV,
+    });
+  };
+
+  const defaultObjValidInput = {
+    isValidMaLDV: true,
+    isValidTenLDV: true,
+  };
+
+  const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setObjValidInput(defaultObjValidInput);
+    if (!formData.tenLDV) {
+      setObjValidInput({ ...defaultObjValidInput, isValidTenLDV: false });
+      toast.error("Chưa nhập tên loại dịch vụ");
+      return;
+    }
+
+    const response = await axios.post("/ldv/update", formData);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllLoaiDichVuAction());
+      const cancelBtn = document.getElementById("cancelBtn11");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  const handleChange = (fieldName, value) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleDelete = async () => {
+    const response = await axios.post("/ldv/delete", formDelete);
+
+    if (response && response.data && response.data.errcode === 0) {
+      toast.success(response.data.message);
+      dispatch(fetchAllLoaiDichVuAction());
+      const cancelBtn = document.getElementById("cancelBtnDelete11");
+      if (cancelBtn) {
+        cancelBtn.click();
+      }
+    }
+    if (response && response.data && response.data.errcode !== 0) {
+      toast.error(response.data.message);
+    }
+  };
+
+  return (
+    <>
+      {/* ListForm */}
+      <table className="table table-striped table-hover">
+        <thead>
+          <tr>
+            {columns?.map((column, index) => (
+              <th key={index} scope="col">
+                {column.title}
+              </th>
+            ))}
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan={columns.length + 3}>
+                <div className="d-flex align-items-center justify-content-between">
+                  <strong>Loading...</strong>
+                  <div className="spinner-border ms-2" role="status"></div>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            data?.map((row, rowIndex) => (
+              <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                {columns?.map((column, colIndex) => (
+                  <td key={colIndex}>{row[column.key] || ""}</td>
+                ))}
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary rounded-circle"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateLDV"
+                  >
+                    <FaEye />
+                  </button>
+
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteLDV"
+                    className="btn btn-danger mx-1 rounded-circle"
+                  >
+                    <MdDeleteForever />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+      {/* Modal update */}
+      <div
+        className="modal fade "
+        id="updateLDV"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-scrollable">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
+                Cập nhật thông tin loại dịch vụ
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div className="modal-body ">
+              <div className="container-fluid">
+                <div className="row py-2">
+                  <IFInputText
+                    title={"Tên loại dịch vụ"}
+                    size={12}
+                    required={"true"}
+                    value={formData.tenLDV}
+                    onChange={(value) => handleChange("tenLDV", value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                id="cancelBtn11"
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleUpdate}
+              >
+                Cập nhật
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Modal delete */}
+      <div
+        class="modal fade"
+        id="deleteLDV"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc chắc muốn xóa loại dịch vụ
+              <span className="text-danger"> {formDelete.tenLDV} </span>?
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete11"
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"

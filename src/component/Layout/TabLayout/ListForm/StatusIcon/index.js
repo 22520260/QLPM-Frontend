@@ -6,6 +6,7 @@ import {
   TbStethoscopeOff,
 } from "react-icons/tb";
 import { Tooltip } from "react-tooltip";
+import "./style.css";
 
 const styles = ["danger", "warning", "success", "info"];
 
@@ -18,7 +19,7 @@ export function TTK({ value }) {
   ];
   const stt = findIndexByValue(values, value);
   let style =
-    "p-2 rounded bg-opacity-10 fw-semibold text-" +
+    "p-1 rounded bg-opacity-10 fw-semibold text-" +
     styles[stt] +
     " border border-" +
     styles[stt] +
@@ -39,7 +40,7 @@ export function TTTT({ value }) {
   const stt = findIndexByValue(values, value);
 
   let style =
-    "p-2 rounded bg-opacity-10 fw-semibold text-" +
+    "p-1 rounded bg-opacity-10 fw-semibold text-" +
     styles[stt] +
     " border border-" +
     styles[stt] +
@@ -62,7 +63,7 @@ export function TTCLS({ value }) {
   const stt = findIndexByValue(values, value);
 
   let style =
-    "p-2 rounded bg-opacity-10 fw-semibold text-" +
+    "p-1 rounded bg-opacity-10 fw-semibold text-" +
     styles[stt] +
     " border border-" +
     styles[stt] +
@@ -85,7 +86,7 @@ export function TTT({ value }) {
   const stt = findIndexByValue(values, value);
 
   let style =
-    "p-2 rounded bg-opacity-10 fw-semibold text-" +
+    "p-1 rounded bg-opacity-10 fw-semibold text-" +
     styles[stt] +
     " border border-" +
     styles[stt] +
@@ -119,11 +120,11 @@ export function StatusIcon({
   return (
     <div>
       <TTK value={trangThaiThucHien} />
-      <TTTT value={trangThaiThanhToanPK} />
-      {/* <div className="py-3 gap-2 flex"> */}
-      <TTCLS value={trangThaiThanhToanCLS} />
-      <TTT value={trangThaiThanhToanDT} />
-      {/* </div> */}
+      <div className="py-1 stgr">
+        <TTTT value={trangThaiThanhToanPK} />
+        <TTCLS value={trangThaiThanhToanCLS} />
+        <TTT value={trangThaiThanhToanDT} />
+      </div>
     </div>
   );
 }

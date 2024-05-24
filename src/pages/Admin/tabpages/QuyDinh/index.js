@@ -2,12 +2,13 @@ import { IFInputText } from "../../../../component/Layout/TabLayout/InputForm";
 import DSDV from "./DSDV";
 import DSLB from "./DSLB";
 import DVT from "./DVT";
+import DSLDV from "./DSLDV";
+import DST from "./DST";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../../../setup/axios";
 import { fetchThamSoAction } from "../../../../redux/action/fetchDataAction/fetchThamSoAction";
-import DST from "./DST";
 
 function QuyDinh() {
   const dispatch = useDispatch();
@@ -139,9 +140,19 @@ function QuyDinh() {
           </div>
         </div>
 
-        <div className="row py-3 align-items-end border border-primary">
-          <DSDV />
+        <div className="row">
+          <div className="col col-md-6 py-3 border border-primary">
+            <div className="h-100">
+              <DSDV />
+            </div>
+          </div>
+          <div className="col col-md-6 py-3 border border-primary">
+            <div className="h-100">
+              <DSLDV />
+            </div>
+          </div>
         </div>
+
         <div className="row py-3 align-items-end border border-primary">
           <DST />
         </div>

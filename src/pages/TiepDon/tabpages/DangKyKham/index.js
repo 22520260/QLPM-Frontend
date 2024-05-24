@@ -244,7 +244,7 @@ function DangKyKham() {
       <form class="needs-validation" novalidate>
         {/* Thông tin */}
         <div className="px-3 py-2 bg-primary">Thông tin</div>
-        <div className="py-3 border border-primary">
+        <div className="py-3">
           <div className="container-fluid mb-">
             <div className="row py-2">
               <IFSearchHT
@@ -361,7 +361,7 @@ function DangKyKham() {
 
         {/* Dịch vụ */}
         <div className="px-3 py-2 bg-primary">Dịch vụ</div>
-        <div className="py-3 border border-primary">
+        <div className="py-3 border">
           <div className="container-fluid mb-3">
             <div className="row py-2">
               <IFSearchDV

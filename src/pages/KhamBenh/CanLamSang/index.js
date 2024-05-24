@@ -97,7 +97,7 @@ function CanLamSang() {
     <>
       <h1 className="container-fluid">Cận lâm sàng</h1>
       <div className="container-fluid">
-        <div className="row py-2">
+        <div className="row p-3">
           <IFNgay
             title={"Từ ngày"}
             size={2}
@@ -114,14 +114,20 @@ function CanLamSang() {
             onChange={(value) => handleIFSearchChange(value)}
           />
         </div>
-        <ListFormCLS columns={columns} data={displayDSDK} loading={isLoading} />
-        <Pagination
-          totalPages={totalPages}
-          page={page}
-          limit={limit}
-          siblings={1}
-          onPageChange={handlePageChange}
-        />
+        <div className="px-3">
+          <ListFormCLS
+            columns={columns}
+            data={displayDSDK}
+            loading={isLoading}
+          />
+          <Pagination
+            totalPages={totalPages}
+            page={page}
+            limit={limit}
+            siblings={1}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </>
   );

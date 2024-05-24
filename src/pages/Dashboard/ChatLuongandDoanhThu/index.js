@@ -34,6 +34,7 @@ function ChatLuongandDoanhThu() {
         <div className="col col-md-6">
           <h4 className="d-flex justify-content-center">Biểu đồ doanh thu</h4>
           <DoanhThuLuotKhach year={year} />
+
         </div>
       </div>
     </div>

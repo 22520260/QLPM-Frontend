@@ -3,7 +3,7 @@ import {
   IFNgay,
   IFSearch,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSDK} from "../../../../component/Layout/TabLayout/ListForm";
+import { ListFormDSDK } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,7 @@ function DanhSachDangKy() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  
+
   const columns = [
     { title: "Mã phiếu", key: "MABN" },
     { title: "STT", key: "MABN" },
@@ -69,8 +69,19 @@ function DanhSachDangKy() {
         );
       }
 
-      const formattedPatients = filteredPatients.map(patient => {
-        const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
+      const formattedPatients = filteredPatients.map((patient) => {
+        const {
+          MABN,
+          MATK,
+          CCCD,
+          HOTEN,
+          NGAYSINH,
+          GIOITINH,
+          SDT,
+          DIACHI,
+          TIENSUBENH,
+          DIUNG,
+        } = patient;
         const formattedNgaySinh = formatDate(NGAYSINH);
 
         return {
@@ -83,7 +94,7 @@ function DanhSachDangKy() {
           SDT,
           DIACHI,
           TIENSUBENH,
-          DIUNG
+          DIUNG,
         };
       });
 
@@ -114,7 +125,7 @@ function DanhSachDangKy() {
 
   return (
     <>
-      <div className="row py-2">
+      <div className="row p-3">
         <IFNgay
           title={"Từ ngày"}
           size={2}
@@ -131,15 +142,20 @@ function DanhSachDangKy() {
           onChange={(value) => handleIFSearchChange(value)}
         />
       </div>
-
-      <ListFormDSDK columns={columns} data={displayedPatients} loading={isLoading}/>
-      <Pagination
-        totalPages={totalPages}
-        page={page}
-        limit={limit}
-        siblings={1}
-        onPageChange={handlePageChange}
-      />
+      <div className="px-3">
+        <ListFormDSDK
+          columns={columns}
+          data={displayedPatients}
+          loading={isLoading}
+        />
+        <Pagination
+          totalPages={totalPages}
+          page={page}
+          limit={limit}
+          siblings={1}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 }

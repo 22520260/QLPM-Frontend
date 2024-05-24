@@ -86,7 +86,7 @@ function NavIcon() {
     <>
       <div className="collapse navbar-collapse">
         <ul className="navbar-nav ms-auto mb-20 mb-lg-0">
-          <li className="nav-item px-2">
+          {/* <li className="nav-item px-2">
             <a
               className="nav-link active text-white"
               aria-current="page"
@@ -94,7 +94,7 @@ function NavIcon() {
             >
               <FaRegBell />
             </a>
-          </li>
+          </li> */}
           <li className="nav-item dropdown px-2">
             <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <FaRegUserCircle size={20} />

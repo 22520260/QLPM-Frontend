@@ -10,7 +10,7 @@ import {
 import { IFSelect } from "../../../component/Layout/TabLayout/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchThongKeThuocAction } from "../../../redux/action/fetchDataAction/fetchThongKeThuocAction";
-
+import { ListForm } from "../../../component/Layout/TabLayout/ListForm";
 
 const Thuoc = () => {
   const dispatch = useDispatch();
@@ -22,6 +22,13 @@ const Thuoc = () => {
   const [year, setYear] = useState(defaultYear);
   const [totalIntensityData, setTotalIntensityData] = useState([]);
   const [monthlyIntensityData, setMonthlyIntensityData] = useState([]);
+  const columns = [
+    { title: "Tháng", key: "MONTH" },
+    { title: "Năm", key: "YEAR" },
+    { title: "Mã thuốc", key: "ID" },
+    { title: "Tên thuốc", key: "NAME" },
+    { title: "Tần suất", key: "FREQUENCY" },
+  ];
 
   useEffect(() => {
     dispatch(fetchThongKeThuocAction());
@@ -83,9 +90,7 @@ const Thuoc = () => {
 
   return (
     <div className="shadow rounded pt-4">
-      <h2 className="d-flex justify-content-center">
-        Biểu Đồ Thống Kê Thuốc
-      </h2>
+      <h2 className="d-flex justify-content-center">Biểu Đồ Thống Kê Thuốc</h2>
       <div className="row d-flex justify-content-center mb-4">
         <IFSelect
           title="Tháng"
@@ -217,6 +222,14 @@ const Thuoc = () => {
             </ResponsiveChartContainer>
           </div>
         )}
+      </div>
+
+      <h2 className="d-flex justify-content-center">Danh Sách Thống Kê Thuốc</h2>
+
+      <div className="row justify-content-center">
+        <div className="col-6">
+          <ListForm columns={columns} data={dataset} />
+        </div>
       </div>
     </div>
   );
