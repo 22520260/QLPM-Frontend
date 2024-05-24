@@ -19,6 +19,7 @@ export default function ChatLuong({ year }) {
   console.log('data', data)
   const columns = [
     { title: "Năm", key: "YEAR" },
+    { title: "Tên BN", key: "NAME" },
     { title: "Khoảng cách trung bình giữa 2 lần khám (ngày)", key: "X2" },
     { title: "Số lượt khám", key: "X1" },
   ];
