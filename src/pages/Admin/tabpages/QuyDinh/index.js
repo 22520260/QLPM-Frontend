@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "../../../../setup/axios";
 import { fetchThamSoAction } from "../../../../redux/action/fetchDataAction/fetchThamSoAction";
+import DSNND from "./DSNND";
 
 function QuyDinh() {
   const dispatch = useDispatch();
@@ -153,8 +154,17 @@ function QuyDinh() {
           </div>
         </div>
 
-        <div className="row py-3 align-items-end border border-primary">
-          <DST />
+        <div className="row">
+          <div className="col col-md-6 py-3 border border-primary">
+            <div className="h-100">
+              <DST />
+            </div>
+          </div>
+          <div className="col col-md-6 py-3 border border-primary">
+            <div className="h-100">
+              <DVT />
+            </div>
+          </div>
         </div>
 
         <div className="row">
@@ -165,7 +175,7 @@ function QuyDinh() {
           </div>
           <div className="col col-md-6 py-3 border border-primary">
             <div className="h-100">
-              <DVT />
+              <DSNND />
             </div>
           </div>
         </div>

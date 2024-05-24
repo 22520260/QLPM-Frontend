@@ -100,7 +100,7 @@ function DVT() {
   };
   return (
     <>
-      <h4>Danh sách các đơn vị tính:</h4>
+      <h4>Danh sách các đơn vị thuốc</h4>
       <div className="row align-items-end">
         <IFSearch
           title={"Tìm kiếm theo tên đơn vị"}

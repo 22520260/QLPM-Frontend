@@ -2,57 +2,55 @@ import React, { useState, useEffect } from "react";
 import {
   IFSearch,
   IFInputText,
-  IFNgay,
 } from "../../../../../component/Layout/TabLayout/InputForm";
-import { ListFormDSLDV } from "../../../../../component/Layout/TabLayout/ListForm";
+import { ListFormNND } from "../../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../../utils/appUtils";
-import { fetchAllBenhAction } from "../../../../../redux/action/fetchDataAction/fetchAllBenhAction";
+import { fetchAllUserGroupAction } from "../../../../../redux/action/fetchDataAction/fetchAllUserGroupAction";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import axios from '../../../../../setup/axios'
-import { fetchAllLoaiDichVuAction } from "../../../../../redux/action/fetchDataAction/fetchAllLoaiDichVuAction";
+import axios from "../../../../../setup/axios";
 
-function DSLDV() {
+function DSNND() {
   const dispatch = useDispatch();
-  const dsLDV = useSelector((state) => state.loaiDichVu?.data) || [];
-  const isLoading = useSelector((state) => state.loaiDichVu?.isLoading);
+  const groupUsers = useSelector((state) => state.groupUsers?.data) || [];
+  const isLoading = useSelector((state) => state.groupUsers?.isLoading);
   const [limit, setLimit] = useState(5);
-  const [displayLDV, setDisplayLDV] = useState([]);
+  const [displayDVT, setDisplayDVT] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã loại dịch vụ", key: "MALOAIDV" },
-    { title: "Tên loại dịch vụ", key: "TENLOAIDV" },
+    { title: "Mã nhóm", key: "MANHOM" },
+    { title: "Tên nhóm", key: "TENNHOM" },
   ];
 
   useEffect(() => {
-    dispatch(fetchAllLoaiDichVuAction());
+    dispatch(fetchAllUserGroupAction());
   }, []);
 
   useEffect(() => {
-    if (dsLDV) {
-      let filteredDSLDV = [...dsLDV];
+    if (groupUsers) {
+      let filteredGroupUsers = [...groupUsers];
 
       // Lọc theo từ khóa tìm kiếm
       if (searchKeyword) {
-        filteredDSLDV = filteredDSLDV.filter((data) =>
-          data.TENLOAIDV.toLowerCase().includes(searchKeyword.toLowerCase())
+        filteredGroupUsers = filteredGroupUsers.filter((data) =>
+          data.TENNHOM.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
 
-      const calculatedTotalPages = Math.ceil(filteredDSLDV.length / limit);
+      const calculatedTotalPages = Math.ceil(filteredGroupUsers.length / limit);
       setTotalPages(calculatedTotalPages);
 
       const startIdx = (page - 1) * limit;
-      const endIdx = Math.min(startIdx + limit, filteredDSLDV.length);
-      const pageLDV = filteredDSLDV.slice(startIdx, endIdx);
+      const endIdx = Math.min(startIdx + limit, filteredGroupUsers.length);
+      const pageDVT = filteredGroupUsers.slice(startIdx, endIdx);
 
-      setDisplayLDV(pageLDV);
+      setDisplayDVT(pageDVT);
     }
-  }, [dsLDV, page, limit, searchKeyword]);
+  }, [groupUsers, page, limit, searchKeyword]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
@@ -61,13 +59,13 @@ function DSLDV() {
   const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
   const defaultFormData = {
-    tenLDV: "",
+    tenNhom: "",
   };
 
   const [formData, setFormData] = useState(defaultFormData);
 
   const defaultObjValidInput = {
-    isValidTenLDV: true,
+    isValidTenNhom: true,
   };
 
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
@@ -75,18 +73,18 @@ function DSLDV() {
   const handleRegister = async (e) => {
     e.preventDefault();
     setObjValidInput(defaultObjValidInput);
-    if (!formData.tenLDV) {
-      setObjValidInput({ ...defaultObjValidInput, isValidTenLDV: false });
-      toast.error("Chưa nhập tên loại dịch vụ");
+    if (!formData.tenNhom) {
+      setObjValidInput({ ...defaultObjValidInput, isValidTenNhom: false });
+      toast.error("Chưa nhập tên nhóm");
       return;
     }
 
-    const response = await axios.post("/ldv/insert", formData);
+    const response = await axios.post("/usergroup/insert", formData);
 
     if (response && response.data && response.data.errcode === 0) {
       toast.success(response.data.message);
       setFormData(defaultFormData);
-      dispatch(fetchAllLoaiDichVuAction());
+      dispatch(fetchAllUserGroupAction());
     }
     if (response && response.data && response.data.errcode !== 0) {
       toast.error(response.data.message);
@@ -102,10 +100,10 @@ function DSLDV() {
   };
   return (
     <>
-      <h4>Danh sách các loại dịch vụ</h4>
+      <h4>Danh sách các nhóm người dùng</h4>
       <div className="row align-items-end">
         <IFSearch
-          title={"Tìm kiếm theo tên loại dịch vụ"}
+          title={"Tìm kiếm theo tên nhóm người dùng"}
           size={7}
           onChange={handleIFSearchChange}
         />
@@ -114,7 +112,7 @@ function DSLDV() {
             className="btn btn-primary"
             type="button"
             data-bs-toggle="modal"
-            data-bs-target="#addLDV"
+            data-bs-target="#addGroupUsers"
           >
             Thêm mới
           </button>
@@ -123,7 +121,7 @@ function DSLDV() {
 
       <div
         className="modal fade "
-        id="addLDV"
+        id="addGroupUsers"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -132,7 +130,7 @@ function DSLDV() {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">
-                Thêm mới loại dịch vụ
+                Thêm mới nhóm người dùng
               </h1>
               <button
                 type="button"
@@ -146,11 +144,12 @@ function DSLDV() {
               <div className="container-fluid">
                 <div className="row py-2">
                   <IFInputText
-                    title={"Tên loại dịch vụ"}
+                    title={"Tên nhóm người dùng"}
                     size={12}
                     required={"true"}
-                    value={formData.tenLDV}
-                    onChange={(value) => handleChange("tenLDV", value)}
+                    value={formData.tenNhom}
+                    valid={objValidInput.isValidTenNhom}
+                    onChange={(value) => handleChange("tenNhom", value)}
                   />
                 </div>
               </div>
@@ -177,7 +176,7 @@ function DSLDV() {
       </div>
 
       <div className="container-fluid py-3">
-        <ListFormDSLDV columns={columns} data={displayLDV} loading={isLoading} />
+        <ListFormNND columns={columns} data={displayDVT} loading={isLoading} />
         <Pagination
           totalPages={totalPages}
           page={page}
@@ -190,4 +189,4 @@ function DSLDV() {
   );
 }
 
-export default DSLDV;
+export default DSNND;
