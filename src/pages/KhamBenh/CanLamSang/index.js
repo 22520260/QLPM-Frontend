@@ -12,11 +12,13 @@ import { compareDates, usePaginationHandler } from "../../../utils/appUtils";
 function CanLamSang() {
   const dispatch = useDispatch();
   const DSDK = useSelector((state) => state.fetchCLS.allCls);
+  console.log('DSDK', DSDK)
   const isLoading = useSelector((state) => state.fetchCLS.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchKeywordTENBS, setSearchKeywordTENBS] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
@@ -61,10 +63,18 @@ function CanLamSang() {
         });
       }
 
-      // Lọc theo từ khóa tìm kiếm
+      // Lọc theo tên bệnh nhân
       if (searchKeyword) {
         filteredDSDK = filteredDSDK.filter((data) =>
           data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+      }
+
+      // Lọc theo tên bác sĩ
+      if (searchKeywordTENBS) {
+        console.log(searchKeywordTENBS);
+        filteredDSDK = filteredDSDK.filter((data) =>
+          data.TENBSTH.toLowerCase().includes(searchKeywordTENBS.toLowerCase())
         );
       }
 
@@ -77,10 +87,22 @@ function CanLamSang() {
 
       setDisplayDSDK(pageDSDK);
     }
-  }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
+  }, [
+    DSDK,
+    page,
+    limit,
+    searchKeyword,
+    searchKeywordTENBS,
+    startDate,
+    endDate,
+  ]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
+  };
+
+  const handleIFSearchChangeTENBS = (value) => {
+    setSearchKeywordTENBS(value);
   };
 
   const handleChange_NBD = (value) => {
@@ -109,9 +131,14 @@ function CanLamSang() {
             onChange={(value) => handleChange_NKT(value)}
           />
           <IFSearch
-            title={"Tìm kiếm từ khóa"}
+            title={"Tìm kiếm theo tên bệnh nhân"}
             size={4}
             onChange={(value) => handleIFSearchChange(value)}
+          />
+          <IFSearch
+            title={"Tìm kiếm theo tên bác sĩ thực hiện"}
+            size={4}
+            onChange={(value) => handleIFSearchChangeTENBS(value)}
           />
         </div>
         <div className="px-3">

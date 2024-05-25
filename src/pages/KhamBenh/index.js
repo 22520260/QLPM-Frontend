@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  IFNgay,
-  IFSearch,
-} from "../../component/Layout/TabLayout/InputForm";
+import { IFNgay, IFSearch } from "../../component/Layout/TabLayout/InputForm";
 import { ListFormKhamBenh } from "../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../component/Layout/TabLayout/Pagination";
 import { fetchDSDKAction } from "../../redux/action/fetchDataAction/fetchDSDKAction";
@@ -12,15 +9,16 @@ import { compareDates, usePaginationHandler } from "../../utils/appUtils";
 function DanhSachDangKy() {
   const dispatch = useDispatch();
   const DSDK = useSelector((state) => state.fetchDSDK?.data);
+  console.log("DSDK", DSDK);
   const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchKeywordTENBS, setSearchKeywordTENBS] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-
 
   const columns = [
     { title: "Mã phiếu", key: "MAPKTG" },
@@ -65,10 +63,18 @@ function DanhSachDangKy() {
         });
       }
 
-      // Lọc theo từ khóa tìm kiếm
+      // Lọc theo tên bệnh nhân
       if (searchKeyword) {
         filteredDSDK = filteredDSDK.filter((data) =>
           data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+      }
+
+      // Lọc theo tên bác sĩ
+      if (searchKeywordTENBS) {
+        console.log(searchKeywordTENBS);
+        filteredDSDK = filteredDSDK.filter((data) =>
+          data.INFOBS.toLowerCase().includes(searchKeywordTENBS.toLowerCase())
         );
       }
 
@@ -81,10 +87,22 @@ function DanhSachDangKy() {
 
       setDisplayDSDK(pageDSDK);
     }
-  }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
+  }, [
+    DSDK,
+    page,
+    limit,
+    searchKeyword,
+    searchKeywordTENBS,
+    startDate,
+    endDate,
+  ]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
+  };
+
+  const handleIFSearchChangeTENBS = (value) => {
+    setSearchKeywordTENBS(value);
   };
 
   const handleChange_NBD = (value) => {
@@ -113,9 +131,14 @@ function DanhSachDangKy() {
             onChange={(value) => handleChange_NKT(value)}
           />
           <IFSearch
-            title={"Tìm kiếm từ khóa"}
+            title={"Tìm kiếm theo tên bệnh nhân"}
             size={4}
             onChange={(value) => handleIFSearchChange(value)}
+          />
+          <IFSearch
+            title={"Tìm kiếm theo tên bác sĩ"}
+            size={4}
+            onChange={(value) => handleIFSearchChangeTENBS(value)}
           />
         </div>
         <div className="px-3">
