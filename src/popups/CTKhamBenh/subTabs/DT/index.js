@@ -369,22 +369,28 @@ function DonThuoc() {
       </div>
 
       <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
-      <div className="container-fluid mb-3">
-        <ListFormDV
-          columns={columns}
-          data={
-            existedCTDT.length === 0
-              ? medicines
-              : existedCTDT.map((item) => ({
-                  ...item,
-                  thanhTien: item.GIABANLUCKE * item.SOLUONGTHUOC,
-                }))
-          } // Truyền dữ liệu các loại thuốc vào ListFormDV
-          loading={false}
-          handleDelete={handleDeleteMedicine}
-          buttonColor={existedCTDT.length > 0 ? "btn-secondary" : null}
-        />
-      </div>
+      {existedCTDT.length > 0 || medicines.length > 0 ? (
+        <div className="container-fluid mb-3">
+          <ListFormDV
+            columns={columns}
+            data={
+              existedCTDT.length === 0
+                ? medicines
+                : existedCTDT.map((item) => ({
+                    ...item,
+                    thanhTien: item.GIABANLUCKE * item.SOLUONGTHUOC,
+                  }))
+            } // Truyền dữ liệu các loại thuốc vào ListFormDV
+            loading={false}
+            handleDelete={handleDeleteMedicine}
+            buttonColor={existedCTDT.length > 0 ? "btn-secondary" : null}
+          />
+        </div>
+      ) : (
+        <div className="d-flex justify-content-center text-danger">
+          Chưa thêm đơn thuốc nào.
+        </div>
+      )}
 
       <div className="d-flex justify-content-center px-3 py-2">
         <button

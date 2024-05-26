@@ -11,7 +11,7 @@ function ChatLuongandDoanhThu() {
   return (
     <div className="shadow rounded pt-4">
       <h2 className="d-flex justify-content-center">
-        Biểu Đồ Doanh Thu và Chất Lượng
+        Biểu Đồ Doanh Thu và Tần Suất Khám
       </h2>
       <div className="d-flex justify-content-center">
         <IFSelect
@@ -28,7 +28,7 @@ function ChatLuongandDoanhThu() {
 
       <div className="row">
         <div className="col col-md-6">
-          <h4 className="d-flex justify-content-center">Biểu đồ chất lượng</h4>
+          <h4 className="d-flex justify-content-center">Biểu đồ tần suất khám</h4>
           <ChatLuong year={year} />
         </div>
         <div className="col col-md-6">
