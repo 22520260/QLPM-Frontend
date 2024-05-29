@@ -3775,7 +3775,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
       email: row.EMAIL,
       cccd: row.CCCD,
       gioiTinh: row.GIOITINH,
-      ngaySinh: deFormatDate(row.NGAYSINH),
+      ngaySinh: new Date(row.NGAYSINH),
       soDienThoai: row.SDT,
       diaChi: row.DIACHI,
       tienSuBenh: row.TIENSUBENH,

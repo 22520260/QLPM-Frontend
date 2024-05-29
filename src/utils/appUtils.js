@@ -3,6 +3,8 @@ import { fetchDSDKAction } from "../redux/action/fetchDataAction/fetchDSDKAction
 import { fetchDSHDByIdAction } from "../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchAllClsAction } from "../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchAllBenhNhanAction } from "../redux/action/fetchDataAction/fetchAllBenhNhanAction";
+import {fetchDsClsByIdAction} from '../redux/action/fetchDataAction/fetchCLSAction';
+import {fetchCTDTByIdAction} from '../redux/action/fetchDataAction/fetchCTDTById';
 
 export const selectAction = (actionName) => {
   switch (actionName) {
@@ -14,6 +16,10 @@ export const selectAction = (actionName) => {
       return fetchDSHDByIdAction;
     case "DSBN":
       return fetchAllBenhNhanAction;
+    case "CLSBYIDPK":
+      return fetchDsClsByIdAction;
+    case "CTDTBYIDPK":
+      return fetchCTDTByIdAction;
     default:
       return null;
   }

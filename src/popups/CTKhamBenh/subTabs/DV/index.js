@@ -105,6 +105,8 @@ function DichVu() {
             dispatch(fetchDSDKAction());
             socket.emit("send-message", {actionName: 'DSDK'});
             socket.emit("send-message", {actionName: 'DSCLS'});
+            socket.emit("send-message", { actionName: "DSHD", maID: selectedPK.MAPK });
+            socket.emit("send-message", { actionName: "CLSBYIDPK", maID: selectedPK.MAPK });
             setSelectedServices([]);
           }
         }

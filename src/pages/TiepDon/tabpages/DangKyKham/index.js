@@ -142,6 +142,8 @@ function DangKyKham() {
         if (response.status === 200) {
           toast.success("Thêm phiếu khám thành công!!!");
           socket.emit("send-message", { actionName: "DSDK" });
+          socket.emit("send-message", { actionName: "LSKBYIDBN", maID: maBN });
+
         }
       } catch (error) {
         toast.error("Thêm phiếu khám không thành công");
