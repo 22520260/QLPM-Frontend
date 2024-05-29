@@ -249,16 +249,14 @@ function DonThuoc() {
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
         toast.success("Thêm hóa đơn và đơn thuốc thành công");
-        socket.emit("send-message", {
-          actionName: "DSHD",
-          maID: selectedPK.MAPK,
-        });
         const isComplete = await insertCTDT(medicines, maDTinserted);
         if (isComplete === true) {
           setMedicines([]);
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
           dispatch(fetchDSDKAction());
           socket.emit("send-message", { actionName: "DSDK" });
+          socket.emit("send-message", { actionName: "DSHD", maID: selectedPK.MAPK });
+          socket.emit("send-message", { actionName: "CTDTBYIDPK", maID: selectedPK.MAPK });
           setFormula("");
           setUnit("");
           setDay(0);
