@@ -3504,6 +3504,11 @@ export function ListFormCLS({ columns, data, loading }) {
       toast.success(response.data.message);
       dispatch(fetchAllClsAction());
       socket.emit("send-message", { actionName: "DSCLS" });
+      socket.emit("send-message", {
+        actionName: "CLSBYIDPK",
+        maID: formData.MAPK,
+      });
+
       const closeBtn = document.getElementById("closeBtn10");
       if (closeBtn) {
         closeBtn.click();
