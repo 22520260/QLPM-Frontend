@@ -3486,6 +3486,7 @@ export function ListFormCLS({ columns, data, loading }) {
       INFOBSTH: row.INFOBSTH,
       NGAYKHAM: row.NGAYKHAM,
       IMAGE: !row.IMAGE || row.IMAGE === null ? null : row.IMAGE,
+      MABN: row.MABN,
     });
   };
 
@@ -3507,6 +3508,9 @@ export function ListFormCLS({ columns, data, loading }) {
       socket.emit("send-message", {
         actionName: "CLSBYIDPK",
         maID: formData.MAPK,
+        maBN: formData.MABN,
+        title: "Kết quả " + formData.TENDV,
+        message: `Mời BN ${formData.TENBN} nhận kết quả ${formData.TENDV} tại phòng khám. Xem kết quả và hình ảnh chụp tại mục Quy trình khám trên app BCarefull`,
       });
 
       const closeBtn = document.getElementById("closeBtn10");
