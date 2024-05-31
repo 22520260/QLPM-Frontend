@@ -10,7 +10,10 @@ import { fetchAllDichVuAction } from "../../../../redux/action/fetchDataAction/f
 import { fetchDsClsByIdAction } from "../../../../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { toast } from "react-toastify";
-import { ListFormDV, ListFormDVCLS } from "../../../../component/Layout/TabLayout/ListForm";
+import {
+  ListFormDV,
+  ListFormDVCLS,
+} from "../../../../component/Layout/TabLayout/ListForm";
 import socket from "../../../../setup/socket";
 
 function DichVu() {
@@ -98,15 +101,27 @@ function DichVu() {
         if (response1.status === 200) {
           maHDinserted = response1.data.MAHD;
           toast.success("Thêm hóa đơn thành công!!!");
-          socket.emit("send-message", {actionName: 'DSHD', maID: selectedPK.MAPK});
+          socket.emit("send-message", {
+            actionName: "DSHD",
+            maID: selectedPK.MAPK,
+          });
           const isComplete = await insertCLS(selectedPK?.MAPK, maHDinserted);
           if (isComplete) {
             dispatch(fetchDsClsByIdAction(selectedPK.MAPK));
             dispatch(fetchDSDKAction());
-            socket.emit("send-message", {actionName: 'DSDK'});
-            socket.emit("send-message", {actionName: 'DSCLS'});
-            socket.emit("send-message", { actionName: "DSHD", maID: selectedPK.MAPK });
-            socket.emit("send-message", { actionName: "CLSBYIDPK", maID: selectedPK.MAPK });
+            socket.emit("send-message", { actionName: "DSDK" });
+            socket.emit("send-message", { actionName: "DSCLS" });
+            socket.emit("send-message", {
+              actionName: "DSHD",
+              maID: selectedPK.MAPK,
+            });
+            socket.emit("send-message", {
+              actionName: "CLSBYIDPK",
+              maID: selectedPK.MAPK,
+              maBN: selectedPK.MABN,
+              title: "Chỉ định Cận lâm sàng cần thực hiện",
+              message: `BN ${selectedPK.TENBN} vừa được BS ${selectedPK.TENBS} chỉ định thực hiện thêm dịch vụ Cận lâm sàng. Tiến hành thanh toán ngay trong app BCarefull tại mục Quy trình khám`,
+            });
             setSelectedServices([]);
           }
         }
@@ -218,12 +233,11 @@ function DichVu() {
               handleDelete={handleDeleteService}
             />
           ) : null}
-          {existedDsCls.length === 0 && selectedServices.length === 0 ? ( 
+          {existedDsCls.length === 0 && selectedServices.length === 0 ? (
             <div className="d-flex justify-content-center text-danger">
               Chưa thêm dịch vụ nào.
             </div>
           ) : null}
-      
         </div>
       </div>
 
