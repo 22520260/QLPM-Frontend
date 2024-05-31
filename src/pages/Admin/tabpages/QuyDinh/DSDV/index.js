@@ -26,7 +26,6 @@ function DSDV() {
 
   const columns = [
     { title: "Mã DV", key: "MADV" },
-    { title: "Mã loại DV", key: "MALOAIDV" },
     { title: "Loại dịch vụ", key: "TENLOAIDV" },
     { title: "Tên dịch vụ", key: "TENDV" },
     { title: "Giá tiền", key: "GIADV" },
