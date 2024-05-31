@@ -23,6 +23,7 @@ function DanhSachBenhNhan() {
   const [displaydsBenhNhan, setDisplaydsBenhNhan] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [totalPages, setTotalPages] = useState(0);
+  const [isData, setIsData] = useState(true);
 
   const columns = [
     { title: "Mã KH", key: "MABN" },
@@ -49,6 +50,8 @@ function DanhSachBenhNhan() {
           data.HOTEN.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
+
+      if (filtereddsBenhNhan.length == 0 ? setIsData(false) : setIsData(true));
 
       const formatteddsBenhNhan = filtereddsBenhNhan.map((data) => {
         return {

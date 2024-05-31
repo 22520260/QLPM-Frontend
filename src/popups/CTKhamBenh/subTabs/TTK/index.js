@@ -25,8 +25,7 @@ import socket from "../../../../setup/socket";
 
 function ThongTinKham() {
   const dispatch = useDispatch();
-  const selectedPK =
-    useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
   const ttkArray = useSelector((state) => state.ttk?.data) || [];
   const ttk = ttkArray ? ttkArray[0] : {};
   const [showError, setShowError] = useState(false);
@@ -57,6 +56,10 @@ function ThongTinKham() {
       dispatch(fetchDSDKAction());
       // cancelBtn.disabled = false;
       socket.emit("send-message", {actionName: 'DSDK'});
+      socket.emit("send-message", {actionName: 'KQKHAMBYIDPK', maID: selectedPK.MAPK});
+      socket.emit("send-message", {actionName: 'DSBENHBYIDPK', maID: selectedPK.MAPK});
+      socket.emit("send-message", {actionName: 'LSKBYIDBN', maID: selectedPK.MABN});
+
     }
     if (response && response.data && response.data.errcode !== 0) {
       toast.error(response.data.message);

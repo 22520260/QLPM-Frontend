@@ -249,16 +249,14 @@ function DonThuoc() {
       if (response.status === 200) {
         maDTinserted = response.data.MADT;
         toast.success("Thêm hóa đơn và đơn thuốc thành công");
-        socket.emit("send-message", {
-          actionName: "DSHD",
-          maID: selectedPK.MAPK,
-        });
         const isComplete = await insertCTDT(medicines, maDTinserted);
         if (isComplete === true) {
           setMedicines([]);
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
           dispatch(fetchDSDKAction());
           socket.emit("send-message", { actionName: "DSDK" });
+          socket.emit("send-message", { actionName: "DSHD", maID: selectedPK.MAPK });
+          socket.emit("send-message", { actionName: "CTDTBYIDPK", maID: selectedPK.MAPK });
           setFormula("");
           setUnit("");
           setDay(0);
@@ -369,22 +367,28 @@ function DonThuoc() {
       </div>
 
       <div className="px-3 py-2 bg-primary">Đơn thuốc</div>
-      <div className="container-fluid mb-3">
-        <ListFormDV
-          columns={columns}
-          data={
-            existedCTDT.length === 0
-              ? medicines
-              : existedCTDT.map((item) => ({
-                  ...item,
-                  thanhTien: item.GIABANLUCKE * item.SOLUONGTHUOC,
-                }))
-          } // Truyền dữ liệu các loại thuốc vào ListFormDV
-          loading={false}
-          handleDelete={handleDeleteMedicine}
-          buttonColor={existedCTDT.length > 0 ? "btn-secondary" : null}
-        />
-      </div>
+      {existedCTDT.length > 0 || medicines.length > 0 ? (
+        <div className="container-fluid mb-3">
+          <ListFormDV
+            columns={columns}
+            data={
+              existedCTDT.length === 0
+                ? medicines
+                : existedCTDT.map((item) => ({
+                    ...item,
+                    thanhTien: item.GIABANLUCKE * item.SOLUONGTHUOC,
+                  }))
+            } // Truyền dữ liệu các loại thuốc vào ListFormDV
+            loading={false}
+            handleDelete={handleDeleteMedicine}
+            buttonColor={existedCTDT.length > 0 ? "btn-secondary" : null}
+          />
+        </div>
+      ) : (
+        <div className="d-flex justify-content-center text-danger">
+          Chưa thêm đơn thuốc nào.
+        </div>
+      )}
 
       <div className="d-flex justify-content-center px-3 py-2">
         <button

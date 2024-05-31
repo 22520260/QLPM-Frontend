@@ -85,6 +85,12 @@ export function ListForm({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex}>
@@ -132,6 +138,12 @@ export function ListFormDV({
                   <strong>Loading...</strong>
                   <div className="spinner-border ms-2" role="status"></div>
                 </div>
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
               </td>
             </tr>
           ) : (
@@ -185,6 +197,12 @@ export function ListFormDSB({ columns, data, loading, handleDelete }) {
                   <strong>Loading...</strong>
                   <div className="spinner-border ms-2" role="status"></div>
                 </div>
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
               </td>
             </tr>
           ) : (
@@ -290,7 +308,7 @@ export function ListFormDSDK({ columns, data, loading }) {
   };
 
   const handleHuyPK = async () => {
-    if (selectedRow.TRANGTHAITH === 'Chưa thực hiện') {
+    if (selectedRow.TRANGTHAITH === "Chưa thực hiện") {
       await updateTrangThaiPK("Đã hủy");
       dispatch(fetchDSDKAction());
     } else {
@@ -321,6 +339,12 @@ export function ListFormDSDK({ columns, data, loading }) {
                   <strong>Loading...</strong>
                   <div className="spinner-border ms-2" role="status"></div>
                 </div>
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
               </td>
             </tr>
           ) : (
@@ -732,6 +756,12 @@ export function ListFormThuoc({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -1114,6 +1144,12 @@ export function ListFormDSTK({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -1453,6 +1489,12 @@ export function ListFormDSDV({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -1712,6 +1754,12 @@ export function ListFormDST({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -1964,6 +2012,12 @@ export function ListFormDSLB({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -2196,6 +2250,12 @@ export function ListFormDSLDV({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -2420,6 +2480,12 @@ export function ListFormDVT({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -2642,6 +2708,12 @@ export function ListFormNND({ columns, data, loading }) {
                   <strong>Loading...</strong>
                   <div className="spinner-border ms-2" role="status"></div>
                 </div>
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
               </td>
             </tr>
           ) : (
@@ -2929,6 +3001,12 @@ export function ListFormPQ({
                   </div>
                 </td>
               </tr>
+            ) : data.length === 0 ? (
+              <tr>
+                <td colSpan={columns.length + 1}>
+                  <div className="text-center">Không tìm thấy dữ liệu</div>
+                </td>
+              </tr>
             ) : (
               data?.map((row, rowIndex) => (
                 <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -3108,10 +3186,13 @@ export function ListFormKhamBenh({ columns, data, loading }) {
     dispatch(fetchDsClsByIdAction(row?.MAPK));
     dispatch(fetchLSKByIdBnAction(row?.MABN));
     if (row.TRANGTHAITH === "Đã hủy") {
-      toast.error("Phiếu khám đã bị hủy, không thể khám bệnh")
+      toast.error("Phiếu khám đã bị hủy, không thể khám bệnh");
     }
-    if (bacSi?.account?.groupName === 'Bác sĩ' && bacSi.account.userInfo[0].MABS !== row.MABS) {
-      toast.error("Bệnh nhân này không phải của bạn")
+    if (
+      bacSi?.account?.groupName === "Bác sĩ" &&
+      bacSi.account.userInfo[0].MABS !== row.MABS
+    ) {
+      toast.error("Bệnh nhân này không phải của bạn");
     }
   };
   const handleCancel = (row) => {};
@@ -3139,6 +3220,12 @@ export function ListFormKhamBenh({ columns, data, loading }) {
                   <strong>Loading...</strong>
                   <div className="spinner-border ms-2" role="status"></div>
                 </div>
+              </td>
+            </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
               </td>
             </tr>
           ) : (
@@ -3399,6 +3486,7 @@ export function ListFormCLS({ columns, data, loading }) {
       INFOBSTH: row.INFOBSTH,
       NGAYKHAM: row.NGAYKHAM,
       IMAGE: !row.IMAGE || row.IMAGE === null ? null : row.IMAGE,
+      MABN: row.MABN,
     });
   };
 
@@ -3417,6 +3505,14 @@ export function ListFormCLS({ columns, data, loading }) {
       toast.success(response.data.message);
       dispatch(fetchAllClsAction());
       socket.emit("send-message", { actionName: "DSCLS" });
+      socket.emit("send-message", {
+        actionName: "CLSBYIDPK",
+        maID: formData.MAPK,
+        maBN: formData.MABN,
+        title: "Kết quả " + formData.TENDV,
+        message: `Mời BN ${formData.TENBN} nhận kết quả ${formData.TENDV} tại phòng khám. Xem kết quả và hình ảnh chụp tại mục Quy trình khám trên app BCarefull`,
+      });
+
       const closeBtn = document.getElementById("closeBtn10");
       if (closeBtn) {
         closeBtn.click();
@@ -3465,6 +3561,12 @@ export function ListFormCLS({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -3482,7 +3584,7 @@ export function ListFormCLS({ columns, data, loading }) {
                   </td>
                 ))}
                 <td>
-                  <div className="pt-2 d-flex" style={{ gap: '10px' }}>        
+                  <div className="pt-2 d-flex" style={{ gap: "10px" }}>
                     <TTK value={row.TRANGTHAITH} />
                     <TTCLS value={row.TTTT} />
                   </div>
@@ -3619,6 +3721,12 @@ export function ListFormDVCLS({ columns, data, loading, handleDelete }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex}>
@@ -3676,7 +3784,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
       email: row.EMAIL,
       cccd: row.CCCD,
       gioiTinh: row.GIOITINH,
-      ngaySinh: deFormatDate(row.NGAYSINH),
+      ngaySinh: new Date(row.NGAYSINH),
       soDienThoai: row.SDT,
       diaChi: row.DIACHI,
       tienSuBenh: row.TIENSUBENH,
@@ -3785,6 +3893,12 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                 </div>
               </td>
             </tr>
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length + 1}>
+                <div className="text-center">Không tìm thấy dữ liệu</div>
+              </td>
+            </tr>
           ) : (
             data.map((row, rowIndex) => (
               <tr key={rowIndex} onClick={() => handleRowClick(row)}>
@@ -3801,7 +3915,6 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                         ))}
                   </td>
                 ))}
-
                 <td>
                   <button
                     type="button"
@@ -3829,7 +3942,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
       <div
         className="modal fade modal-lg"
         id="updateBenhNhan"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
@@ -3846,8 +3959,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                 aria-label="Close"
               ></button>
             </div>
-
-            <div className="modal-body ">
+            <div className="modal-body">
               <div className="container-fluid">
                 <div className="row py-2">
                   <IFInputText
@@ -3930,7 +4042,6 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                     valid={objValidInput.isValidSoDienThoai}
                     onChange={(value) => handleChange("diaChi", value)}
                   />
-
                   <IFInputText
                     title={"Dị ứng"}
                     size={5}
@@ -3939,7 +4050,6 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                     onChange={(value) => handleChange("diUng", value)}
                   />
                 </div>
-
                 <div className="row py-2">
                   <IFInputText
                     title={"Tiền sử bệnh"}
@@ -3977,7 +4087,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
         id="lichsukham"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
@@ -3994,8 +4104,7 @@ export function ListFormDSBenhNhan({ columns, data, loading }) {
                 aria-label="Close"
               ></button>
             </div>
-
-            <div className="modal-body ">
+            <div className="modal-body">
               <div className="container-fluid">
                 <LichSuKham />
               </div>

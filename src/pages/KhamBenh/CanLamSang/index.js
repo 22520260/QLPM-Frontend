@@ -12,7 +12,7 @@ import { compareDates, usePaginationHandler } from "../../../utils/appUtils";
 function CanLamSang() {
   const dispatch = useDispatch();
   const DSDK = useSelector((state) => state.fetchCLS.allCls);
-  console.log('DSDK', DSDK)
+  console.log("DSDK", DSDK);
   const isLoading = useSelector((state) => state.fetchCLS.loading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);

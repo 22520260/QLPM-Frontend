@@ -22,8 +22,8 @@ function App() {
       const fetchAction = selectAction(data?.actionName);
       if (fetchAction !== null) {
         data?.maID === ""
-        ? dispatch(fetchAction())
-        : dispatch(fetchAction(data.maID));
+          ? dispatch(fetchAction())
+          : dispatch(fetchAction(data.maID));
         // toast(`Người dùng ${data.id} vừa thực hiện thay đổi`)
       }
     });
