@@ -255,8 +255,17 @@ function DonThuoc() {
           dispatch(fetchCTDTByIdAction(selectedPK.MAPK));
           dispatch(fetchDSDKAction());
           socket.emit("send-message", { actionName: "DSDK" });
-          socket.emit("send-message", { actionName: "DSHD", maID: selectedPK.MAPK });
-          socket.emit("send-message", { actionName: "CTDTBYIDPK", maID: selectedPK.MAPK });
+          socket.emit("send-message", {
+            actionName: "DSHD",
+            maID: selectedPK.MAPK,
+          });
+          socket.emit("send-message", {
+            actionName: "CTDTBYIDPK",
+            maID: selectedPK.MAPK,
+            maBN: selectedPK.MABN,
+            title: "Đơn thuốc cần thanh toán",
+            message: `BN ${selectedPK.TENBN} vừa được BS ${selectedPK.TENBS} kê cho một đơn thuốc mới. Tiến hành thanh toán ngay trong app BCarefull tại mục Quy trình khám`,
+          });
           setFormula("");
           setUnit("");
           setDay(0);
