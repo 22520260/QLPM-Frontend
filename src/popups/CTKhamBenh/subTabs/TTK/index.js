@@ -67,10 +67,12 @@ function ThongTinKham() {
       socket.emit("send-message", {
         actionName: "DSBENHBYIDPK",
         maID: selectedPK.MAPK,
+        maBN: selectedPK.MABN,
       });
       socket.emit("send-message", {
         actionName: "LSKBYIDBN",
         maID: selectedPK.MABN,
+        maBN: selectedPK.MABN,
       });
     }
     if (response && response.data && response.data.errcode !== 0) {
