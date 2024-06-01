@@ -25,7 +25,8 @@ import socket from "../../../../setup/socket";
 
 function ThongTinKham() {
   const dispatch = useDispatch();
-  const selectedPK = useSelector((state) => state.selectedRow?.selectedRow) || {};
+  const selectedPK =
+    useSelector((state) => state.selectedRow?.selectedRow) || {};
   const ttkArray = useSelector((state) => state.ttk?.data) || [];
   const ttk = ttkArray ? ttkArray[0] : {};
   const [showError, setShowError] = useState(false);
@@ -55,11 +56,22 @@ function ThongTinKham() {
       // setFormData(defaultFormData);
       dispatch(fetchDSDKAction());
       // cancelBtn.disabled = false;
-      socket.emit("send-message", {actionName: 'DSDK'});
-      socket.emit("send-message", {actionName: 'KQKHAMBYIDPK', maID: selectedPK.MAPK});
-      socket.emit("send-message", {actionName: 'DSBENHBYIDPK', maID: selectedPK.MAPK});
-      socket.emit("send-message", {actionName: 'LSKBYIDBN', maID: selectedPK.MABN});
-
+      socket.emit("send-message", { actionName: "DSDK" });
+      socket.emit("send-message", {
+        actionName: "KQKHAMBYIDPK",
+        maID: selectedPK.MAPK,
+        maBN: selectedPK.MABN,
+        title: "Kết quả " + selectedPK.TENDV,
+        message: `Mời BN ${selectedPK.TENBN} nhận kết quả ${selectedPK.TENDV} tại phòng khám. Xem kết quả và chẩn đoán bệnh tại mục Quy trình khám trên app BCarefull`,
+      });
+      socket.emit("send-message", {
+        actionName: "DSBENHBYIDPK",
+        maID: selectedPK.MAPK,
+      });
+      socket.emit("send-message", {
+        actionName: "LSKBYIDBN",
+        maID: selectedPK.MABN,
+      });
     }
     if (response && response.data && response.data.errcode !== 0) {
       toast.error(response.data.message);
