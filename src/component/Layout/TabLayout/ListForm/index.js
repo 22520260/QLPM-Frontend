@@ -343,7 +343,7 @@ export function ListFormDSDK({ columns, data, loading }) {
             </tr>
           ) : data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length + 1}>
+              <td colSpan={columns.length + 2}>
                 <div className="text-center">Không tìm thấy dữ liệu</div>
               </td>
             </tr>

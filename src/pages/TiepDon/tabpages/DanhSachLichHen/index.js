@@ -6,114 +6,105 @@ import {
 import { ListFormDSDK } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
 import { useDispatch, useSelector } from "react-redux";
 import { compareDates, formatDate } from "../../../../utils/appUtils";
 
+
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const patients = useSelector((state) => state.fetchAllBenhNhan.data.data);
-  const isLoading = useSelector((state) => state.fetchAllBenhNhan.isLoading);
+  const DSDK = useSelector((state) => state.fetchDSDK?.data);
+  const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const [displayedPatients, setDisplayedPatients] = useState([]);
+  const [displayDSDK, setDisplayDSDK] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã phiếu", key: "MABN" },
-    { title: "STT", key: "MABN" },
-    { title: "Họ Tên", key: "HOTEN" },
-    { title: "Tên Bác sĩ", key: "HOTEN" },
-    { title: "Tổng tiền", key: "HOTEN" },
-    { title: "Trạng thái", key: "HOTEN" },
+    { title: "Mã phiếu", key: "MAPKTG" }, 
+    { title: "STT", key: "STT" },
+    { title: "Bệnh nhân", key: "INFOBN" },
+    { title: "Bác sĩ", key: "INFOBS" },
+    { title: "Dịch vụ", key: "TENDV" },
+    // { title: "TTTT HDPK", key: "TTTTPK" },
+    // { title: "TTTT HDCLS", key: "TTTTCLS" },
+    // { title: "TTTT HDTH", key: "TTTTDTH" },
   ];
 
-  // useEffect(() => {
-  //   dispatch(fetchAllBenhNhanAction());
-  // }, []);
+  useEffect(() => {
+    dispatch(fetchDSDKAction());
+  }, []);
 
   useEffect(() => {
-    if (patients) {
-      let filteredPatients = [...patients]; // Tạo một bản sao của data để tránh thay đổi trực tiếp data
+    if (DSDK) {
+      let filteredDSDK = [...DSDK];
       // Lọc theo ngày bắt đầu và ngày kết thúc
       if (startDate && endDate) {
-        filteredPatients = filteredPatients.filter((patient) => {
-          const patientDate = new Date(patient.NGAYSINH);
+        filteredDSDK = filteredDSDK.filter((data) => {
+          const formatedNGAYKHAM = new Date(data.NGAYKHAM);
           return (
-            compareDates(startDate, patientDate) >= 0 &&
-            compareDates(patientDate, endDate) >= 0
+            compareDates(startDate, formatedNGAYKHAM) >= 0 &&
+            compareDates(formatedNGAYKHAM, endDate) >= 0
           );
         });
       } else if (startDate) {
         // Chỉ có ngày bắt đầu
-        filteredPatients = filteredPatients.filter((patient) => {
-          const patientDate = new Date(patient.NGAYSINH);
+        filteredDSDK = filteredDSDK.filter((data) => {
+          const formatedNGAYKHAM = new Date(data.NGAYKHAM);
 
-          return compareDates(startDate, patientDate) >= 0;
+          return compareDates(startDate, formatedNGAYKHAM) >= 0;
         });
       } else if (endDate) {
         // Chỉ có ngày kết thúc
-        filteredPatients = filteredPatients.filter((patient) => {
-          const patientDate = new Date(patient.NGAYSINH);
+        filteredDSDK = filteredDSDK.filter((data) => {
+          const formatedNGAYKHAM = new Date(data.NGAYKHAM);
 
-          return compareDates(patientDate, endDate) >= 0;
+          return compareDates(formatedNGAYKHAM, endDate) >= 0;
         });
       }
 
       // Lọc theo từ khóa tìm kiếm
       if (searchKeyword) {
-        filteredPatients = filteredPatients.filter((patient) =>
-          patient.HOTEN.toLowerCase().includes(searchKeyword.toLowerCase())
+        filteredDSDK = filteredDSDK.filter((data) =>
+          data.TENBN.toLowerCase().includes(searchKeyword.toLowerCase())
         );
       }
 
-      const formattedPatients = filteredPatients.map((patient) => {
-        const {
-          MABN,
-          MATK,
-          CCCD,
-          HOTEN,
-          NGAYSINH,
-          GIOITINH,
-          SDT,
-          DIACHI,
-          TIENSUBENH,
-          DIUNG,
-        } = patient;
-        const formattedNgaySinh = formatDate(NGAYSINH);
+      // const formattedDSDK = filteredDSDK.map(data => {
+      //   const {MABN, MATK, CCCD, HOTEN, NGAYSINH, GIOITINH, SDT, DIACHI, TIENSUBENH, DIUNG} = patient;
+      //   const formattedNgaySinh = formatDate(NGAYSINH);
 
-        return {
-          MABN,
-          MATK,
-          CCCD,
-          HOTEN,
-          formattedNgaySinh,
-          GIOITINH,
-          SDT,
-          DIACHI,
-          TIENSUBENH,
-          DIUNG,
-        };
-      });
+      //   return {
+      //     MABN,
+      //     MATK,
+      //     CCCD,
+      //     HOTEN,
+      //     formattedNgaySinh,
+      //     GIOITINH,
+      //     SDT,
+      //     DIACHI,
+      //     TIENSUBENH,
+      //     DIUNG
+      //   };
+      // });
 
-      const calculatedTotalPages = Math.ceil(filteredPatients.length / limit);
+      const calculatedTotalPages = Math.ceil(filteredDSDK.length / limit);
       setTotalPages(calculatedTotalPages);
 
       const startIdx = (page - 1) * limit;
-      const endIdx = Math.min(startIdx + limit, filteredPatients.length);
-      const pagePatients = formattedPatients.slice(startIdx, endIdx);
+      const endIdx = Math.min(startIdx + limit, filteredDSDK.length);
+      const pageDSDK = filteredDSDK.slice(startIdx, endIdx);
 
-      setDisplayedPatients(pagePatients);
+      setDisplayDSDK(pageDSDK);
     }
-  }, [patients, page, limit, searchKeyword, startDate, endDate]);
+  }, [DSDK, page, limit, searchKeyword, startDate, endDate]);
 
   const handleIFSearchChange = (value) => {
     setSearchKeyword(value);
   };
-
-  const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
   const handleChange_NBD = (value) => {
     setStartDate(value);
@@ -122,6 +113,8 @@ function DanhSachDangKy() {
   const handleChange_NKT = (value) => {
     setEndDate(value);
   };
+
+  const handlePageChange = usePaginationHandler(setPage, page, totalPages);
 
   return (
     <>
@@ -142,12 +135,9 @@ function DanhSachDangKy() {
           onChange={(value) => handleIFSearchChange(value)}
         />
       </div>
+
       <div className="px-3">
-        <ListFormDSDK
-          columns={columns}
-          data={displayedPatients}
-          loading={isLoading}
-        />
+        <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading} />
         <Pagination
           totalPages={totalPages}
           page={page}
