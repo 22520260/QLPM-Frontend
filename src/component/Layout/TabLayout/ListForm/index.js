@@ -307,12 +307,12 @@ export function ListFormDSDK({ columns, data, loading }) {
     dispatch(clearIsShowHdRow());
   };
 
-  const handleHuyPK = async () => {
+  const handleUpdatePK = async (trangThai) => {
     if (selectedRow.TRANGTHAITH === "Chưa thực hiện") {
-      await updateTrangThaiPK("Đã hủy");
+      await updateTrangThaiPK(trangThai);
       dispatch(fetchDSDKAction());
     } else {
-      toast.error("Phiếu khám đã được thực hiện, không thể hủy");
+      toast.error("Phiếu khám đã được thực hiện");
     }
   };
 
@@ -625,7 +625,53 @@ export function ListFormDSDK({ columns, data, loading }) {
                 type="button"
                 class="btn btn-primary"
                 data-bs-dismiss="modal"
-                onClick={handleHuyPK}
+                onClick={() => handleUpdatePK("Đã hủy")}
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*Bạn có chắc muốn đang thực hiện phiếu khám*/}
+      <div
+        class="modal fade"
+        id="dangThucHien"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">
+                Cảnh báo
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              Bạn có chắc muốn chuyển trạng thái PK{selectedRow.MAPK} sang Đang
+              thực hiện
+            </div>
+            <div class="modal-footer">
+              <button
+                id="cancelBtnDelete4"
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+                onClick={() => handleUpdatePK("Đang thực hiện")}
               >
                 Đồng ý
               </button>

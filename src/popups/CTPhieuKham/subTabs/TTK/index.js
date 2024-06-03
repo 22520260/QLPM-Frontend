@@ -58,33 +58,6 @@ function ThongTinKham() {
     setResetKey(Date.now());
   };
 
-  const updateTrangThaiPK = async (varTrangThai) => {
-    try {
-      const response2 = await axios.post("/phieukham/update-trang-thai", {
-        maPK: ttk?.MAPK,
-        trangThai: varTrangThai,
-      });
-
-      if (response2.status === 200) {
-        toast.success("Cập nhật trạng thái phiếu khám thành công");
-        socket.emit("send-message", { actionName: "DSDK" });
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Cập nhật trạng thái phiếu khám không thành công");
-    }
-  };
-
-  const handleUpdateTrangThai = async () => {
-    if (ttk?.TRANGTHAITH === "Chưa thực hiện") {
-      await updateTrangThaiPK("Đang thực hiện");
-      dispatch(fetchDSDKAction());
-      dispatch(fetchTTKAction(ttk?.MAPK));
-    } else {
-      toast.error("Phiếu khám đã được thực hiện");
-    }
-  };
-
   return (
     <div className="shadow rounded" key={resetKey}>
       <div className="px-3 py-2 bg-primary rounded-top">Thông tin khám</div>
@@ -209,8 +182,8 @@ function ThongTinKham() {
           <button
             type="button"
             className="btn btn-primary ms-auto mx-4 col-auto"
-            onClick={() => updateTrangThaiPK("Đang thực hiện")}
-            data-bs-dismiss="modal"
+            data-bs-toggle="modal"
+            data-bs-target="#dangThucHien"
           >
             Chuyển trạng thái
           </button>
