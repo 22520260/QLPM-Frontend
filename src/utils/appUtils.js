@@ -3,13 +3,16 @@ import { fetchDSDKAction } from "../redux/action/fetchDataAction/fetchDSDKAction
 import { fetchDSHDByIdAction } from "../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchAllClsAction } from "../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchAllBenhNhanAction } from "../redux/action/fetchDataAction/fetchAllBenhNhanAction";
-import {fetchDsClsByIdAction} from '../redux/action/fetchDataAction/fetchCLSAction';
-import {fetchCTDTByIdAction} from '../redux/action/fetchDataAction/fetchCTDTById';
+import { fetchDsClsByIdAction } from "../redux/action/fetchDataAction/fetchCLSAction";
+import { fetchCTDTByIdAction } from "../redux/action/fetchDataAction/fetchCTDTById";
+import { fetchDSLHAction } from "../redux/action/fetchDataAction/fetchDSLHAction";
 
 export const selectAction = (actionName) => {
   switch (actionName) {
     case "DSDK":
       return fetchDSDKAction;
+    case "DSLH":
+      return fetchDSLHAction;
     case "DSCLS":
       return fetchAllClsAction;
     case "DSHD":
