@@ -1,0 +1,113 @@
+// import { createGlobalStyle } from 'styled-components';
+@import "normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap");
+
+// const GlobalStyle = createGlobalStyle`
+// @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+:root {
+  --primary: #7864EA;
+  --sub: #ea793a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 95%;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  text-rendering: optimizeSpeed;
+}
+
+.navbar.bg-primary.navbar-expand-md {
+  padding: 0;
+}
+
+.bg-primary,
+.navbar-nav .nav-link,
+.navbar-nav .dropdown-menu,
+.navbar-nav .dropdown-item {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.nav-link.active {
+  color: white !important;
+  border-color: var(--sub) !important;
+  background-color: var(--sub) !important;
+}
+
+.nav-link {
+  color: var(--primary) !important;
+}
+
+.page-link {
+  color: var(--primary) !important;
+}
+
+.page-item.active .page-link {
+  color: white !important;
+  background-color: var(--primary) !important;
+  border-color: var(--primary);
+}
+
+// .navbar-nav .nav-link {
+//   padding: 1rem 0;
+//   min-width: 5rem;
+// }
+
+// .navbar-nav .dropdown-item {
+//   padding: 0.8rem 0.5rem;
+// }
+
+// .dropdown-menu {
+//   padding: 0;
+// }
+
+// .dropdown:hover .dropdown-menu {
+//   display: block;
+// }
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .dropdown-item:hover {
+  background-color: var(--sub) !important;
+}
+
+//   * {
+//     boxSizing: "border-box";
+//     textRendering: "optimizeSpeed;
+//   }
+
+//   :root {
+//     --main: #883AEA;
+//     --sub: #EA793A;
+//     --bg: #EAF1FB;
+//   }
+// `;
+
+// export default GlobalStyle;
+
+.list-group-horizontal-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.list-group-horizontal-scroll .nav-link {
+  white-space: nowrap;
+}
+
+.list-group-horizontal-scroll.overflow-auto {
+  overflow-x: auto;
+}
+
+.border-primary {
+  border-color: var(--primary) !important;
+  // border-color: var(--primary);
+}
+
+h1 {
+  padding-top: 10px;
+}

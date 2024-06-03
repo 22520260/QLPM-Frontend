@@ -1,0 +1,8 @@
+.p-1.rounded.bg-opacity-10.fw-semibold {
+    font-size: 80%;
+}
+
+.stgr {
+    display: flex;
+    gap: 10px;
+}

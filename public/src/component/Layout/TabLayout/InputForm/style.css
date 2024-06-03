@@ -1,0 +1,9 @@
+.rs-input-group.rs-input-group-inside input {
+    font-size: 1rem;
+    color: black;
+}
+.rs-picker-popup {
+    z-index: 1056 !important;
+    max-height: 100rem;
+  }
+  
