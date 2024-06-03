@@ -4,6 +4,7 @@ import fetchAllBacSiReducer from './slice/getDataSlice/getAllBacSiSlice'
 import fetchAllDichVuReducer from './slice/getDataSlice/getAllDichVuSlice'
 import fetchHoaDonReducer from './slice/getDataSlice/getHoaDonSlice' 
 import getDSDKRecuder from './slice/getDataSlice/getDSDKSlice'
+import getDSLHReducer from './slice/getDataSlice/getDSLHSlice'
 import getCTDTByIdRecuder from './slice/getDataSlice/getCTDTByIdSlice'
 import getCLSRecuder from './slice/getDataSlice/getCLSSlice'
 import selectedRowReducer from './slice/other/selectedRowSlice'
@@ -38,6 +39,7 @@ export default configureStore({
     services: fetchAllDichVuReducer,
     thuoc: getAllThuocReducer,
     fetchDSDK: getDSDKRecuder,
+    fetchDSLH: getDSLHReducer,
     fetchHoaDon: fetchHoaDonReducer,
     fetchCLS: getCLSRecuder,
     existedCTDT: getCTDTByIdRecuder,

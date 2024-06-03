@@ -6,15 +6,15 @@ import {
 import { ListFormDSDK } from "../../../../component/Layout/TabLayout/ListForm";
 import Pagination from "../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../utils/appUtils";
-import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { fetchDSLHAction } from "../../../../redux/action/fetchDataAction/fetchDSLHAction";
 import { useDispatch, useSelector } from "react-redux";
 import { compareDates, formatDate } from "../../../../utils/appUtils";
 
-
 function DanhSachDangKy() {
   const dispatch = useDispatch();
-  const DSDK = useSelector((state) => state.fetchDSDK?.data);
-  const isLoading = useSelector((state) => state.fetchDSDK?.isLoading);
+  const DSDK = useSelector((state) => state.fetchDSLH?.data);
+  console.log('DSDK', DSDK)
+  const isLoading = useSelector((state) => state.fetchDSLH?.isLoading);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [displayDSDK, setDisplayDSDK] = useState([]);
@@ -24,8 +24,9 @@ function DanhSachDangKy() {
   const [totalPages, setTotalPages] = useState(0);
 
   const columns = [
-    { title: "Mã phiếu", key: "MAPKTG" }, 
+    { title: "Mã phiếu", key: "MAPKTG" },
     { title: "STT", key: "STT" },
+    { title: "Giờ đặt lịch", key: "GIODATLICH" },
     { title: "Bệnh nhân", key: "INFOBN" },
     { title: "Bác sĩ", key: "INFOBS" },
     { title: "Dịch vụ", key: "TENDV" },
@@ -35,7 +36,7 @@ function DanhSachDangKy() {
   ];
 
   useEffect(() => {
-    dispatch(fetchDSDKAction());
+    dispatch(fetchDSLHAction());
   }, []);
 
   useEffect(() => {
@@ -137,7 +138,11 @@ function DanhSachDangKy() {
       </div>
 
       <div className="px-3">
-        <ListFormDSDK columns={columns} data={displayDSDK} loading={isLoading} />
+        <ListFormDSDK
+          columns={columns}
+          data={displayDSDK}
+          loading={isLoading}
+        />
         <Pagination
           totalPages={totalPages}
           page={page}
