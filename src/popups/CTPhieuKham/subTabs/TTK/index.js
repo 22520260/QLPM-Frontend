@@ -4,15 +4,21 @@ import {
   IFNgay,
   TextArea,
 } from "../../../../component/Layout/TabLayout/InputForm";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ListForm } from "../../../../component/Layout/TabLayout/ListForm";
+import { toast } from "react-toastify";
+import socket from "../../../../setup/socket";
+import axios from "../../../../setup/axios";
+import { fetchDSDKAction } from "../../../../redux/action/fetchDataAction/fetchDSDKAction";
+import { fetchTTKAction } from "../../../../redux/action/fetchDataAction/fetchTTKAction";
 
 function ThongTinKham() {
+  const dispatch = useDispatch();
   const ttkArray = useSelector((state) => state.ttk?.data) || [];
   const ttk = ttkArray ? ttkArray[0] : {};
   const [selectedBenh, setSelectedBenh] = useState([]);
   const benhById = useSelector((state) => state.benhById?.data) || [];
-  
+
   const defaultFormData = {
     maPK: ttk?.MAPK,
     trieuChung: ttk?.TRIEUCHUNGBENH || null,
@@ -23,14 +29,14 @@ function ThongTinKham() {
     canNang: ttk?.CANNANG || null,
     benh: benhById,
   };
-  const [formData, setFormData] = useState('');
+  const [formData, setFormData] = useState("");
 
   useEffect(() => {
     setSelectedBenh(benhById);
   }, [benhById]);
 
   useEffect(() => {
-    setFormData(defaultFormData)
+    setFormData(defaultFormData);
   }, [ttk]);
 
   const columns = [
@@ -50,7 +56,34 @@ function ThongTinKham() {
       canNang: null,
     });
     setResetKey(Date.now());
-  }
+  };
+
+  const updateTrangThaiPK = async (varTrangThai) => {
+    try {
+      const response2 = await axios.post("/phieukham/update-trang-thai", {
+        maPK: ttk?.MAPK,
+        trangThai: varTrangThai,
+      });
+
+      if (response2.status === 200) {
+        toast.success("Cập nhật trạng thái phiếu khám thành công");
+        socket.emit("send-message", { actionName: "DSDK" });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Cập nhật trạng thái phiếu khám không thành công");
+    }
+  };
+
+  const handleUpdateTrangThai = async () => {
+    if (ttk?.TRANGTHAITH === "Chưa thực hiện") {
+      await updateTrangThaiPK("Đang thực hiện");
+      dispatch(fetchDSDKAction());
+      dispatch(fetchTTKAction(ttk?.MAPK));
+    } else {
+      toast.error("Phiếu khám đã được thực hiện");
+    }
+  };
 
   return (
     <div className="shadow rounded" key={resetKey}>
@@ -87,13 +120,19 @@ function ThongTinKham() {
           <IFInputText
             title={"Phòng khám"}
             size={3}
-            value={ttk?.TENPHONG ? (ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")") : (null)}
+            value={
+              ttk?.TENPHONG
+                ? ttk?.TENPHONG + " (" + "Tầng " + ttk?.TANG + ")"
+                : null
+            }
             readOnly={true}
           />
           <IFInputText
             title={"Bác sĩ khám"}
             size={4}
-            value={ttk?.HOTEN ? ("BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN) : (null)}
+            value={
+              ttk?.HOTEN ? "BS" + " " + ttk?.TRINHDO + " " + ttk?.HOTEN : null
+            }
             readOnly={true}
           />
         </div>
@@ -169,7 +208,15 @@ function ThongTinKham() {
         <div className="row py-2 d-flex justify-content-between">
           <button
             type="button"
-            className="btn btn-secondary ms-auto mx-4 col-auto"
+            className="btn btn-primary ms-auto mx-4 col-auto"
+            onClick={() => updateTrangThaiPK("Đang thực hiện")}
+            data-bs-dismiss="modal"
+          >
+            Chuyển trạng thái
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary me-4 col-auto"
             onClick={handleCancel}
             data-bs-dismiss="modal"
           >
