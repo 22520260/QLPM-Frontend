@@ -36,12 +36,12 @@
 * Xác thực và phân quyền: Json Web Token (JWT)
 * Hosting server: Oracle Cloud.
 ### Chức năng 
-| STT | Chức năng | Mức độ hoàn thành (%) | Ghi chú |
+| STT | Chức năng | Mức độ hoàn thành | Ghi chú |
 | --- | --- | :---: | --- |
-| 1 | Lập danh sách khám bệnh. | 100% | Gồm trang danh sách đăng kí cho lễ tân và danh sách khám bệnh cho bác sĩ. |
-| 2 | Lập phiếu khám bệnh. | 100% | Gồm trang thông tin khám cho bác sĩ thêm các mô tả cũng như kết luận bệnh, và trang đơn thuốc để bác sĩ thực hiện kê đơn thuốc cho bệnh nhân. |
+| 1 | Lập danh sách khám bệnh | 100% | Gồm trang danh sách đăng kí cho lễ tân và danh sách khám bệnh cho bác sĩ. |
+| 2 | Lập phiếu khám bệnh | 100% | Gồm trang thông tin khám cho bác sĩ thêm các mô tả cũng như kết luận bệnh, và trang đơn thuốc để bác sĩ thực hiện kê đơn thuốc cho bệnh nhân. |
 | 3 | Tra cứu bệnh nhân | 100% | Trang khách hàng để lễ tân có thể tra cứu thông tin hồ sơ cũng như các lịch sử khám của tất cả các bệnh nhân đã từng khám tại phòng khám. Ngoài ra, trang danh sách đăng kí và danh sách khám bệnh giúp bác sĩ và lễ tân tra cứu các phiếu khám của các bệnh nhân. |
-| 4 | Lập hóa đơn thanh toán. | 100% | Màn hình hóa đơn thanh toán tương ứng với các phiếu khám cho phép lễ tân xem thông tin hóa đơn và thực hiện thanh toán cho bệnh nhân. |
+| 4 | Lập hóa đơn thanh toán | 100% | Màn hình hóa đơn thanh toán tương ứng với các phiếu khám cho phép lễ tân xem thông tin hóa đơn và thực hiện thanh toán cho bệnh nhân. |
 | 5 | Lập báo cáo thống kê theo tháng hoặc năm | 100% | Người lễ tân có thể xem báo cáo thống kê ở dạng biểu đồ hay dạng danh sách số liệu theo các tiêu chí: Thống kê doanh thu, tần suất khám của bệnh nhân, các dịch vụ đã được thực hiện, các loại bệnh đã xuất hiện ở bệnh nhân, các loại thuốc đã bán. |
 | 6 | Thay đổi các quy định | 100% | Người quản trị có thể thay đổi các quy định của phòng khám như số lượt khám tối đa trong ngày, danh sách các nhóm người dùng, danh sách các dịch vụ, danh sách các loại dịch vụ, danh sách các thuốc, danh sách các đơn vị thuốc, danh sách các loại bệnh. |
 | 7 | Quản lý kho thuốc | 100% | Người quản lý kho thuốc có thể thêm, sửa, xóa các lô thuốc nhập vào. Ngoài ra, hệ thống còn tự động kiểm tra và thông báo cho người quản kho biết thuốc nào đang hết hàng. |
