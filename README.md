@@ -37,7 +37,7 @@
 * Hosting server: Oracle Cloud.
 ### Chức năng 
 | STT | Chức năng | Mức độ hoàn thành (%) | Ghi chú |
-| --- | --- | ---: | --- |
+| --- | --- | :---: | --- |
 | 1 | Lập danh sách khám bệnh. | 100% | Gồm trang danh sách đăng kí cho lễ tân và danh sách khám bệnh cho bác sĩ. |
 | 2 | Lập phiếu khám bệnh. | 100% | Gồm trang thông tin khám cho bác sĩ thêm các mô tả cũng như kết luận bệnh, và trang đơn thuốc để bác sĩ thực hiện kê đơn thuốc cho bệnh nhân. |
 | 3 | Tra cứu bệnh nhân | 100% | Trang khách hàng để lễ tân có thể tra cứu thông tin hồ sơ cũng như các lịch sử khám của tất cả các bệnh nhân đã từng khám tại phòng khám. Ngoài ra, trang danh sách đăng kí và danh sách khám bệnh giúp bác sĩ và lễ tân tra cứu các phiếu khám của các bệnh nhân. |
