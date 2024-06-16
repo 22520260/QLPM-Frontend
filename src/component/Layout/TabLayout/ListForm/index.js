@@ -1436,12 +1436,14 @@ export function ListFormDSDV({ columns, data, loading }) {
   const [formData, setFormData] = useState({});
   const [formDelete, setFormDelete] = useState({});
   const loaiDichVu = useSelector((state) => state.loaiDichVu?.data) || [];
+  const phongKham = useSelector((state) => state.phongKham.data);
   const handleRowClick = (row) => {
     setFormData({
       maDV: row.MADV,
       maLDV: row.MALOAIDV,
       tenDichVu: row.TENDV,
       giaDichVu: row.GIADV,
+      maPhong: row.MAPHONG,
     });
     setFormDelete({
       maDV: row.MADV,
@@ -1453,6 +1455,7 @@ export function ListFormDSDV({ columns, data, loading }) {
     isValidMaLDV: true,
     isValidTenDV: true,
     isValidGiaDV: true,
+    isValidMaPhong: true,
   };
 
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
@@ -1475,7 +1478,12 @@ export function ListFormDSDV({ columns, data, loading }) {
       toast.error("Chưa nhập giá dịch vụ");
       return;
     }
-
+    if (!formData.maPhong) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMaPhong: false });
+      toast.error("Chưa nhập vị trí phòng");
+      return;
+    }
+    
     const response = await axios.post("/dichvu/update", formData);
 
     if (response && response.data && response.data.errcode === 0) {
@@ -1603,6 +1611,17 @@ export function ListFormDSDV({ columns, data, loading }) {
                     value={formData.tenDichVu}
                     valid={objValidInput.isValidTenDV}
                     onChange={(value) => handleChange("tenDichVu", value)}
+                  />
+                  <IFSelect
+                    id={"phongKham"}
+                    title={"Phòng khám"}
+                    size={3}
+                    options={phongKham}
+                    keyObj={"MAPHONG"}
+                    showObj={"SOPHONG"}
+                    value={formData.maPhong}
+                    valid={objValidInput.isValidMaPhong}
+                    onChange={(value) => handleChange("maPhong", value)}
                   />
                 </div>
                 <div className="row py-2">
