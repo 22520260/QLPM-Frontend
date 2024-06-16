@@ -9,6 +9,7 @@ import Pagination from "../../../../../component/Layout/TabLayout/Pagination";
 import { usePaginationHandler } from "../../../../../utils/appUtils";
 import { fetchAllDichVuAction } from "../../../../../redux/action/fetchDataAction/fetchAllDichVuAction";
 import { fetchAllLoaiDichVuAction } from "../../../../../redux/action/fetchDataAction/fetchAllLoaiDichVuAction";
+import { fetchAllPhongKhamAction } from "../../../../../redux/action/fetchDataAction/fetchAllPhongKhamAction";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../../../../setup/axios";
@@ -17,6 +18,7 @@ function DSDV() {
   const dispatch = useDispatch();
   const services = useSelector((state) => state.services?.data) || [];
   const loaiDichVu = useSelector((state) => state.loaiDichVu?.data) || [];
+  const phongKham = useSelector((state) => state.phongKham.data);
   const isLoading = useSelector((state) => state.services?.isloading);
   const [limit, setLimit] = useState(5);
   const [displayServices, setDisplayServices] = useState([]);
@@ -34,6 +36,7 @@ function DSDV() {
   useEffect(() => {
     dispatch(fetchAllDichVuAction());
     dispatch(fetchAllLoaiDichVuAction());
+    dispatch(fetchAllPhongKhamAction());
   }, []);
 
   useEffect(() => {
@@ -67,6 +70,7 @@ function DSDV() {
     maLDV: 0,
     tenDichVu: "",
     giaDichVu: "",
+    maPhong: 0,
   };
 
   const [formData, setFormData] = useState(defaultFormData);
@@ -75,6 +79,7 @@ function DSDV() {
     isValidMaLDV: true,
     isValidTenDV: true,
     isValidGiaDV: true,
+    isValidMaPhong: true,
   };
 
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
@@ -97,7 +102,11 @@ function DSDV() {
       toast.error("Chưa nhập giá dịch vụ");
       return;
     }
-
+    if (!formData.maPhong) {
+      setObjValidInput({ ...defaultObjValidInput, isValidMaPhong: false });
+      toast.error("Chưa nhập vị trí phòng");
+      return;
+    }
     const response = await axios.post("/dichvu/insert", formData);
 
     if (response && response.data && response.data.errcode === 0) {
@@ -170,6 +179,17 @@ function DSDV() {
                     value={formData.tenDichVu}
                     valid={objValidInput.isValidTenDV}
                     onChange={(value) => handleChange("tenDichVu", value)}
+                  />
+                  <IFSelect
+                    id={"phongKham"}
+                    title={"Phòng khám"}
+                    size={3}
+                    options={phongKham}
+                    keyObj={"MAPHONG"}
+                    showObj={"SOPHONG"}
+                    value={formData.maPhong}
+                    valid={objValidInput.isValidMaPhong}
+                    onChange={(value) => handleChange("maPhong", value)}
                   />
                 </div>
                 <div className="row py-2">
