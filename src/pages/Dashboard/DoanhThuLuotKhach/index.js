@@ -133,7 +133,7 @@ function DoanhThuLuotKhach({ year }) {
       </ResponsiveChartContainer>
 
       <h4 className="d-flex justify-content-center">
-        Danh Sách Thống Kê Doanh Thu
+        Danh Sách Thống Kê Doanh Thu Quang
       </h4>
       <div className="row justify-content-center">
         <div className="col-9">
