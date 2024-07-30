@@ -3,8 +3,8 @@ import { fetchDSDKAction } from "../redux/action/fetchDataAction/fetchDSDKAction
 import { fetchDSHDByIdAction } from "../redux/action/fetchDataAction/fetchHoaDonAction";
 import { fetchAllClsAction } from "../redux/action/fetchDataAction/fetchCLSAction";
 import { fetchAllBenhNhanAction } from "../redux/action/fetchDataAction/fetchAllBenhNhanAction";
-import {fetchDsClsByIdAction} from '../redux/action/fetchDataAction/fetchCLSAction';
-import {fetchCTDTByIdAction} from '../redux/action/fetchDataAction/fetchCTDTById';
+import { fetchDsClsByIdAction } from "../redux/action/fetchDataAction/fetchCLSAction";
+import { fetchCTDTByIdAction } from "../redux/action/fetchDataAction/fetchCTDTById";
 
 export const selectAction = (actionName) => {
   switch (actionName) {
@@ -23,6 +23,7 @@ export const selectAction = (actionName) => {
     default:
       return null;
   }
+  // make change to test pull request
 };
 
 export const returnPagiationRange = (totalPages, page, limit, siblings) => {
