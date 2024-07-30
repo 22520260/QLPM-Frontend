@@ -132,6 +132,8 @@ function DoanhThuLuotKhach({ year }) {
         <ChartsTooltip />
       </ResponsiveChartContainer>
 
+      <div>{console.log(axisData)}</div>
+
       <h4 className="d-flex justify-content-center">
         Danh Sách Thống Kê Doanh Thu
       </h4>
