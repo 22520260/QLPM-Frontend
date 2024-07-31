@@ -19,7 +19,7 @@ export const selectAction = (actionName) => {
     case "CLSBYIDPK":
       return fetchDsClsByIdAction;
     case "CTDTBYIDPK":
-      return fetchCTDTByIdAction; // comment
+      return fetchCTDTByIdAction; // fixed comment
     default:
       return null;
     // yet another comment
